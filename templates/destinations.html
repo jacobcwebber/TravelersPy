@@ -1,0 +1,11 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <h1>Destinations</h1>
+    <p><a href="/create-destination">Create Destination</a></p>
+    <ul class="list-group">
+    {% for destination in destinations %}
+        <li class="list-group-item"><a  href="/destinations/{{ destination.DestID }}"><p> {{ destination.DestName }} </p></a></li>
+    {% endfor %}
+    </ul>
+{% endblock %}

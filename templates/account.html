@@ -1,0 +1,10 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <h1>{{ session['username'] }}</h1>
+    <ul class="list-group"> My Favorites:
+    {% for favorite in favorites %}
+        <li class="list-group-item"><a  href="/destinations/{{ destinations.DestID }}"><p> {{ destinations.DestName }} </p></a></li>
+    {% endfor %}
+    </ul>
+{% endblock %}

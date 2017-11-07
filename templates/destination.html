@@ -1,0 +1,10 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  <h1>{{destinations.DestName}}</h1>
+  <small> Last updated on {{destinations.UpdateDate}}</small>
+  <hr>
+  <div>
+    {{destinations.Description | safe}}
+  </div>
+{% endblock %}

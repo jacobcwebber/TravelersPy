@@ -14,6 +14,26 @@ connection = pymysql.connect(host='localhost',
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
 
+def is_logged_in(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if 'logged_in' in session:
+            return f(*args, **kwargs)
+        else:
+            flash ('Unauthorized, please login.', 'danger')
+            return redirect(url_for('login'))
+    return wrap
+
+def is_admin(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if session['admin'] == True:
+            return f(*args, **kwargs)
+        else:
+            flash ('Unauthorized. Requires administrator access.', 'danger')
+            return redirect(url_for('index'))
+    return
+
 @app.route('/')
 def index():
     return render_template('home.html')
@@ -49,7 +69,7 @@ def register():
         password = sha256_crypt.encrypt(str(form.password.data))
 
         cur = connection.cursor()
-        cur.execute("INSERT INTO user(Username, Password, Email) VALUES (%s, %s, %s)", (username, password, email))
+        cur.execute("INSERT INTO users(Username, Password, Email) VALUES (%s, %s, %s)", (username, password, email))
 
         connection.commit()
         cur.close()
@@ -69,7 +89,7 @@ def login():
 
         cur = connection.cursor()
 
-        result = cur.execute("SELECT * FROM user WHERE Username = %s", [username])
+        result = cur.execute("SELECT * FROM users WHERE Username = %s", [username])
 
         if result > 0:
             data = cur.fetchone()
@@ -81,7 +101,7 @@ def login():
                 session['username'] = username
 
                 #sets admin session status from db query
-                cur.execute("SELECT IsAdmin FROM User WHERE Username = %s", [username])
+                cur.execute("SELECT IsAdmin FROM users WHERE Username = %s", [username])
                 if cur.fetchone()['IsAdmin'] == 1:
                     session['admin'] = True
                 else:
@@ -100,26 +120,6 @@ def login():
             return render_template('login.html', error=error)
 
     return render_template('login.html')
-
-def is_logged_in(f):
-    @wraps(f)
-    def wrap(*args, **kwargs):
-        if 'logged_in' in session:
-            return f(*args, **kwargs)
-        else:
-            flash ('Unauthorized, please login.', 'danger')
-            return redirect(url_for('login'))
-    return wrap
-
-def is_admin(f):
-    @wraps(f)
-    def wrap(*args, **kwargs):
-        if session['admin'] == True:
-            return f(*args, **kwargs)
-        else:
-            flash ('Unauthorized. Requires administrator access.', 'danger')
-            return redirect(url_for('index'))
-    return
 
 @app.route('/countries')
 @is_logged_in
@@ -152,32 +152,75 @@ def country(id):
 class DestinationForm(Form):
     cur = connection.cursor()
 
-    cur.execute("SELECT CountryID, countryName FROM countries")
+    cur.execute("SELECT CountryID, CountryName FROM countries")
     countries = cur.fetchall()
 
-    #countriesList = countries.items()
-    #print(countriesList)
+    countriesList = [(0, "")]
+    for country in countries:
+        countriesList.append((country['CountryID'], country['CountryName']))
 
     name = StringField('Name', [validators.Length(min=1, max=300)])
-    #countryId = SelectField('Country', choices=countriesList)
-    category = SelectField('Category', choices=[(1, "Natural Site"), (2, "Cultural Site"), (3, "Historic Site")])
+    countryId = SelectField('Country', choices=countriesList, coerce=int)
+    category = SelectField('Category', choices=[(0, ""), (1, "Natural Site"), (2, "Cultural Site"), (3, "Historic Site")], coerce=int)
     description = TextAreaField('Description')
 
-@app.route('/create-destination')
+@app.route('/create-destination', methods=['POST', 'GET'])
 @is_logged_in
-@is_admin
 def create_destination():
     form = DestinationForm(request.form)
     if request.method == 'POST' and form.validate():
+        print(form.category)
+
         name = form.name.data
-        country = form.country.data
+        countryId = form.countryId.data
+        category = form.category.data
         description = form.description.data
 
         cur = connection.cursor()
 
-        cur.execute("INSERT INTO destinations(DestName, CountryID, Description) VALUES (%s, %s, %s)")
+        cur.execute("INSERT INTO destinations(DestName, CountryID, Category, Description) VALUES (%s, %s, %s, %s)", (name, countryId, category, description))
+
+        connection.commit()
+        cur.close()
+
+        flash('Your new destination has been created!', 'success')
+
+        return redirect(url_for('destinations'))
+
 
     return render_template('create_destination.html', form=form)
+
+@app.route('/destinations')
+@is_logged_in
+def destinations():
+    cur = connection.cursor()
+    result = cur.execute("SELECT * FROM destinations")
+    destinations = cur.fetchall()
+
+    if result > 0:
+        return render_template('destinations.html', destinations=destinations)
+    else:
+        msg="No destinations found."
+        return render_template('destinations.html',  msg=msg)
+
+    cur.close()
+
+@app.route('/destination/<string:id>')
+@is_logged_in
+def destination(id):
+    cur = connection.cursor()
+    try:
+        result = cur.execute("SELECT * FROM destinations WHERE DestID = %s", [id])
+        destination = cur.fetchone()
+        return render_template('destination.html', country=country)
+    except:
+        msg = "Destination does not exist."
+        return render_template('destination.html', msg=msg)
+
+@app.route('/account')
+@is_logged_in
+def account():
+    return render_template('account.html')
 
 @app.route('/logout')
 @is_logged_in
