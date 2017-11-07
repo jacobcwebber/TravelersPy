@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, url_for, logging, session, flash, redirect
 import pymysql.cursors
 from passlib.hash import sha256_crypt
-from wtforms import Form, StringField, TextAreaField, PasswordField, validators, ValidationError
+from wtforms import Form, StringField, TextAreaField, PasswordField, validators, SelectField
 from functools import wraps
 import re
 
@@ -22,7 +22,6 @@ def index():
 def about():
     return render_template('about.html')
 
-#use WTForms API to create easy form authentications
 class RegisterForm(Form):
     username = StringField('', [
         validators.Length(min=4, max=25, message='Username must be 4 to 25 characters long')
@@ -34,14 +33,12 @@ class RegisterForm(Form):
     ], render_kw={"placeholder": "password"})
     confirm = PasswordField('', render_kw={"placeholder": "confirm password"})
 
-    #custom validation using regex for ensuring email address is valid
     def validate_email(form, field):
         if len(field.data) < 5 or len(field.data) > 35:
             raise ValidationError('Email must be 5 to 35 characters long')
         if not re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", field.data):
             raise ValidationError('Please submit a valid email')
 
-#tests user registration details against constraints; adds to db if passes
 @app.route('/register', methods=['POST', 'GET'])
 def register():
     form = RegisterForm(request.form)
@@ -52,7 +49,7 @@ def register():
         password = sha256_crypt.encrypt(str(form.password.data))
 
         cur = connection.cursor()
-        cur.execute("INSERT INTO user(Username, Password, Email) VALUES (%s, %s)", (username, password, email))
+        cur.execute("INSERT INTO user(Username, Password, Email) VALUES (%s, %s, %s)", (username, password, email))
 
         connection.commit()
         cur.close()
@@ -122,7 +119,65 @@ def is_admin(f):
         else:
             flash ('Unauthorized. Requires administrator access.', 'danger')
             return redirect(url_for('index'))
-    return wrap
+    return
+
+@app.route('/countries')
+@is_logged_in
+def countries():
+    cur = connection.cursor()
+    result = cur.execute("SELECT * FROM countries")
+    countries = cur.fetchall()
+
+    if result > 0:
+        return render_template('countries.html', countries=countries)
+    else:
+        msg = 'No countries found.'
+        return render_template('countries.html', msg=msg)
+
+    cur.close()
+
+@app.route('/country/<string:id>')
+@is_logged_in
+def country(id):
+    cur = connection.cursor()
+    try:
+        result = cur.execute("SELECT * FROM countries WHERE CountryID = %s", [id])
+        country = cur.fetchone()
+        return render_template('country.html', country=country)
+    except:
+        msg = "Country does not exist."
+        return render_template('country.html', msg=msg)
+
+
+class DestinationForm(Form):
+    cur = connection.cursor()
+
+    cur.execute("SELECT CountryID, countryName FROM countries")
+    countries = cur.fetchall()
+
+    #countriesList = countries.items()
+    #print(countriesList)
+
+    name = StringField('Name', [validators.Length(min=1, max=300)])
+    #countryId = SelectField('Country', choices=countriesList)
+    category = SelectField('Category', choices=[(1, "Natural Site"), (2, "Cultural Site"), (3, "Historic Site")])
+    description = TextAreaField('Description')
+
+@app.route('/create-destination')
+@is_logged_in
+@is_admin
+def create_destination():
+    form = DestinationForm(request.form)
+    if request.method == 'POST' and form.validate():
+        name = form.name.data
+        country = form.country.data
+        description = form.description.data
+
+        cur = connection.cursor()
+
+        cur.execute("INSERT INTO destinations(DestName, CountryID, Description) VALUES (%s, %s, %s)")
+
+    return render_template('create_destination.html', form=form)
 
 @app.route('/logout')
 @is_logged_in
