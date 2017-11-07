@@ -205,22 +205,40 @@ def destinations():
 
     cur.close()
 
-@app.route('/destination/<string:id>')
+
+@app.route('/destination/<string:id>', methods=['POST', 'GET'])
 @is_logged_in
 def destination(id):
-    cur = connection.cursor()
-    try:
-        result = cur.execute("SELECT * FROM destinations WHERE DestID = %s", [id])
-        destination = cur.fetchone()
-        return render_template('destination.html', country=country)
-    except:
-        msg = "Destination does not exist."
-        return render_template('destination.html', msg=msg)
+    if request.method == 'GET':
+        cur = connection.cursor()
+        try:
+            result = cur.execute("SELECT * FROM destinations WHERE DestID = %s", [id])
+            destination = cur.fetchone()
+            return render_template('destination.html', destination=destination)
+        except:
+            msg = "Destination does not exist."
+            return render_template('destination.html', msg=msg)
+
+    else:
+        cur = connection.cursor()
+        cur.execute("INSERT INTO favorites VALUES (%s, %s)", (session['username'], int(id)) )
+
+        connection.commit()
+        cur.close()
+
+        flash('Added to favorites!', 'success')
+        return redirect(url_for('index.html'))
+
 
 @app.route('/account')
 @is_logged_in
 def account():
-    return render_template('account.html')
+    cur = connection.cursor()
+    cur.execute("SELECT DestID FROM favorites WHERE Username = %s", [session['username']])
+    favorites = cur.fetchall()
+
+
+    return render_template('account.html', favorites=favorites)
 
 @app.route('/logout')
 @is_logged_in

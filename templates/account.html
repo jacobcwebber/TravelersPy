@@ -4,7 +4,7 @@
     <h1>{{ session['username'] }}</h1>
     <ul class="list-group"> My Favorites:
     {% for favorite in favorites %}
-        <li class="list-group-item"><a  href="/destinations/{{ destinations.DestID }}"><p> {{ destinations.DestName }} </p></a></li>
+        <li class="list-group-item"><a  href="/destination/{{ favorite.DestID }}"><p> {{ favorite.DestID }} </p></a></li>
     {% endfor %}
     </ul>
 {% endblock %}
