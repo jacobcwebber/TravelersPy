@@ -3,11 +3,12 @@
 {% block body %}
 <h1>{{destination.DestName}}</h1>
 <form method='POST' action="">
-    <p><input class="btn btn-success" type="submit" value="Favorite"></p>
+    <p><input id="favorite-btn" class="btn btn-success" type="submit" value="Favorite"></p>
 </form>
 <small> Last updated on {{destination.UpdateDate}}</small>
 <hr>
 <div>
     {{destination.Description | safe}}
 </div>
+
 {% endblock %}

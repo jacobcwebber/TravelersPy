@@ -3,9 +3,18 @@
 {% block body %}
     <h1>Destinations</h1>
     <p><a href="/create-destination">Create Destination</a></p>
-    <ul class="list-group">
-    {% for destination in destinations %}
-        <li class="list-group-item"><a  href="/destination/{{ destination.DestID }}"><p> {{ destination.DestName }} </p></a></li>
-    {% endfor %}
-    </ul>
+    <table class="table">
+        <tr>
+            <th>Destination</th>
+            <th>Country</th>
+            <th></th>
+        </tr>
+        {% for destination in destinations %}
+        <tr>
+            <td><a href="/destination/{{ destination.DestID }}"><p> {{ destination.DestName }} </p></a></td>
+            <td><a href="/country/{{ destination.CountryID }}"><p> {{ destination.CountryName  }} </p></a></td>
+            <td><a href="/edit_destination/{{ destination.DestID }}"><p>Edit</p></a></td>
+        </tr>
+        {% endfor %}
+    </table>
 {% endblock %}

@@ -80,7 +80,6 @@ def register():
 
     return render_template('register.html', form=form)
 
-#authenticates login details; logs user in and changes session details if passes
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
@@ -187,14 +186,13 @@ def create_destination():
 
         return redirect(url_for('destinations'))
 
-
     return render_template('create_destination.html', form=form)
 
 @app.route('/destinations')
 @is_logged_in
 def destinations():
     cur = connection.cursor()
-    result = cur.execute("SELECT * FROM destinations")
+    result = cur.execute("SELECT * FROM destinations d JOIN countries c ON d.CountryID = c.CountryID")
     destinations = cur.fetchall()
 
     if result > 0:
@@ -211,13 +209,14 @@ def destinations():
 def destination(id):
     if request.method == 'GET':
         cur = connection.cursor()
-        try:
-            result = cur.execute("SELECT * FROM destinations WHERE DestID = %s", [id])
-            destination = cur.fetchone()
+        result = cur.execute("SELECT * FROM destinations WHERE DestID = %s", [id])
+        destination = cur.fetchone()
+
+        if result > 0:
             return render_template('destination.html', destination=destination)
-        except:
-            msg = "Destination does not exist."
-            return render_template('destination.html', msg=msg)
+        else:
+            flash('Destination does not exist.', 'danger')
+            return redirect(url_for('destinations'))
 
     else:
         cur = connection.cursor()
@@ -225,18 +224,46 @@ def destination(id):
 
         connection.commit()
         cur.close()
+        return render_template('destination.html', destination=int(id))
 
-        flash('Added to favorites!', 'success')
-        return redirect(url_for('index.html'))
+@app.route('/edit_destination/<string:id>', methods=['POST', 'GET'])
+@is_logged_in
+def edit_destination(id):
+    cur = connection.cursor()
+    cur.execute("SELECT * FROM destinations WHERE DestID = %s", [id])
+    destination = cur.fetchone()
+    cur.close()
 
+    form = DestinationForm(request.form)
+    #fill in form with info from db
+    form.name.data = destination['DestName']
+    form.countryId.data = destination['CountryID']
+    form.category.data = destination['Category']
+    form.description.data = destination['Description']
+
+    if request.method == 'POST':
+        name = form.name.data
+        countryId = form.countryId.data
+        category = form.category.data
+        description = form.description.data
+
+        cur = connection.cursor()
+        cur.execute("UPDATE destinations SET DestName=%s, CountryID=%s, Category=%s, Description=%s WHERE DestID = %s", (name, countryId, category, description, id))
+        connection.commit()
+        cur.close()
+
+        flash('Destination updated.', 'success')
+
+        return redirect(url_for('destinations'))
+
+    return render_template('edit_destination.html', form=form)
 
 @app.route('/account')
 @is_logged_in
 def account():
     cur = connection.cursor()
-    cur.execute("SELECT DestID FROM favorites WHERE Username = %s", [session['username']])
+    cur.execute("SELECT f.DestID, DestName FROM favorites f JOIN destinations d ON d.DestID = f.DestID WHERE Username = %s", [session['username']])
     favorites = cur.fetchall()
-
 
     return render_template('account.html', favorites=favorites)
 

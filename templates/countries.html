@@ -2,9 +2,13 @@
 
 {% block body %}
     <h1>Countries</h1>
-    <ul class="list-group">
-    {% for country in countries %}
-        <li class="list-group-item"><a  href="/country/{{ country.CountryID }}"><p> {{ country.CountryName }} </p></a></li>
-    {% endfor %}
-    </ul>
+    <table class="table">
+        <tr>
+            <th>Country</td>
+        </tr>
+        {% for country in countries %}
+        <tr>
+            <td><a  href="/country/{{ country.CountryID }}"><p> {{ country.CountryName }} </p></a></td>
+        </tr>
+        {% endfor %}
 {% endblock %}
