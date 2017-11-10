@@ -168,8 +168,6 @@ class DestinationForm(Form):
 def create_destination():
     form = DestinationForm(request.form)
     if request.method == 'POST' and form.validate():
-        print(form.category)
-
         name = form.name.data
         countryId = form.countryId.data
         category = form.category.data
@@ -242,19 +240,22 @@ def edit_destination(id):
     form.description.data = destination['Description']
 
     if request.method == 'POST':
-        name = form.name.data
-        countryId = form.countryId.data
-        category = form.category.data
-        description = form.description.data
+        if request.form['action'] == 'Submit':
+            name = form.name.data
+            countryId = form.countryId.data
+            category = form.category.data
+            description = form.description.data
 
-        cur = connection.cursor()
-        cur.execute("UPDATE destinations SET DestName=%s, CountryID=%s, Category=%s, Description=%s WHERE DestID = %s", (name, countryId, category, description, id))
-        connection.commit()
-        cur.close()
+            cur = connection.cursor()
+            cur.execute("UPDATE destinations SET DestName=%s, CountryID=%s, Category=%s, Description=%s WHERE DestID = %s", (name, countryId, category, description, id))
+            connection.commit()
+            cur.close()
 
-        flash('Destination updated.', 'success')
+            flash('Destination updated.', 'success')
 
-        return redirect(url_for('destinations'))
+            return redirect(url_for('destinations'))
+        elif request.form['action'] == 'Delete':
+            return render_template('account.html')
 
     return render_template('edit_destination.html', form=form)
 
