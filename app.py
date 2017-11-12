@@ -4,6 +4,7 @@ from passlib.hash import sha256_crypt
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators, SelectField
 from functools import wraps
 import re
+import sys
 
 app = Flask(__name__)
 
@@ -106,6 +107,7 @@ def login():
                 else:
                     session['admin'] = False
 
+                cur.close()
                 flash('Welcome, ' + username + '. You are now logged in.', 'success')
                 return redirect(url_for('index'))
 
@@ -126,6 +128,7 @@ def countries():
     cur = connection.cursor()
     result = cur.execute("SELECT * FROM countries")
     countries = cur.fetchall()
+    cur.close()
 
     if result > 0:
         return render_template('countries.html', countries=countries)
@@ -142,6 +145,7 @@ def country(id):
     try:
         result = cur.execute("SELECT * FROM countries WHERE CountryID = %s", [id])
         country = cur.fetchone()
+        cur.close()
         return render_template('country.html', country=country)
     except:
         msg = "Country does not exist."
@@ -153,6 +157,7 @@ class DestinationForm(Form):
 
     cur.execute("SELECT CountryID, CountryName FROM countries")
     countries = cur.fetchall()
+    cur.close()
 
     countriesList = [(0, "")]
     for country in countries:
@@ -160,8 +165,47 @@ class DestinationForm(Form):
 
     name = StringField('Name', [validators.Length(min=1, max=300)])
     countryId = SelectField('Country', choices=countriesList, coerce=int)
-    category = SelectField('Category', choices=[(0, ""), (1, "Natural Site"), (2, "Cultural Site"), (3, "Historic Site")], coerce=int)
+    category = SelectField('Category', choices=[(0, ""), (1, "Natural Site"), (2, "Cultural/Historic Site"), (3, "Activity")], coerce=int)
     description = TextAreaField('Description')
+
+@app.route('/destinations')
+@is_logged_in
+def destinations():
+    cur = connection.cursor()
+    result = cur.execute("SELECT * FROM destinations d JOIN countries c ON d.CountryID = c.CountryID ORDER BY d.DestName")
+    destinations = cur.fetchall()
+    cur.close()
+
+    if result > 0:
+        return render_template('destinations.html', destinations=destinations)
+    else:
+        msg="No destinations found."
+        return render_template('destinations.html',  msg=msg)
+
+
+
+@app.route('/destination/<string:id>', methods=['POST', 'GET'])
+@is_logged_in
+def destination(id):
+    if request.method == 'GET':
+        cur = connection.cursor()
+        result = cur.execute("SELECT * FROM destinations WHERE DestID = %s", [id])
+        destination = cur.fetchone()
+        cur.close()
+
+        if result > 0:
+            return render_template('destination.html', destination=destination)
+        else:
+            flash('Destination does not exist.', 'danger')
+            return redirect(url_for('destinations'))
+
+    else:
+        cur = connection.cursor()
+        cur.execute("INSERT INTO favorites VALUES (%s, %s)", (session['username'], int(id)) )
+
+        connection.commit()
+        cur.close()
+        return render_template('destination.html', destination=int(id))
 
 @app.route('/create-destination', methods=['POST', 'GET'])
 @is_logged_in
@@ -186,44 +230,6 @@ def create_destination():
 
     return render_template('create_destination.html', form=form)
 
-@app.route('/destinations')
-@is_logged_in
-def destinations():
-    cur = connection.cursor()
-    result = cur.execute("SELECT * FROM destinations d JOIN countries c ON d.CountryID = c.CountryID")
-    destinations = cur.fetchall()
-
-    if result > 0:
-        return render_template('destinations.html', destinations=destinations)
-    else:
-        msg="No destinations found."
-        return render_template('destinations.html',  msg=msg)
-
-    cur.close()
-
-
-@app.route('/destination/<string:id>', methods=['POST', 'GET'])
-@is_logged_in
-def destination(id):
-    if request.method == 'GET':
-        cur = connection.cursor()
-        result = cur.execute("SELECT * FROM destinations WHERE DestID = %s", [id])
-        destination = cur.fetchone()
-
-        if result > 0:
-            return render_template('destination.html', destination=destination)
-        else:
-            flash('Destination does not exist.', 'danger')
-            return redirect(url_for('destinations'))
-
-    else:
-        cur = connection.cursor()
-        cur.execute("INSERT INTO favorites VALUES (%s, %s)", (session['username'], int(id)) )
-
-        connection.commit()
-        cur.close()
-        return render_template('destination.html', destination=int(id))
-
 @app.route('/edit_destination/<string:id>', methods=['POST', 'GET'])
 @is_logged_in
 def edit_destination(id):
@@ -233,6 +239,7 @@ def edit_destination(id):
     cur.close()
 
     form = DestinationForm(request.form)
+
     #fill in form with info from db
     form.name.data = destination['DestName']
     form.countryId.data = destination['CountryID']
@@ -241,21 +248,29 @@ def edit_destination(id):
 
     if request.method == 'POST':
         if request.form['action'] == 'Submit':
-            name = form.name.data
-            countryId = form.countryId.data
-            category = form.category.data
-            description = form.description.data
+            name = request.form['name']
+            countryId = request.form['countryId']
+            category = request.form['category']
+            description = request.form['description']
 
             cur = connection.cursor()
-            cur.execute("UPDATE destinations SET DestName=%s, CountryID=%s, Category=%s, Description=%s WHERE DestID = %s", (name, countryId, category, description, id))
+            cur.execute("UPDATE destinations SET DestName=%s, CountryID=%s, Category=%s, Description=%s WHERE DestID=%s", (name, countryId, category, description, id))
+
             connection.commit()
             cur.close()
 
             flash('Destination updated.', 'success')
-
             return redirect(url_for('destinations'))
+
         elif request.form['action'] == 'Delete':
-            return render_template('account.html')
+            cur = connection.cursor()
+            cur.execute("DELETE FROM destinations WHERE DestID = %s", [id])
+
+            connection.commit()
+            cur.close()
+
+            flash('Destination successfully deleted.', 'success')
+            return redirect(url_for('destinations'))
 
     return render_template('edit_destination.html', form=form)
 
