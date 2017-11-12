@@ -1,10 +1,16 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-  <h1>{{country.CountryName}}</h1>
-  <small> Last updated on {{country.UpdateDate}}</small>
-  <hr>
-  <div>
-    {{country.Description | safe}}
-  </div>
+<h1>{{country.CountryName}}</h1>
+<small> Last updated on {{country.UpdateDate}}</small>
+<hr>
+
+<b>Destinations:</b><br>
+{% for destination in destinations %}
+    <li><a  href="/destination/{{ destination.DestID }}"> {{ destination.DestName }}</a></li>
+{% endfor %}
+<hr>
+
+{{country.Description | safe}}
+
 {% endblock %}

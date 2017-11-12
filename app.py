@@ -141,12 +141,19 @@ def countries():
 @app.route('/country/<string:id>')
 @is_logged_in
 def country(id):
-    cur = connection.cursor()
+    countryCur = connection.cursor()
+    destinationsCur = connection.cursor()
     try:
-        result = cur.execute("SELECT * FROM countries WHERE CountryID = %s", [id])
-        country = cur.fetchone()
-        cur.close()
-        return render_template('country.html', country=country)
+        countryCur.execute("SELECT CountryName, Description, UpdateDate FROM countries WHERE CountryID = %s", [id])
+        destinationsCur.execute("SELECT CountryName, DestName, DestID, c.Description AS Description, c.UpdateDate AS UpdateDate"
+                    " FROM countries c JOIN destinations d"
+                    " WHERE c.CountryID = d.CountryID AND c.CountryID = %s"
+                    , [id])
+        country = countryCur.fetchone()
+        destinations = destinationsCur.fetchall()
+        countryCur.close()
+        destinationsCur.close()
+        return render_template('country.html', country=country, destinations=destinations)
     except:
         msg = "Country does not exist."
         return render_template('country.html', msg=msg)
