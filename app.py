@@ -4,7 +4,6 @@ from passlib.hash import sha256_crypt
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators, SelectField
 from functools import wraps
 import re
-import sys
 
 app = Flask(__name__)
 
@@ -122,6 +121,12 @@ def login():
 
     return render_template('login.html')
 
+class CountryForm(Form):
+    cur = connection.cursor()
+
+    name = StringField('Name', [validators.Length(min=1, max=300)])
+    description = TextAreaField('Description')
+
 @app.route('/countries')
 @is_logged_in
 def countries():
@@ -159,6 +164,50 @@ def country(id):
         return render_template('country.html', msg=msg)
 
 
+@app.route('/edit_country/<string:id>', methods=['POST', 'GET'])
+@is_logged_in
+def edit_country(id):
+    cur = connection.cursor()
+    cur.execute("SELECT CountryName, Description FROM countries WHERE CountryID = %s", [id])
+    country = cur.fetchone()
+    cur.close()
+
+    form = CountryForm(request.form)
+
+    #fill in form with info from db
+    form.name.data = country['CountryName']
+    form.description.data = country['Description']
+
+    if request.method == 'POST':
+        if request.form['action'] == 'Submit':
+            name = request.form['name']
+            description = request.form['description']
+
+            cur = connection.cursor()
+            cur.execute("UPDATE countries "
+                        "SET CountryName=%s, Description=%s "
+                        "WHERE CountryID=%s"
+                        ,(name, description, id))
+
+            connection.commit()
+            cur.close()
+
+            flash('Country updated.', 'success')
+            return redirect(url_for('countries'))
+
+        elif request.form['action'] == 'Delete':
+            cur = connection.cursor()
+            cur.execute("DELETE FROM countries WHERE CountryID = %s", [id])
+
+            connection.commit()
+            cur.close()
+
+            flash('Country successfully deleted.', 'success')
+            return redirect(url_for('destinations'))
+
+    return render_template('edit_country.html', form=form)
+
+
 class DestinationForm(Form):
     cur = connection.cursor()
 
@@ -179,7 +228,8 @@ class DestinationForm(Form):
 @is_logged_in
 def destinations():
     cur = connection.cursor()
-    result = cur.execute("SELECT * FROM destinations d JOIN countries c ON d.CountryID = c.CountryID ORDER BY d.DestName")
+    result = cur.execute("SELECT * FROM destinations d JOIN countries c ON d.CountryID = c.CountryID "
+                        " ORDER BY d.DestName")
     destinations = cur.fetchall()
     cur.close()
 
@@ -196,7 +246,9 @@ def destinations():
 def destination(id):
     if request.method == 'GET':
         cur = connection.cursor()
-        result = cur.execute("SELECT * FROM destinations WHERE DestID = %s", [id])
+        result = cur.execute("SELECT DestName, CountryName, c.CountryID, d.Description, d.UpdateDate "
+                            "FROM destinations d JOIN countries c ON d.CountryID = c.CountryID "
+                            " WHERE DestID = %s", [id])
         destination = cur.fetchone()
         cur.close()
 
@@ -226,7 +278,9 @@ def create_destination():
 
         cur = connection.cursor()
 
-        cur.execute("INSERT INTO destinations(DestName, CountryID, Category, Description) VALUES (%s, %s, %s, %s)", (name, countryId, category, description))
+        cur.execute("INSERT INTO destinations(DestName, CountryID, Category, Description) "
+                    " VALUES (%s, %s, %s, %s)"
+                    , (name, countryId, category, description))
 
         connection.commit()
         cur.close()
@@ -261,7 +315,10 @@ def edit_destination(id):
             description = request.form['description']
 
             cur = connection.cursor()
-            cur.execute("UPDATE destinations SET DestName=%s, CountryID=%s, Category=%s, Description=%s WHERE DestID=%s", (name, countryId, category, description, id))
+            cur.execute("UPDATE destinations "
+                        "SET DestName=%s, CountryID=%s, Category=%s, Description=%s "
+                        " WHERE DestID=%s"
+                        , (name, countryId, category, description, id))
 
             connection.commit()
             cur.close()
@@ -285,7 +342,10 @@ def edit_destination(id):
 @is_logged_in
 def account():
     cur = connection.cursor()
-    cur.execute("SELECT f.DestID, DestName FROM favorites f JOIN destinations d ON d.DestID = f.DestID WHERE Username = %s", [session['username']])
+    cur.execute("SELECT f.DestID, DestName "
+                "FROM favorites f JOIN destinations d ON d.DestID = f.DestID "
+                "WHERE Username = %s"
+                , [session['username']])
     favorites = cur.fetchall()
 
     return render_template('account.html', favorites=favorites)

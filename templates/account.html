@@ -2,9 +2,8 @@
 
 {% block body %}
     <h1>{{ session['username'] }}</h1>
-    <ul class="list-group"> My Favorites:
+    <b>My Favorites:</b>
     {% for favorite in favorites %}
-        <li class="list-group-item"><a  href="/destination/{{ favorite.DestID }}"><p> {{ favorite.DestName }} </p></a></li>
+        <li><a href="/destination/{{ favorite.DestID }}">{{ favorite.DestName }}</a></li>
     {% endfor %}
-    </ul>
-{% endblock %}
+    {% endblock %}
