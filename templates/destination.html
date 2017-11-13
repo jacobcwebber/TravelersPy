@@ -2,8 +2,7 @@
 
 {% block body %}
 <div class="d-inline-block">
-    <h1>{{destination.DestName}}</h1>
-    <h3><a href='/country/{{ destination.CountryID }}'>{{destination.CountryName}}</a></h3>
+    <h1>{{destination.DestName}}, <a href='/country/{{ destination.CountryID }}'>{{destination.CountryName}}</a></h1>
 </div>
 <div class="d-inline-block">
     <form method='POST' action="">
@@ -19,6 +18,8 @@
     {% endfor %}
 </div></center>
 <center>{{destination.Description | safe}}</center>
+
+<hr>
 
 <script type="text/javascript">
     $('.images').slick( {

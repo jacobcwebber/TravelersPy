@@ -148,17 +148,27 @@ def countries():
 def country(id):
     countryCur = connection.cursor()
     destinationsCur = connection.cursor()
+    imagesCur = connection.cursor()
     try:
-        countryCur.execute("SELECT CountryName, Description, UpdateDate FROM countries WHERE CountryID = %s", [id])
-        destinationsCur.execute("SELECT CountryName, DestName, DestID, c.Description AS Description, c.UpdateDate AS UpdateDate"
+        countryCur.execute("SELECT CountryName, Description, UpdateDate "
+                           "FROM countries "
+                           "WHERE CountryID = %s"
+                           , [id])
+        destinationsCur.execute("SELECT CountryName, DestName, DestID, c.Description, c.UpdateDate"
                     " FROM countries c JOIN destinations d"
                     " WHERE c.CountryID = d.CountryID AND c.CountryID = %s"
                     , [id])
+        imagesCur.execute("SELECT c.CountryId, d.DestName, ImgUrl "
+                "FROM countries c JOIN destinations d ON c.CountryID = d.CountryID "
+                "JOIN dest_images i on d.DestID = i.DestID "
+                "WHERE c.CountryID = %s"
+                , [id])
         country = countryCur.fetchone()
         destinations = destinationsCur.fetchall()
+        images = imagesCur.fetchall()
         countryCur.close()
         destinationsCur.close()
-        return render_template('country.html', country=country, destinations=destinations)
+        return render_template('country.html', country=country, destinations=destinations, images=images)
     except:
         msg = "Country does not exist."
         return render_template('country.html', msg=msg)
@@ -223,6 +233,7 @@ class DestinationForm(Form):
     countryId = SelectField('Country', choices=countriesList, coerce=int)
     category = SelectField('Category', choices=[(0, ""), (1, "Natural Site"), (2, "Cultural/Historic Site"), (3, "Activity")], coerce=int)
     description = TextAreaField('Description')
+    imgUrl = StringField('Image Upload', [validators.URL(message="Not a valid url")])
 
 class DestImageForm(Form):
     imgUrl = StringField('Image URL', [validators.URL(message="Not a valid url")])
@@ -273,7 +284,9 @@ def destination(id):
 
         connection.commit()
         cur.close()
-        return render_template('destination.html', destination=int(id))
+
+        flash('Added to favorites', 'success')
+        return redirect(url_for('destinations'))
 
 @app.route('/create-destination', methods=['POST', 'GET'])
 @is_logged_in
@@ -284,12 +297,27 @@ def create_destination():
         countryId = form.countryId.data
         category = form.category.data
         description = form.description.data
+        imgUrl = form.imgUrl.data
 
         cur = connection.cursor()
 
         cur.execute("INSERT INTO destinations(DestName, CountryID, Category, Description) "
                     " VALUES (%s, %s, %s, %s)"
                     , (name, countryId, category, description))
+
+        connection.commit()
+        cur.close()
+        cur = connection.cursor()
+
+        cur.execute("SELECT DestID "
+                    "FROM destinations "
+                    "WHERE DestName = %s"
+                    , [name])
+        id = cur.fetchone()
+
+        cur.execute("INSERT INTO dest_images "
+                    " VALUES (%s, %s)",
+                    (id['DestID'], imgUrl))
 
         connection.commit()
         cur.close()
@@ -352,6 +380,13 @@ def edit_destination(id):
 def add_image(id):
     form = DestImageForm(request.form)
 
+    cur = connection.cursor()
+    cur.execute("SELECT DestName "
+                "FROM destinations "
+                "WHERE DestID = %s"
+                , ([id]))
+    dest = cur.fetchone()
+
     if request.method == 'POST' and form.validate():
         imgUrl = form.imgUrl.data
 
@@ -366,7 +401,7 @@ def add_image(id):
         flash('Image successfully upload.', 'success')
         return redirect(url_for('destinations'))
 
-    return render_template('add_image.html', form=form)
+    return render_template('add_image.html', dest = dest, form=form)
 
 
 @app.route('/account')

@@ -16,6 +16,9 @@
     <div class="form-group">
       {{ render_field(form.description, class_="form-control", id="editor") }}
     </div>
+    <div class="form-group">
+      {{ render_field(form.imgUrl, class_="form-control") }}
+    </div>
     <p><input class="btn btn-primary" type="submit" value="Submit">
     <a href="/destinations" class="btn btn-danger">Cancel</a>
   </form>

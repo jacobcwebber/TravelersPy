@@ -5,12 +5,32 @@
 <small> Last updated on {{country.UpdateDate}}</small>
 <hr>
 
+<center><div style="width: 50%; height: 50%;" class="images">
+    {% for image in images %}
+            <img class='img-responsive' src="{{ image.ImgUrl }}" alt="">
+    {% endfor %}
+</div></center>
+
+<!-- <center><div class="captions">
+    {% for image in images %}
+        <p>{{ image.DestName }}</p>
+    {% endfor %}
+</div></center> -->
+
+<hr>
+
 <b>Destinations:</b><br>
 {% for destination in destinations %}
     <li><a  href="/destination/{{ destination.DestID }}"> {{ destination.DestName }}</a></li>
 {% endfor %}
 <hr>
 
-{{country.Description | safe}}
+<script type="text/javascript">
+    $('.images').slick( {
+        fade: true
+    });
+</script>
+
+<p><a href="/countries" class="btn btn-primary">Back to Countries</a></p>
 
 {% endblock %}
