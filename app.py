@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, url_for, logging, session, flash, redirect
 import pymysql.cursors
 from passlib.hash import sha256_crypt
-from wtforms import Form, StringField, TextAreaField, PasswordField, validators, SelectField
+from wtforms import Form, StringField, TextAreaField, PasswordField, validators, SelectField, FileField
 from functools import wraps
 import re
 
@@ -224,12 +224,16 @@ class DestinationForm(Form):
     category = SelectField('Category', choices=[(0, ""), (1, "Natural Site"), (2, "Cultural/Historic Site"), (3, "Activity")], coerce=int)
     description = TextAreaField('Description')
 
+class DestImageForm(Form):
+    imgUrl = StringField('Image URL', [validators.URL(message="Not a valid url")])
+
 @app.route('/destinations')
 @is_logged_in
 def destinations():
     cur = connection.cursor()
-    result = cur.execute("SELECT * FROM destinations d JOIN countries c ON d.CountryID = c.CountryID "
-                        " ORDER BY d.DestName")
+    result = cur.execute("SELECT * "
+                             "FROM destinations d JOIN countries c ON d.CountryID = c.CountryID "
+                             " ORDER BY d.DestName")
     destinations = cur.fetchall()
     cur.close()
 
@@ -239,21 +243,26 @@ def destinations():
         msg="No destinations found."
         return render_template('destinations.html',  msg=msg)
 
-
-
 @app.route('/destination/<string:id>', methods=['POST', 'GET'])
 @is_logged_in
 def destination(id):
     if request.method == 'GET':
         cur = connection.cursor()
+        imageCur = connection.cursor()
         result = cur.execute("SELECT DestName, CountryName, c.CountryID, d.Description, d.UpdateDate "
                             "FROM destinations d JOIN countries c ON d.CountryID = c.CountryID "
                             " WHERE DestID = %s", [id])
+        imageCur.execute("SELECT ImgUrl "
+                         "FROM dest_images "
+                         "WHERE DestID = %s"
+                         , [id])
         destination = cur.fetchone()
+        images = imageCur.fetchall()
         cur.close()
+        imageCur.close()
 
         if result > 0:
-            return render_template('destination.html', destination=destination)
+            return render_template('destination.html', destination=destination, images=images)
         else:
             flash('Destination does not exist.', 'danger')
             return redirect(url_for('destinations'))
@@ -337,6 +346,28 @@ def edit_destination(id):
             return redirect(url_for('destinations'))
 
     return render_template('edit_destination.html', form=form)
+
+@app.route('/add_image/<string:id>', methods=['POST', 'GET'])
+@is_logged_in
+def add_image(id):
+    form = DestImageForm(request.form)
+
+    if request.method == 'POST' and form.validate():
+        imgUrl = form.imgUrl.data
+
+        cur = connection.cursor()
+        cur.execute("INSERT INTO dest_images "
+                    " VALUES (%s, %s)",
+                    (id, imgUrl))
+
+        connection.commit()
+        cur.close()
+
+        flash('Image successfully upload.', 'success')
+        return redirect(url_for('destinations'))
+
+    return render_template('add_image.html', form=form)
+
 
 @app.route('/account')
 @is_logged_in

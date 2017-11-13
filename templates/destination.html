@@ -12,7 +12,21 @@
 </div>
 <small> Last updated on {{destination.UpdateDate}}</small>
 <hr>
-{{destination.Description | safe}}
+
+<center><div style="width: 50%; height: 50%;" class="images">
+    {% for image in images %}
+        <img class='img-responsive' src="{{ image.ImgUrl }}" alt="">
+    {% endfor %}
+</div></center>
+<center>{{destination.Description | safe}}</center>
+
+<script type="text/javascript">
+    $('.images').slick( {
+        fade: true
+    });
+</script>
+
 <p><a href="/destinations" class="btn btn-primary">Back to Destinations</a></p>
 {% endblock %}
+
 

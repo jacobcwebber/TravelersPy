@@ -13,7 +13,10 @@
         <tr>
             <td><a href="/destination/{{ destination.DestID }}"><p> {{ destination.DestName }} </p></a></td>
             <td><a href="/country/{{ destination.CountryID }}"><p> {{ destination.CountryName  }} </p></a></td>
-            <td><a href="/edit_destination/{{ destination.DestID }}"><p>Edit</p></a></td>
+            <td>
+                <a href="/edit_destination/{{ destination.DestID }}"><p>Edit</p></a>
+                <a href="/add_image/{{ destination.DestID }}"><p>Add Image</p></a>
+            </td>
         </tr>
         {% endfor %}
     </table>
