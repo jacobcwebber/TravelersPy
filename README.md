@@ -9,5 +9,4 @@ To-do list:
     - Eg: UNESCO, nature, ancient civilizations, mountain, religious
 - Add Search capability based on both name, country name, etc. as well as tags
 - Improve account page (allow profile pictures, "About Me" section)
-- Add pictures to Country pages based on all Destinations within that country
-    - Add associated captions to pictures to show here (or just caption with DestName)
+- Add associated captions to pictures on Country pages

@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, url_for, logging, session, flash, redirect
+from flask import Flask, request, render_template, url_for, logging, session, flash, redirect, Markup
 import pymysql.cursors
 from passlib.hash import sha256_crypt
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators, SelectField, FileField
