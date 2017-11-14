@@ -69,7 +69,9 @@ def register():
         password = sha256_crypt.encrypt(str(form.password.data))
 
         cur = connection.cursor()
-        cur.execute("INSERT INTO users(Username, Password, Email) VALUES (%s, %s, %s)", (username, password, email))
+        cur.execute("INSERT INTO users(Username, Password, Email) "
+                    "VALUES (%s, %s, %s)"
+                    , (username, password, email))
 
         connection.commit()
         cur.close()
@@ -88,7 +90,10 @@ def login():
 
         cur = connection.cursor()
 
-        result = cur.execute("SELECT * FROM users WHERE Username = %s", [username])
+        result = cur.execute("SELECT * "
+                             "FROM users "
+                             "WHERE Username = %s"
+                             , [username])
 
         if result > 0:
             data = cur.fetchone()
@@ -100,7 +105,11 @@ def login():
                 session['username'] = username
 
                 #sets admin session status from db query
-                cur.execute("SELECT IsAdmin FROM users WHERE Username = %s", [username])
+                cur.execute("SELECT IsAdmin "
+                            "FROM users "
+                            "WHERE Username = %s"
+                            , [username])
+
                 if cur.fetchone()['IsAdmin'] == 1:
                     session['admin'] = True
                 else:
@@ -131,7 +140,9 @@ class CountryForm(Form):
 @is_logged_in
 def countries():
     cur = connection.cursor()
-    result = cur.execute("SELECT * FROM countries")
+    result = cur.execute("SELECT * "
+                         "FROM countries")
+
     countries = cur.fetchall()
     cur.close()
 
@@ -154,15 +165,18 @@ def country(id):
                            "FROM countries "
                            "WHERE CountryID = %s"
                            , [id])
+
         destinationsCur.execute("SELECT CountryName, DestName, DestID, c.Description, c.UpdateDate"
                     " FROM countries c JOIN destinations d"
                     " WHERE c.CountryID = d.CountryID AND c.CountryID = %s"
                     , [id])
+
         imagesCur.execute("SELECT c.CountryId, d.DestName, ImgUrl "
                 "FROM countries c JOIN destinations d ON c.CountryID = d.CountryID "
                 "JOIN dest_images i on d.DestID = i.DestID "
                 "WHERE c.CountryID = %s"
                 , [id])
+
         country = countryCur.fetchone()
         destinations = destinationsCur.fetchall()
         images = imagesCur.fetchall()
@@ -178,7 +192,11 @@ def country(id):
 @is_logged_in
 def edit_country(id):
     cur = connection.cursor()
-    cur.execute("SELECT CountryName, Description FROM countries WHERE CountryID = %s", [id])
+    cur.execute("SELECT CountryName, Description "
+                "FROM countries "
+                "WHERE CountryID = %s"
+                , [id])
+
     country = cur.fetchone()
     cur.close()
 
@@ -207,7 +225,9 @@ def edit_country(id):
 
         elif request.form['action'] == 'Delete':
             cur = connection.cursor()
-            cur.execute("DELETE FROM countries WHERE CountryID = %s", [id])
+            cur.execute("DELETE FROM countries "
+                        "WHERE CountryID = %s"
+                        , [id])
 
             connection.commit()
             cur.close()
@@ -221,7 +241,9 @@ def edit_country(id):
 class DestinationForm(Form):
     cur = connection.cursor()
 
-    cur.execute("SELECT CountryID, CountryName FROM countries")
+    cur.execute("SELECT CountryID, CountryName "
+                "FROM countries")
+
     countries = cur.fetchall()
     cur.close()
 
@@ -231,7 +253,11 @@ class DestinationForm(Form):
 
     name = StringField('Name', [validators.Length(min=1, max=300)])
     countryId = SelectField('Country', choices=countriesList, coerce=int)
-    category = SelectField('Category', choices=[(0, ""), (1, "Natural Site"), (2, "Cultural/Historic Site"), (3, "Activity")], coerce=int)
+    category = SelectField('Category', choices=[
+        (0, ""),
+        (1, "Natural Site"),
+        (2, "Cultural/Historic Site"),
+        (3, "Activity")], coerce=int)
     description = TextAreaField('Description')
     imgUrl = StringField('Image Upload', [validators.URL(message="Not a valid url")])
 
@@ -243,8 +269,9 @@ class DestImageForm(Form):
 def destinations():
     cur = connection.cursor()
     result = cur.execute("SELECT * "
-                             "FROM destinations d JOIN countries c ON d.CountryID = c.CountryID "
-                             " ORDER BY d.DestName")
+                         "FROM destinations d JOIN countries c ON d.CountryID = c.CountryID "
+                         "ORDER BY d.DestName")
+
     destinations = cur.fetchall()
     cur.close()
 
@@ -261,12 +288,14 @@ def destination(id):
         cur = connection.cursor()
         imageCur = connection.cursor()
         result = cur.execute("SELECT DestName, CountryName, c.CountryID, d.Description, d.UpdateDate "
-                            "FROM destinations d JOIN countries c ON d.CountryID = c.CountryID "
-                            " WHERE DestID = %s", [id])
+                             "FROM destinations d JOIN countries c ON d.CountryID = c.CountryID "
+                             "WHERE DestID = %s", [id])
+
         imageCur.execute("SELECT ImgUrl "
                          "FROM dest_images "
                          "WHERE DestID = %s"
                          , [id])
+
         destination = cur.fetchone()
         images = imageCur.fetchall()
         cur.close()
@@ -280,12 +309,15 @@ def destination(id):
 
     else:
         cur = connection.cursor()
-        cur.execute("INSERT INTO favorites VALUES (%s, %s)", (session['username'], int(id)) )
+        cur.execute("INSERT INTO favorites "
+                    "VALUES (%s, %s)",
+                    (session['username'], id))
 
         connection.commit()
         cur.close()
 
         flash('Added to favorites', 'success')
+
         return redirect(url_for('destinations'))
 
 @app.route('/create-destination', methods=['POST', 'GET'])
@@ -332,7 +364,12 @@ def create_destination():
 @is_logged_in
 def edit_destination(id):
     cur = connection.cursor()
-    cur.execute("SELECT * FROM destinations WHERE DestID = %s", [id])
+
+    cur.execute("SELECT * "
+                "FROM destinations "
+                "WHERE DestID = %s"
+                , [id])
+
     destination = cur.fetchone()
     cur.close()
 
@@ -354,7 +391,7 @@ def edit_destination(id):
             cur = connection.cursor()
             cur.execute("UPDATE destinations "
                         "SET DestName=%s, CountryID=%s, Category=%s, Description=%s "
-                        " WHERE DestID=%s"
+                        "WHERE DestID=%s"
                         , (name, countryId, category, description, id))
 
             connection.commit()
@@ -365,7 +402,9 @@ def edit_destination(id):
 
         elif request.form['action'] == 'Delete':
             cur = connection.cursor()
-            cur.execute("DELETE FROM destinations WHERE DestID = %s", [id])
+            cur.execute("DELETE FROM destinations "
+                        "WHERE DestID = %s"
+                        , [id])
 
             connection.commit()
             cur.close()
@@ -385,6 +424,7 @@ def add_image(id):
                 "FROM destinations "
                 "WHERE DestID = %s"
                 , ([id]))
+
     dest = cur.fetchone()
 
     if request.method == 'POST' and form.validate():
@@ -392,7 +432,7 @@ def add_image(id):
 
         cur = connection.cursor()
         cur.execute("INSERT INTO dest_images "
-                    " VALUES (%s, %s)",
+                    "VALUES (%s, %s)",
                     (id, imgUrl))
 
         connection.commit()
