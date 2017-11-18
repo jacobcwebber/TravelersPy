@@ -463,6 +463,10 @@ def logout():
     flash('You are now logged out', 'success')
     return redirect(url_for('index'))
 
+@app.errorhandler(404)
+def not_found(error):
+    return render_template('error.html'), 404
+
 if __name__ == '__main__':
     app.secret_key='supersecretkey'
     app.run(port=8000, debug=True)
