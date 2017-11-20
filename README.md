@@ -9,4 +9,4 @@ To-do list:
     - Eg: UNESCO, nature, ancient civilizations, mountain, religious
 - Add Search capability based on both name, country name, etc. as well as tags
 - Improve account page (allow profile pictures, "About Me" section)
-- Add associated captions to pictures on Country pages
+- Continuously add more content
