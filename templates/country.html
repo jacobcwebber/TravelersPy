@@ -5,17 +5,14 @@
 <small> Last updated on {{country.UpdateDate}}</small>
 <hr>
 
-<center><div style="width: 50%; height: 50%;" class="images">
+<center><div class="images">
     {% for image in images %}
-            <img class='img-responsive' src="{{ image.ImgUrl }}" alt="">
+    <div class="image-container">
+        <img class='img-responsive image-element' src="{{ image.ImgUrl }}" alt="">
+        <p>{{ image.DestName }}</p>
+    </div>
     {% endfor %}
 </div></center>
-
-<!-- <center><div class="captions">
-    {% for image in images %}
-        <p>{{ image.DestName }}</p>
-    {% endfor %}
-</div></center> -->
 
 <hr>
 
@@ -26,10 +23,12 @@
 <hr>
 
 <script type="text/javascript">
-    $('.images').slick( {
+$('.images').slick( {
         fade: true,
-        autoplay: true
-    });
+        arrows: false,
+        autoplay: true,
+        autoplaySpeed: 4000,
+});
 </script>
 
 <p><a href="/countries" class="btn btn-primary">Back to Countries</a></p>

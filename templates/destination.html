@@ -12,18 +12,28 @@
 <small> Last updated on {{destination.UpdateDate}}</small>
 <hr>
 
-<center><div style="width: 50%; height: 50%;" class="images">
+<center><div class="images">
     {% for image in images %}
-        <img class='img-responsive' src="{{ image.ImgUrl }}" alt="">
+    <div class="image-container">
+        <img class="img-responsive image-element" src="{{ image.ImgUrl }}" alt="">
+    </div>
     {% endfor %}
 </div></center>
-<center>{{destination.Description | safe}}</center>
+
+<center><div class="image-caption">
+    <i>{{destination.Description | safe}}</i>
+</div></center>
 
 <hr>
 
 <script type="text/javascript">
     $('.images').slick( {
-        fade: true
+        fade: true,
+        arrows: false,
+        mobileFirst: true,
+        autoplay: true,
+        autoplaySpeed: 6000,
+        touchMove: true
     });
 </script>
 
