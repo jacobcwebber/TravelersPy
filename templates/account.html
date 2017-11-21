@@ -6,4 +6,13 @@
     {% for favorite in favorites %}
         <li><a href="/destination/{{ favorite.DestID }}">{{ favorite.DestName }}</a></li>
     {% endfor %}
-    {% endblock %}
+    <hr>
+
+    <b>My Map:</b>
+
+    <div id="map"></div>
+    <script type="text/javascript" src="../static/js/account.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABEVdEk2zQBeCHstcUpXQUkSxPhtmTv0Q&callback=initMap"
+    async defer></script>
+    <hr>
+{% endblock %}

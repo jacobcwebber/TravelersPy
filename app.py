@@ -141,7 +141,8 @@ class CountryForm(Form):
 def countries():
     cur = connection.cursor()
     result = cur.execute("SELECT * "
-                         "FROM countries")
+                         "FROM countries "
+                         "ORDER BY CountryName")
 
     countries = cur.fetchall()
     cur.close()

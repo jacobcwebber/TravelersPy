@@ -1,7 +1,9 @@
 .image-element {
     height: 350px;
 }
-
 .image-caption {
     width: 50%;
+}
+#map {
+    height: 450px;
 }
