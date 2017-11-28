@@ -147,13 +147,7 @@ def countries():
     countries = cur.fetchall()
     cur.close()
 
-    if result > 0:
-        return render_template('countries.html', countries=countries)
-    else:
-        msg = 'No countries found.'
-        return render_template('countries.html', msg=msg)
-
-    cur.close()
+    return render_template('countries.html', countries=countries)
 
 @app.route('/country/<string:id>')
 @is_logged_in
@@ -203,7 +197,6 @@ def edit_country(id):
 
     form = CountryForm(request.form)
 
-    #fill in form with info from db
     form.name.data = country['CountryName']
     form.description.data = country['Description']
 
@@ -288,7 +281,7 @@ def destination(id):
     if request.method == 'GET':
         cur = connection.cursor()
         imageCur = connection.cursor()
-        result = cur.execute("SELECT DestName, CountryName, c.CountryID, d.Description, d.UpdateDate "
+        result = cur.execute("SELECT DestName, CountryName, DestID, c.CountryID, d.Description, d.UpdateDate "
                              "FROM destinations d JOIN countries c ON d.CountryID = c.CountryID "
                              "WHERE DestID = %s", [id])
 
@@ -376,7 +369,6 @@ def edit_destination(id):
 
     form = DestinationForm(request.form)
 
-    #fill in form with info from db
     form.name.data = destination['DestName']
     form.countryId.data = destination['CountryID']
     form.category.data = destination['Category']
@@ -401,6 +393,7 @@ def edit_destination(id):
             flash('Destination updated.', 'success')
             return redirect(url_for('destinations'))
 
+        # TODO: add JS here to have popup "Are you sure?"
         elif request.form['action'] == 'Delete':
             cur = connection.cursor()
             cur.execute("DELETE FROM destinations "
