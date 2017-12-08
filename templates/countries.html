@@ -1,16 +1,25 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-    <h1>Countries</h1>
-    <table class="table">
-        <tr>
-            <th>Country</th>
-            <th></th>
-        </tr>
-        {% for country in countries %}
-        <tr>
-            <td><a  href="/country/{{ country.CountryID }}"><p> {{ country.CountryName }} </p></a></td>
-            <td><a href="/edit_country/{{ country.CountryID }}"><p>Edit</p></a></td>
-        </tr>
-        {% endfor %}
+<div class="panel panel-default">
+    <div class="panel-heading"><strong>Countries</strong></div>
+    <div class="panel-body">
+        <div class="table-responsive" style="max-height: 400px">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <th>Country</th>
+                    <th></th>
+                </thead>
+                <tbody>
+                    {% for country in countries %}
+                    <tr class="clickable-row">
+                        <td><a  href="/country/{{ country.CountryID }}"><p> {{ country.CountryName }} </p></a></td>
+                        <td><a href="/edit_country/{{ country.CountryID }}"><p>Edit</p></a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 {% endblock %}

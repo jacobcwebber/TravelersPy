@@ -1,23 +1,29 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-    <h1>Destinations</h1>
-    <p><a href="/create-destination">Create Destination</a></p>
-    <table class="table">
-        <tr>
-            <th>Destination</th>
-            <th>Country</th>
-            <th></th>
-        </tr>
-        {% for destination in destinations %}
-        <tr>
-            <td><a href="/destination/{{ destination.DestID }}"><p> {{ destination.DestName }} </p></a></td>
-            <td><a href="/country/{{ destination.CountryID }}"><p> {{ destination.CountryName  }} </p></a></td>
-            <td>
-                <a href="/edit_destination/{{ destination.DestID }}"><p>Edit</p></a>
-                <a href="/add_image/{{ destination.DestID }}"><p>Add Image</p></a>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
+ <div class="panel panel-default">
+    <div class="panel-heading"><strong>Destinations</strong></div>
+    <div class="panel-body">
+    <p><a class="btn btn-primary" href="/create-destination">Create Destination</a></p>
+    <div class="table-responsive" style="max-height: 400px">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <th>Destination</th>
+                <th>Country</th>
+                <th></th>
+            </thead>
+            {% for destination in destinations %}
+            <tr class="clickable-row">
+                <td><a href="/destination/{{ destination.DestID }}"><p> {{ destination.DestName }} </p></a></td>
+                <td><a href="/country/{{ destination.CountryID }}"><p> {{ destination.CountryName  }} </p></a></td>
+                <td>
+                    <a href="/edit_destination/{{ destination.DestID }}"><p>Edit</p></a>
+<!--                     <a href="/add_image/{{ destination.DestID }}"><p>Add Image</p></a>
+ -->                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        </div>
+    </div>
+</div>
 {% endblock %}

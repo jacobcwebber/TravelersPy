@@ -4,6 +4,7 @@ from passlib.hash import sha256_crypt
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators, SelectField, FileField
 from functools import wraps
 import re
+import sys
 
 app = Flask(__name__)
 
@@ -284,6 +285,7 @@ def destination(id):
         result = cur.execute("SELECT DestName, CountryName, DestID, c.CountryID, d.Description, d.UpdateDate "
                              "FROM destinations d JOIN countries c ON d.CountryID = c.CountryID "
                              "WHERE DestID = %s", [id])
+        print(result, file=sys.stderr)
 
         imageCur.execute("SELECT ImgUrl "
                          "FROM dest_images "
