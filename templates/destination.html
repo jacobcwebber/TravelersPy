@@ -7,13 +7,11 @@
             <h1>{{destination.DestName}}, <a href='/country/{{ destination.CountryID }}'>{{destination.CountryName}}</a></h1>
         </div>
         <div>
-            <form method='POST' action="" class="form-inline">
-                <div class="form-group">
-                        <input style="width: 80px" id="favorite-btn" class="btn btn-success" type="submit" value="Favorite">
-                        <a style="width: 80px" href="/edit_destination/{{ destination.DestID }}"><input class="btn btn-primary" type="submit" value="Edit"></a> <p> </p>
-                </div>
+            <form method='POST' action="" style="display: inline-block;">
+                <input style="width: 80px" id="favorite-btn" class="btn btn-success" type="submit" value="Favorite">
             </form>
-        </div>
+            <a style="width: 80px; display: inline-block;" href="/edit_destination/{{ destination.DestID }}"><input class="btn btn-primary" type="submit" value="Edit"></a> <p> </p>            
+        </div> <p></p>
         <small> Last updated on {{destination.UpdateDate}}</small>
         <hr>
 

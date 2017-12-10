@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, url_for, logging, session, flash, redirect, Markup
 import pymysql.cursors
 from passlib.hash import sha256_crypt
-from wtforms import Form, StringField, TextAreaField, PasswordField, validators, SelectField, FileField
+from wtforms import Form, StringField, TextAreaField, PasswordField, validators, SelectField, FileField, ValidationError
 from functools import wraps
 import re
 import sys
@@ -11,7 +11,7 @@ app = Flask(__name__)
 connection = pymysql.connect(host='localhost',
                              user='Jacob',
                              password='691748jw',
-                             db='traveler',
+                             db='travelers',
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
 
@@ -48,6 +48,12 @@ class RegisterForm(Form):
         validators.Length(min=4, max=25, message='Username must be 4 to 25 characters long')
         ], render_kw={"placeholder": "username"})
     email = StringField('', render_kw={"placeholder": "email"})
+    firstName = StringField('', [
+        validators.InputRequired()
+    ], render_kw={"placeholder": "first name"})
+    lastName = StringField('', [
+        validators.InputRequired()
+    ], render_kw={"placeholder": "last name"}) 
     password = PasswordField('', [
         validators.DataRequired(),
         validators.EqualTo('confirm', message='Passwords do not match')
@@ -67,12 +73,14 @@ def register():
     if request.method == 'POST' and form.validate():
         username = form.username.data
         email = form.email.data
+        first = form.firstName.data
+        last = form.lastName.data
         password = sha256_crypt.encrypt(str(form.password.data))
 
         cur = connection.cursor()
-        cur.execute("INSERT INTO users(Username, Password, Email) "
-                    "VALUES (%s, %s, %s)"
-                    , (username, password, email))
+        cur.execute("INSERT INTO users(Username, FirstName, LastName, Password, Email) "
+                    "VALUES (%s, %s, %s, %s, %s)"
+                    , (username, first, last, password, email))
 
         connection.commit()
         cur.close()
@@ -96,20 +104,23 @@ def login():
                              "WHERE Username = %s"
                              , [username])
 
+
         if result > 0:
-            data = cur.fetchone()
-            password = data['Password']
+            user = cur.fetchone()
+            password = user['Password']
+            userId = user['UserID']
+            firstname = user['FirstName']
 
             #checks if passwords match and logs you in if they do
             if sha256_crypt.verify(password_attempt, password):
                 session['logged_in'] = True
-                session['username'] = username
+                session['user'] = userId
 
                 #sets admin session status from db query
                 cur.execute("SELECT IsAdmin "
                             "FROM users "
-                            "WHERE Username = %s"
-                            , [username])
+                            "WHERE UserID = %s"
+                            , [userId])
 
                 if cur.fetchone()['IsAdmin'] == 1:
                     session['admin'] = True
@@ -117,7 +128,7 @@ def login():
                     session['admin'] = False
 
                 cur.close()
-                flash('Welcome, ' + username + '. You are now logged in.', 'success')
+                flash('Welcome, ' + firstname + '. You are now logged in.', 'success')
                 return redirect(url_for('index'))
 
             else:
@@ -126,7 +137,7 @@ def login():
             cur.close()
 
         else:
-            error = "Username not found"
+            error = "Username not found."
             return render_template('login.html', error=error)
 
     return render_template('login.html')
@@ -141,9 +152,10 @@ class CountryForm(Form):
 @is_logged_in
 def countries():
     cur = connection.cursor()
-    result = cur.execute("SELECT * "
-                         "FROM countries "
-                         "ORDER BY CountryName")
+    result = cur.execute("SELECT c.CountryName, count(d.DestName) AS DestCount, c.CountryID "
+                         "FROM Countries c LEFT OUTER JOIN Destinations d ON c.CountryID = d.CountryID "
+                         "GROUP BY c.CountryName "
+                         "ORDER BY c.CountryName")
 
     countries = cur.fetchall()
     cur.close()
@@ -307,7 +319,7 @@ def destination(id):
         cur = connection.cursor()
         cur.execute("INSERT INTO favorites "
                     "VALUES (%s, %s)",
-                    (session['username'], id))
+                    (session['user'], id))
 
         connection.commit()
         cur.close()
@@ -445,9 +457,9 @@ def add_image(id):
 def account():
     cur = connection.cursor()
     cur.execute("SELECT f.DestID, DestName "
-                "FROM favorites f JOIN destinations d ON d.DestID = f.DestID "
-                "WHERE Username = %s"
-                , [session['username']])
+                "FROM favorites f JOIN destinations d ON d.DestID = f.DestID JOIN users u on u.UserID = f.UserID "
+                "WHERE f.UserID = %s"
+                , [session['user']])
     favorites = cur.fetchall()
 
     return render_template('account.html', favorites=favorites)
