@@ -280,7 +280,7 @@ def destinations():
                          "ORDER BY d.DestName")
 
     destinations = cur.fetchall()
-    cur.close()
+    cur.close() 
 
     if result > 0:
         return render_template('destinations.html', destinations=destinations)
@@ -338,6 +338,8 @@ def create_destination():
         category = form.category.data
         description = form.description.data
         imgUrl = form.imgUrl.data
+        #lat = request.form['lat']
+        #lng = request.form['lng']
 
         cur = connection.cursor()
 
@@ -358,6 +360,10 @@ def create_destination():
         cur.execute("INSERT INTO dest_images "
                     " VALUES (%s, %s)",
                     (id['DestID'], imgUrl))
+
+        # cur.execute("INSERT INTO dest_locations "
+        #     " VALUES (%s, %s, %s)"
+        #     , (id['DestID'], lat, lng))
 
         connection.commit()
         cur.close()
