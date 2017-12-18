@@ -1,14 +1,31 @@
-$('#next-btn').on("click", function() {
-    var geocoder = new google.maps.Geocoder();
-    var location = $('#dest-name').val();
-    geocoder.geocode( {'address' : location}, function(response, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
-            var lat = response[0].geometry.location.lat();
-            var lng = response[0].geometry.location.lng();
-            storeLocation(lat, lng)
-        }
-    })
-});
+var currentTab = 0;
+showTab(currentTab);
+
+function showTab(n) {
+    var x = document.getElementsByClassName("tab");
+    x[n].style.display = "block";
+    if (n == 0) {
+        document.getElementById("prevBtn").style.display = "none";
+    } else {
+        document.getElementById("prevBtn").style.display = "inline";
+    }
+    if (n == (x.length - 1)) {
+        document.getElementById("nextBtn").innerHTML = "Submit"
+    } else {
+        document.getElementById("nextBtn").innerHTML = "Next"
+    }
+}
+
+function nextPrev(n) {
+    var x = document.getElementsByClassName("tab");
+    x[currentTab].style.display = "none";
+    currentTab = currentTab + n;
+    if (currentTab >= x.length) {
+        document.getElementById("submitForm").submit();
+        return false;
+    }
+    showTab(currentTab)
+}
 
 function storeLocation(lat, lng) {
     $.ajax({
