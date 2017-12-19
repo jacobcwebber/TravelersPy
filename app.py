@@ -258,7 +258,7 @@ class DestinationForm(Form):
     for country in countries:
         countriesList.append((country['CountryID'], country['CountryName']))
 
-    name = StringField('Name', [validators.Length(min=1, max=300)])
+    name = StringField('Name')
     countryId = SelectField('Country', choices=countriesList, coerce=int)
     category = SelectField('Category', choices=[
         (0, ""),
@@ -270,6 +270,24 @@ class DestinationForm(Form):
 
 class DestImageForm(Form):
     imgUrl = StringField('Image URL', [validators.URL(message="Not a valid url")])
+
+@app.route('/destinations-user')
+@is_logged_in
+def destinations_user():
+    cur = connection.cursor()
+    result = cur.execute("SELECT d.DestID, d.DestName, i.ImgURL "
+                         "FROM destinations d JOIN dest_images i on d.destID = i.DestID "
+                         "GROUP BY d.DestID "
+                         "ORDER BY d.DestName "
+                         "LIMIT 3")
+    destinations = cur.fetchall()
+    cur.close()
+
+    if result > 0:
+        return render_template('destinations_user.html', destinations=destinations)
+    else: 
+        msg = "No destinations found."
+        return render_template("destinations_user.html", msg=msg)
 
 @app.route('/destinations')
 @is_logged_in

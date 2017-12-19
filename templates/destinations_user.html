@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<section class="card-group-container h-center">
+    <section class="dest-card-group">
+        <section class="dest-card-group-title">Recommended For You</section>
+        <section style="display:flex; align-items: center; justify-content: flex-start; flex-wrap: wrap;">
+            {% for destination in destinations %}
+            <a style="text-decoration: none;" href="/destination/{{ destination.DestID }}">
+                <section class='dest-box' style="background-image: url({{ destination.ImgURL }})">
+                    <section style="margin: 0px auto 24px;">
+                        <section class="dest-box-name">
+                            <p style="font-size: 20px">{{ destination.DestName }}</p>
+                        </section>
+                    </section>
+                </section>
+            </a>
+            {% endfor %}
+        </section>
+    </section>
+</section>
+{% endblock %}

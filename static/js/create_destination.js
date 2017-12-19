@@ -27,16 +27,16 @@ function nextPrev(n) {
     showTab(currentTab)
 }
 
-function storeLocation(lat, lng) {
-    $.ajax({
-        type: 'POST',
-        url: '/create-destination',
-        data: {
-            lat: lat,
-            lng: lng
-        },
-        error: function(e) {
-            console.log(e);
-        }
-    });
-}
+// function storeLocation(lat, lng) {
+//     $.ajax({
+//         type: 'POST',
+//         url: '/create-destination',
+//         data: {
+//             lat: lat,
+//             lng: lng
+//         },
+//         error: function(e) {
+//             console.log(e);
+//         }
+//     });
+// }
