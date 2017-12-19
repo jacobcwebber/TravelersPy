@@ -7,6 +7,7 @@ div {
 .navbar-inverse {
     background-color: rgb(32, 41, 51);
     border: 0;
+    text-transform: uppercase;
 }
 .h-v-center{
     position: absolute;

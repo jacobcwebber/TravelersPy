@@ -1,29 +1,30 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<h1>{{country.CountryName}}</h1>
-<small> Last updated on {{country.UpdateDate}}</small>
-<hr>
+<div class="panel panel-default">
+    <div class="panel-heading">{{ country.CountryName }}</div>
+    <div class="panel-body">
+        <center>
+            <div class="images">
+                {% for image in images %}
+                <div class="image-container">
+                    <img class='img-responsive image-element' src="{{ image.ImgUrl }}" alt="">
+                    <p>{{ image.DestName }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </center>        
+        <hr>  
+        <b>Destinations:</b><br>
+        {% for destination in destinations %}
+            <li><a  href="/destination/{{ destination.DestID }}"> {{ destination.DestName }}</a></li>
+        {% endfor %}
+        <hr>
 
-<center><div class="images">
-    {% for image in images %}
-    <div class="image-container">
-        <img class='img-responsive image-element' src="{{ image.ImgUrl }}" alt="">
-        <p>{{ image.DestName }}</p>
+        <p><a href="/countries" class="btn btn-primary">Back to Countries</a></p>
+        <small> Last updated on {{country.UpdateDate}}</small>
     </div>
-    {% endfor %}
-</div></center>
-
-<hr>
-
-<b>Destinations:</b><br>
-{% for destination in destinations %}
-    <li><a  href="/destination/{{ destination.DestID }}"> {{ destination.DestName }}</a></li>
-{% endfor %}
-<hr>
-
-<p><a href="/countries" class="btn btn-primary">Back to Countries</a></p>
-
+</div>
 
 <script src="/static/js/country.js"></script>
 {% endblock %}

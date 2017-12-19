@@ -1,35 +1,36 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<div class="d-inline-block" id="dest-name">
-    <h1>{{destination.DestName}}, <a href='/country/{{ destination.CountryID }}'>{{destination.CountryName}}</a></h1>
-</div>
-<div>
-    <form method='POST' action="" style="display: inline-block;">
-        <input style="width: 80px" id="favorite-btn" class="btn btn-success" type="submit" value="Favorite">
-    </form>
-    <a style="width: 80px; display: inline-block;" href="/edit_destination/{{ destination.DestID }}"><input class="btn btn-primary" type="submit" value="Edit"></a> <p> </p>            
-</div> <p></p>
-<small> Last updated on {{destination.UpdateDate}}</small>
-<hr>
-
-<center><div class="images">
-    {% for image in images %}
-    <div class="image-container">
-        <img class="img-responsive image-element" src="{{ image.ImgUrl }}" alt="">
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="d-inline-block">{{ destination.DestName }}, <a href='/country/{{ destination.CountryID }}'>{{destination.CountryName}}</a></div>
     </div>
-    {% endfor %}
-</div></center>
-
-<center><div class="image-caption">
-    <i>{{destination.Description | safe}}</i>
-</div></center>
-<hr>
-<h1>Map</h1>
-<div id="map" style="height: 500px; width: 100%;"></div>
-<hr>
-<a href="/destinations" class="btn btn-primary">Back to Destinations</a> <p></p>
-
+    <div class="panel-body">
+        <form method='POST' action="" style="display: inline-block;">
+            <input style="width: 80px" id="favorite-btn" class="btn btn-success" type="submit" value="Favorite">
+        </form>
+        <a style="width: 80px; display: inline-block;" href="/edit_destination/{{ destination.DestID }}"><input class="btn btn-primary" type="submit" value="Edit"></a> <p> </p>            
+        <p></p>
+        <hr>
+        
+        <center><div class="images">
+            {% for image in images %}
+            <div class="image-container">
+                <img class="img-responsive image-element" src="{{ image.ImgUrl }}" alt="">
+            </div>
+            {% endfor %}
+        </div></center>
+        
+        <center><div class="image-caption">
+            <i>{{destination.Description | safe}}</i>
+        </div></center>
+        <hr>
+        <h1>Map</h1>
+        <div id="map" style="height: 500px; width: 100%;"></div>
+        <hr>
+        <a href="/destinations" class="btn btn-primary">Back to Destinations</a> <p></p>
+        <small> Last updated on {{destination.UpdateDate}}</small>
+    </div>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABEVdEk2zQBeCHstcUpXQUkSxPhtmTv0Q&callback=initMap"
     async defer></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>

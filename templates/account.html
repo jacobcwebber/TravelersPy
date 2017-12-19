@@ -1,14 +1,19 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-    <h1>{{ session['username'] }}</h1>
-    <b>My Favorites:</b>
-    {% for favorite in favorites %}
-        <li><a href="/destination/{{ favorite.DestID }}">{{ favorite.DestName }}</a></li>
-    {% endfor %}
-    <hr>
-    <b>My Map:</b>
-    <div id="map"></div>
+<div class="panel panel-default">
+    <div class="panel-heading">{{ session['username'] }}</div>
+    <div class="panel-body">
+        <b>My Favorites:</b>
+        {% for favorite in favorites %}
+            <li><a href="/destination/{{ favorite.DestID }}">{{ favorite.DestName }}</a></li>
+        {% endfor %}
+        <hr>
+        <b>My Map:</b>
+        <div id="map"></div>
+    </div>
+</div>
+
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABEVdEk2zQBeCHstcUpXQUkSxPhtmTv0Q&callback=initMap"
     async defer></script>
     <script type="text/javascript" src="../static/js/account.js"></script>

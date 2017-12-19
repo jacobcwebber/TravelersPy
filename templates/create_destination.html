@@ -22,18 +22,16 @@
             {{ render_field(form.countryId, class_="form-control") }}
           </div>
         </div>
-          <!-- <div id="map"></div> -->
         <div class="tab" style="display: none;">
           <div class="form-group">
               {{ render_field(form.imgUrl, class_="form-control") }}
           </div>
         </div>
       </form>
-      <div class="btn-group" style="float: right">
-          <a class="btn btn-primary" id="prevBtn" onclick="nextPrev(-1)">Previous</a>   
+      <div style="float: right">
+          <a class="btn btn-secondary" id="prevBtn" onclick="nextPrev(-1)">Previous</a>   
           <a class="btn btn-primary" id="nextBtn" onclick="nextPrev(1)">Next</a>
-          <input style="display: none;" id="submit-btn" class="btn btn-success" type="submit" value="Submit">
-          <!-- <a href="/destinations" class="btn btn-danger">Cancel</a> <p></p> -->
+          <input  class="btn btn-success  " style="display: none;" id="submit-btn" type="submit" value="Submit">
         </div>
     </div>
   </div>

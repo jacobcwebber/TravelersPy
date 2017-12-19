@@ -1,27 +1,22 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<h1>Register</h1>
 {% from "includes/_formhelpers.html" import render_field %}
-<form method="POST" action="">
-    <div class="form-group">
-        {{render_field(form.username, class_="form-control")}}
+
+<div class="panel panel-default h-v-center" style="width: 450px">
+    <div class="panel-heading">Register</div>
+    <div class="panel-body">
+        <form method="POST" action="">
+            <div class="form-group">
+                {{render_field(form.username, class_="form-control")}}
+                {{render_field(form.email, class_="form-control")}}
+                {{render_field(form.firstName, class_="form-control")}}
+                {{render_field(form.lastName, class_="form-control")}}                
+                {{render_field(form.password, class_="form-control")}}
+                {{render_field(form.confirm, class_="form-control")}}
+            </div>
+            <center><input type="submit" class="btn btn-primary btn-lg" value="Create"></center>
+        </form>
     </div>
-    <div class="form-group">
-        {{render_field(form.email, class_="form-control")}}
-    </div>
-    <div class="form-group">
-        {{render_field(form.firstName, class_="form-control")}}
-    </div>
-    <div class="form-group">
-        {{render_field(form.lastName, class_="form-control")}}
-    </div>
-    <div class="form-group">
-      {{render_field(form.password, class_="form-control")}}
-    </div>
-    <div class="form-group">
-      {{render_field(form.confirm, class_="form-control")}}
-    </div>
-    <p><input type="submit" class="btn btn-primary" value="Create"></p>
-</form>
+</div>
 {% endblock %}
