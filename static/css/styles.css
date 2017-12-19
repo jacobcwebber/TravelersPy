@@ -4,6 +4,16 @@ body {
 div {
     display: block;
 }
+.navbar-inverse {
+    background-color: rgb(32, 41, 51);
+    border: 0;
+}
+.h-v-center{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
 .image-element {
     height: 350px;
 }
@@ -19,9 +29,9 @@ div {
     padding: 10px;
 }
 .dest-card-group {
-    border: 1px solid rgb(41, 51, 67);
-    border-radius: 5px;
-    background-color: rgba(41, 51, 67, 0.3);
+    border: 1px solid rgb(51, 64, 85);
+    background: rgba(51, 64, 85, 0.5);
+    border-radius: 6px; 
     max-width: 720px;
     width: 100%;
     align-items: center;
@@ -42,16 +52,20 @@ div {
     text-align: center;
     height: 240px; 
     width: 200px; 
-    background-color: rgb(41,51,67);
     background-position: center center;
     background-size: auto 240px;
     margin: 0 8px 8px 0;
 }
 .dest-box-name {
-    font-weight: 300;
+    font-weight: 350;
     letter-spacing: 0.8px;
     color: rgb(255,255,255);
-    vertical-align: middle;
-    text-align: center;
     margin: 12px;
+    position: relative;
+}
+.title-text {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%); 
+    text-shadow: 2px 2px 1px rgba(0,0,0,0.2);
 }

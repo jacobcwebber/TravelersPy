@@ -39,10 +39,6 @@ def is_admin(f):
 def index():
     return render_template('home.html')
 
-@app.route('/about')
-def about():
-    return render_template('about.html')
-
 class RegisterForm(Form):
     username = StringField('', [
         validators.Length(min=4, max=25, message='Username must be 4 to 25 characters long')

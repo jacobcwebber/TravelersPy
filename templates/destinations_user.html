@@ -7,10 +7,10 @@
         <section style="display:flex; align-items: center; justify-content: flex-start; flex-wrap: wrap;">
             {% for destination in destinations %}
             <a style="text-decoration: none;" href="/destination/{{ destination.DestID }}">
-                <section class='dest-box' style="background-image: url({{ destination.ImgURL }})">
-                    <section style="margin: 0px auto 24px;">
-                        <section class="dest-box-name">
-                            <p style="font-size: 20px">{{ destination.DestName }}</p>
+                <section class='dest-box' style="background-image: linear-gradient(rgba(51, 64, 85, 0.40), rgba(51, 64, 85, 0.40)), url({{ destination.ImgURL }});">
+                    <section style="margin: 0px auto 24px; height: 100%">
+                        <section class="dest-box-name" style="height: 100%">
+                            <p class="title-text" style="font-size: 20px">{{ destination.DestName }}</p>
                         </section>
                     </section>
                 </section>
