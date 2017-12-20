@@ -274,7 +274,7 @@ def destinations_user():
     result = cur.execute("SELECT d.DestID, d.DestName, i.ImgURL "
                          "FROM destinations d JOIN dest_images i on d.destID = i.DestID "
                          "GROUP BY d.DestID "
-                         "ORDER BY d.DestName "
+                         "ORDER BY RAND() "
                          "LIMIT 3")
     destinations = cur.fetchall()
     cur.close()
@@ -386,7 +386,15 @@ def create_destination():
 
         return redirect(url_for('destinations'))
 
-    return render_template('create_destination.html', form=form)
+    cur = connection.cursor()
+    cur.execute("SELECT * FROM tags")
+    tags = cur.fetchall()
+    cur.close()
+
+    tagsList = []
+    for tag in tags:
+        tagsList.append(tag['Tag'])
+    return render_template('create_destination.html', form=form, tags=tagsList)
 
 @app.route('/edit_destination/<string:id>', methods=['POST', 'GET'])
 @is_logged_in

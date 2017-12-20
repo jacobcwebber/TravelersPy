@@ -1,42 +1,87 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-  {% from "includes/_formhelpers.html" import render_field %}
-  <div class="panel panel-default">
-    <div class="panel-heading">Create Destination</div>
-    <div class="panel-body">
-      <form method="POST" id="submitForm" action="">
-        <div class="tab">
-          <div class="form-group">
-            {{ render_field(form.name, id="dest-name", class_="form-control") }}
-          </div>
-          <div class="form-group">
-              {{ render_field(form.category, class_="form-control") }}
-          </div>
-          <div class="form-group">
-              {{ render_field(form.description, class_="form-control", id="editor") }}
-          </div>
+{% from "includes/_formhelpers.html" import render_field %}
+<link rel="stylesheet" href="/static/css/bootstrap-tagsinput.css">
+<div class="panel panel-default">
+  <div class="panel-heading">Create Destination</div>
+  <div class="panel-body">
+    <form method="POST" id="submitForm" action="">
+      <div class="tab">
+        <div class="form-group">
+          {{ render_field(form.name, id="dest-name", class_="form-control") }}
         </div>
-        <div class="tab" style="display: none;">
-          <div class="form-group">
-            {{ render_field(form.countryId, class_="form-control") }}
-          </div>
+        <div class="form-group">
+            {{ render_field(form.category, class_="form-control") }}
         </div>
-        <div class="tab" style="display: none;">
-          <div class="form-group">
-              {{ render_field(form.imgUrl, class_="form-control") }}
-          </div>
+        <div class="form-group">
+            {{ render_field(form.description, class_="form-control", id="editor") }}
         </div>
-      </form>
-      <div style="float: right">
-          <a class="btn btn-secondary" id="prevBtn" onclick="nextPrev(-1)">Previous</a>   
-          <a class="btn btn-primary" id="nextBtn" onclick="nextPrev(1)">Next</a>
-          <input  class="btn btn-success  " style="display: none;" id="submit-btn" type="submit" value="Submit">
+      </div>
+      <div class="tab" style="display: none;">
+        <div class="form-group">
+          {{ render_field(form.countryId, class_="form-control") }}
         </div>
-    </div>
+        <div class="form-group">
+          <label for="tags">Tags</label> <br>
+          <input id="tags" class="form-control" type="text" data-role="tagsinput" style="width: 100%"> 
+        </div>
+      </div>
+      <div class="tab" style="display: none;">
+        <div class="form-group">
+            {{ render_field(form.imgUrl, class_="form-control") }}
+        </div>
+      </div>
+    </form>
+    <div style="float: right">
+        <a class="btn btn-secondary" id="prevBtn" onclick="nextPrev(-1)">Previous</a>   
+        <a class="btn btn-primary" id="nextBtn" onclick="nextPrev(1)">Next</a>
+        <input  class="btn btn-success" style="display: none;" id="submit-btn" type="submit" value="Submit">
+      </div>
   </div>
-    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABEVdEk2zQBeCHstcUpXQUkSxPhtmTv0Q" async defer></script> -->
-    <script src="//cdn.ckeditor.com/4.6.2/basic/ckeditor.js"></script>
-    <script type="text/javascript">CKEDITOR.replace('editor')</script>
-    <script src="/static/js/create_destination.js"></script>
+</div>
+<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABEVdEk2zQBeCHstcUpXQUkSxPhtmTv0Q" async defer></script> -->
+<script src="//cdn.ckeditor.com/4.6.2/basic/ckeditor.js"></script>
+<script type="text/javascript">CKEDITOR.replace('editor')</script>
+<script src="/static/js/create_destination.js"></script>
+<script src="/static/js/bootstrap-tagsinput.js"></script>
+<script src="/static/js/bootstrap3-typeahead.js"></script>
+<script>
+  $('#tags').tagsinput({
+    confirmKeys: [13, 44, 9],
+    maxTags: 10,
+    trimValue: true,
+    typeahead: {
+      afterSelect: function(val) {this.$element.val(""); },
+      source: ['Adventure', 'UNESCO', 'Southeast Asia']
+    },
+    freeInput: false
+  });
+
+  // This might help with getting the source
+  // $("#elem").tagsinput({
+  //       typeahead: {
+  //           afterSelect: function(val) { this.$element.val(""); },
+  //           source: function(query) {
+  //               return $.get("/someurl");
+  //           }
+  //       }
+  //   });
+
+  $("#tags").change(function(){
+    console.log($("#tags").tagsinput('items'))
+  });
+
+  // var tagnames = Bloodhound({
+  //   datumTokenizer: Bloodhound.tokenizers.obj.whitespace,
+  //   queryTokenizer
+  // })
+//   var availableTags = "{{ tags }}"
+//   $('#tags').autocomplete({
+//     source: availableTags
+//   });
+// });
+
+// add typeahead.js and bootstrap tags
+</script>
 {% endblock %}

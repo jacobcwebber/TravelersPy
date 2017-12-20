@@ -4,12 +4,12 @@
 <div class="panel panel-default">
     <div class="panel-heading">{{ session['username'] }}</div>
     <div class="panel-body">
-        <b>My Favorites:</b>
+        <b>My Favorites</b>
         {% for favorite in favorites %}
             <li><a href="/destination/{{ favorite.DestID }}">{{ favorite.DestName }}</a></li>
         {% endfor %}
         <hr>
-        <b>My Map:</b>
+        <b>My Map</b>
         <div id="map"></div>
     </div>
 </div>
