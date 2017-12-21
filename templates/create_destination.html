@@ -23,8 +23,7 @@
           {{ render_field(form.countryId, class_="form-control") }}
         </div>
         <div class="form-group">
-          <label for="tags">Tags</label> <br>
-          <input id="tags" class="form-control" type="text" data-role="tagsinput" style="width: 100%"> 
+          {{ render_field(form.tags, id="tags", class="form-control", type="text", **{'data-role':'tagsinput'})}}
         </div>
       </div>
       <div class="tab" style="display: none;">
@@ -53,23 +52,15 @@
     trimValue: true,
     typeahead: {
       afterSelect: function(val) {this.$element.val(""); },
+      showHintOnFocus: true,
       source: {{ tags | safe }}
     },
     freeInput: false
   });
 
-  // This might help with getting the source
-  // $("#elem").tagsinput({
-  //       typeahead: {
-  //           afterSelect: function(val) { this.$element.val(""); },
-  //           source: function(query) {
-  //               return $.get("/someurl");
-  //           }
-  //       }
-  //   });
-
-  $("#tags").change(function(){
-    console.log($("#tags").tagsinput('items'))
-  });
+  // Use this for getting the current tags:
+  // $("#tags").change(function(){
+  //   console.log($("#tags").tagsinput('items'))
+  // });
 </script>
 {% endblock %}

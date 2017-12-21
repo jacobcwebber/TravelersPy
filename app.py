@@ -264,6 +264,7 @@ class DestinationForm(Form):
         (3, "Activity")], coerce=int)
     description = TextAreaField('Description')
     imgUrl = StringField('Image Upload', [validators.URL(message="Not a valid url")])
+    tags = StringField('Tags')
 
 class DestImageForm(Form):
     imgUrl = StringField('Image URL', [validators.URL(message="Not a valid url")])
@@ -277,14 +278,19 @@ def destinations_user():
                          "GROUP BY d.DestID "
                          "ORDER BY RAND() "
                          "LIMIT 3")
-    destinations = cur.fetchall()
+    recommended = cur.fetchall()
     cur.close()
 
-    if result > 0:
-        return render_template('destinations_user.html', destinations=destinations)
-    else: 
-        msg = "No destinations found."
-        return render_template("destinations_user.html", msg=msg)
+    cur = connection.cursor()
+    result = cur.execute("SELECT d.DestID, d.DestName, i.ImgURL "
+                         "FROM destinations d JOIN dest_images i on d.DestID = i.DestID JOIN dest_tags dt on d.DestID = dt.DestID JOIN tags t ON dt.TagID = t.TagID "
+                         "WHERE t.TagName = 'Adventure' "
+                         "GROUP BY d.DestID "
+                         "LIMIT 3")
+    topTag = cur.fetchall()
+    cur.close()
+
+    return render_template('destinations_user.html', recommended=recommended, topTag=topTag)
 
 @app.route('/destinations')
 @is_logged_in
@@ -353,6 +359,7 @@ def create_destination():
         category = form.category.data
         description = form.description.data
         imgUrl = form.imgUrl.data
+        tags = form.tags.data
         #lat = request.form['lat']
         #lng = request.form['lng']
 
@@ -364,6 +371,7 @@ def create_destination():
 
         connection.commit()
         cur.close()
+
         cur = connection.cursor()
 
         cur.execute("SELECT DestID "
@@ -376,6 +384,7 @@ def create_destination():
                     " VALUES (%s, %s)",
                     (id['DestID'], imgUrl))
 
+        #TODO: make it so the latLng is saved in db to avoid geocoding on page load
         # cur.execute("INSERT INTO dest_locations "
         #     " VALUES (%s, %s, %s)"
         #     , (id['DestID'], lat, lng))
@@ -383,20 +392,37 @@ def create_destination():
         connection.commit()
         cur.close()
 
+        print("Number of tags:" + str(len(tags.split(','))), file=sys.stderr)
+        if len(tags.split(',')) > 0:
+            for tag in tags.split(','):
+                cur = connection.cursor()
+
+                cur.execute("SELECT TagID "
+                            "FROM Tags "
+                            "WHERE TagName = %s"
+                            , [tag])
+                tagId = cur.fetchone()
+                
+                cur.execute("INSERT INTO dest_tags "
+                            "VALUES (%s, %s)"
+                            , (id['DestID'], tagId['TagID']))
+                connection.commit()
+                cur.close()
+
         flash('Your new destination has been created!', 'success')
 
         return redirect(url_for('destinations'))
-
+            
     cur = connection.cursor()
-    cur.execute("SELECT * FROM tags")
+    cur.execute("SELECT TagName FROM tags")
     tags = cur.fetchall()
     cur.close()
 
     tagsList = []
     for tag in tags:
-        tagsList.append(tag['Tag'])
+        tagsList.append(tag['TagName'])
 
-    return render_template('create_destination.html', form=form, tags=json.dumps(tagsList))
+    return render_template('create_destination.html', form=form, tags=tagsList)
 
 @app.route('/edit_destination/<string:id>', methods=['POST', 'GET'])
 @is_logged_in

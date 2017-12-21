@@ -3,7 +3,7 @@
 {% block body %}
 <div class="panel panel-default">
     <div class="panel-heading">
-        <div class="d-inline-block">{{ destination.DestName }}, <a href='/country/{{ destination.CountryID }}'>{{destination.CountryName}}</a></div>
+        <div class="d-inline-block" id="dest-name">{{ destination.DestName }}, <a href='/country/{{ destination.CountryID }}'>{{destination.CountryName}}</a></div>
     </div>
     <div class="panel-body">
         <form method='POST' action="" style="display: inline-block;">
@@ -31,9 +31,10 @@
         <a href="/destinations" class="btn btn-primary">Back to Destinations</a> <p></p>
         <small> Last updated on {{destination.UpdateDate}}</small>
     </div>
+</div>
+
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABEVdEk2zQBeCHstcUpXQUkSxPhtmTv0Q&callback=initMap"
     async defer></script>
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="/static/js/destination.js"></script>
 {% endblock %}
 
