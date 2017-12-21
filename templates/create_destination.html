@@ -53,7 +53,7 @@
     trimValue: true,
     typeahead: {
       afterSelect: function(val) {this.$element.val(""); },
-      source: ['Adventure', 'UNESCO', 'Southeast Asia']
+      source: {{ tags | safe }}
     },
     freeInput: false
   });
@@ -71,17 +71,5 @@
   $("#tags").change(function(){
     console.log($("#tags").tagsinput('items'))
   });
-
-  // var tagnames = Bloodhound({
-  //   datumTokenizer: Bloodhound.tokenizers.obj.whitespace,
-  //   queryTokenizer
-  // })
-//   var availableTags = "{{ tags }}"
-//   $('#tags').autocomplete({
-//     source: availableTags
-//   });
-// });
-
-// add typeahead.js and bootstrap tags
 </script>
 {% endblock %}

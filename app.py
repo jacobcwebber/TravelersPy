@@ -5,6 +5,7 @@ from wtforms import Form, StringField, TextAreaField, PasswordField, validators,
 from functools import wraps
 import re
 import sys
+import json
 
 app = Flask(__name__)
 
@@ -394,7 +395,8 @@ def create_destination():
     tagsList = []
     for tag in tags:
         tagsList.append(tag['Tag'])
-    return render_template('create_destination.html', form=form, tags=tagsList)
+
+    return render_template('create_destination.html', form=form, tags=json.dumps(tagsList))
 
 @app.route('/edit_destination/<string:id>', methods=['POST', 'GET'])
 @is_logged_in
