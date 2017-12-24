@@ -1,31 +1,65 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-  <h1>Edit Destination</h1>
-  {% from "includes/_formhelpers.html" import render_field %}
-  <form method="POST" action="">
-    <div class="form-group">
-      {{ render_field(form.name, class_="form-control") }}
+{% from "includes/_formhelpers.html" import render_field %}
+<link rel="stylesheet" href="/static/css/bootstrap-tagsinput.css">
+<div class="panel panel-default">
+  <div class="panel-heading">Edit Destination</div>
+  <div class="panel-body">
+    <form method="POST" id="submitForm" action="">
+      <div class="tab">
+        <div class="form-group">
+          {{ render_field(form.name, class_="form-control") }}
+        </div>
+        <div class="form-group">
+          {{ render_field(form.category, class_="form-control") }}
+        </div>
+        <div class="form-group">
+          {{ render_field(form.description, class_="form-control", id="editor") }}
+        </div>
+      </div>
+      <div class="tab" style="display: none;">
+        <div class="form-group">
+          {{ render_field(form.countryId, class_="form-control") }}
+        </div>
+        <div class="form-group">
+          {{ render_field(form.tags, id="tags", class="form-control", type="text", **{'data-role':'tagsinput'})}}
+        </div>
+      </div>
+      <div class="tab" style="display: none;">
+        <div class="form-group">
+          {{ render_field(form.imgUrl, class_="form-control") }}
+        </div>
+      </div>
+    </form>
+    <div style="float: right">
+        <a class="btn btn-secondary" id="prevBtn" onclick="nextPrev(-1)">Previous</a>   
+        <a class="btn btn-primary" id="nextBtn" onclick="nextPrev(1)">Next</a>
+        <input  class="btn btn-success" style="display: none;" id="submit-btn" type="submit" value="Submit">
     </div>
-    <div class="form-group">
-      {{ render_field(form.countryId, class_="form-control") }}
-    </div>
-    <div class="form-group">
-      {{ render_field(form.category, class_="form-control") }}
-    </div>
-    <div class="form-group">
-      {{ render_field(form.description, class_="form-control", id="editor") }}
-    </div>
-    <div class="form-group">
-      {{ render_field(form.imgUrl, class_="form-control") }}
-    </div>
-    <input class="btn btn-success" type="submit" name="action" value="Submit">
-    <input class="btn btn-danger" type="submit" name="action" value="Delete">
-    <a href="/destinations" class="btn btn-primary">Cancel</a>
-  </form>
-  <p></p>
-  <script src="//cdn.ckeditor.com/4.6.2/basic/ckeditor.js"></script>
-  <script type="text/javascript">
-    CKEDITOR.replace('editor')
-  </script>
+  </div>
+</div>
+<p></p>
+<script src="//cdn.ckeditor.com/4.6.2/basic/ckeditor.js"></script>
+<script type="text/javascript">CKEDITOR.replace('editor')</script>
+<script src="/static/js/create_destination.js"></script>
+<script src="/static/js/bootstrap-tagsinput.js"></script>
+<script src="/static/js/bootstrap3-typeahead.js"></script>
+<script>
+  $('#tags').tagsinput({
+    confirmKeys: [13, 44, 9],
+    maxTags: 10,
+    trimValue: true,
+    typeahead: {
+      afterSelect: function(val) {this.$element.val(""); },
+      showHintOnFocus: true,
+      source: {{ tags | safe }}
+    },
+    freeInput: false
+  });
+  // Use this for getting the current tags:
+  // $("#tags").change(function(){
+  //   console.log($("#tags").tagsinput('items'))
+  // });
+</script>
 {% endblock %}

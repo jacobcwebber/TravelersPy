@@ -273,24 +273,46 @@ class DestImageForm(Form):
 @is_logged_in
 def destinations_user():
     cur = connection.cursor()
-    result = cur.execute("SELECT d.DestID, d.DestName, i.ImgURL "
-                         "FROM destinations d JOIN dest_images i on d.destID = i.DestID "
-                         "GROUP BY d.DestID "
-                         "ORDER BY RAND() "
-                         "LIMIT 3")
+    cur.execute("SELECT d.DestID, d.DestName, i.ImgURL "
+                "FROM destinations d JOIN dest_images i on d.destID = i.DestID "
+                "GROUP BY d.DestID "
+                "ORDER BY RAND() "
+                "LIMIT 3")
     recommended = cur.fetchall()
     cur.close()
 
     cur = connection.cursor()
-    result = cur.execute("SELECT d.DestID, d.DestName, i.ImgURL "
-                         "FROM destinations d JOIN dest_images i on d.DestID = i.DestID JOIN dest_tags dt on d.DestID = dt.DestID JOIN tags t ON dt.TagID = t.TagID "
-                         "WHERE t.TagName = 'Adventure' "
-                         "GROUP BY d.DestID "
-                         "LIMIT 3")
+    cur.execute("SELECT d.DestID, d.DestName, i.ImgURL "
+                "FROM destinations d "
+                "JOIN dest_images i on d.DestID = i.DestID "
+                "JOIN dest_tags dt on d.DestID = dt.DestID "
+                "JOIN tags t ON dt.TagID = t.TagID "
+                "WHERE t.TagName = 'Adventure' "
+                "GROUP BY d.DestID "
+                "ORDER BY RAND() "
+                "LIMIT 3")
     topTag = cur.fetchall()
     cur.close()
 
-    return render_template('destinations_user.html', recommended=recommended, topTag=topTag)
+    cur = connection.cursor()
+    cur.execute("SELECT d.DestID, d.DestName, i.ImgURL "
+                "FROM destinations d "
+                "JOIN dest_images i on d.DestID = i.DestID "
+                "JOIN dest_tags dt on d.DestID = dt.DestID "
+                "JOIN tags t ON dt.TagID = t.TagID "
+                "WHERE t.TagName = 'Animals' "
+                "GROUP BY d.DestID "
+                "ORDER BY RAND() "
+                "LIMIT 3")
+    secondTag = cur.fetchall()
+    cur.close()
+
+    cur = connection.cursor()
+    cur.execute("SELECT COUNT(*) AS Count "
+                "FROM Destinations")
+    count=cur.fetchone()
+
+    return render_template('destinations_user.html', count=count, recommended=recommended, topTag=topTag, secondTag=secondTag)
 
 @app.route('/destinations')
 @is_logged_in
@@ -318,7 +340,6 @@ def destination(id):
         result = cur.execute("SELECT DestName, CountryName, DestID, c.CountryID, d.Description, d.UpdateDate "
                              "FROM destinations d JOIN countries c ON d.CountryID = c.CountryID "
                              "WHERE DestID = %s", [id])
-        print(result, file=sys.stderr)
 
         imageCur.execute("SELECT ImgUrl "
                          "FROM dest_images "
@@ -392,8 +413,8 @@ def create_destination():
         connection.commit()
         cur.close()
 
-        print("Number of tags:" + str(len(tags.split(','))), file=sys.stderr)
-        if len(tags.split(',')) > 0:
+        ##TODO: figure out why this if statement isn't working... error is thrown if no tags input
+        if tags != None:
             for tag in tags.split(','):
                 cur = connection.cursor()
 
@@ -443,40 +464,75 @@ def edit_destination(id):
     form.countryId.data = destination['CountryID']
     form.category.data = destination['Category']
     form.description.data = destination['Description']
+    # form.tags.data = tags['TagName'] --> gonna need to loop through
 
     if request.method == 'POST':
-        if request.form['action'] == 'Submit':
-            name = request.form['name']
-            countryId = request.form['countryId']
-            category = request.form['category']
-            description = request.form['description']
+        #if request.form['action'] == 'Submit':
+        name = request.form['name']
+        countryId = request.form['countryId']
+        category = request.form['category']
+        description = request.form['description']
+        tags = request.form['tags']
 
-            cur = connection.cursor()
-            cur.execute("UPDATE destinations "
-                        "SET DestName=%s, CountryID=%s, Category=%s, Description=%s "
-                        "WHERE DestID=%s"
-                        , (name, countryId, category, description, id))
+        cur = connection.cursor()
+        cur.execute("UPDATE destinations "
+                    "SET DestName=%s, CountryID=%s, Category=%s, Description=%s "
+                    "WHERE DestID=%s"
+                    , (name, countryId, category, description, id))
 
-            connection.commit()
-            cur.close()
+        connection.commit()
+        cur.close()
 
-            flash('Destination updated.', 'success')
-            return redirect(url_for('destinations'))
+        cur = connection.cursor()
 
-        # TODO: add JS here to have popup "Are you sure?"
-        elif request.form['action'] == 'Delete':
-            cur = connection.cursor()
-            cur.execute("DELETE FROM destinations "
-                        "WHERE DestID = %s"
-                        , [id])
+        cur.execute("SELECT DestID "
+                    "FROM destinations "
+                    "WHERE DestName = %s"
+                    , [name])
+        destId = cur.fetchone()
 
-            connection.commit()
-            cur.close()
+        if len(tags.split(',')) > 0:
+            for tag in tags.split(','):
+                cur = connection.cursor()       
 
-            flash('Destination successfully deleted.', 'success')
-            return redirect(url_for('destinations'))
+                cur.execute("SELECT TagID "
+                            "FROM Tags "
+                            "WHERE TagName = %s"
+                            , [tag])
+                tagId = cur.fetchone()
+                
+                cur.execute("INSERT INTO dest_tags "
+                            "VALUES (%s, %s)"
+                            , (destId['DestID'], tagId['TagID']))
+                connection.commit()
+                cur.close()
 
-    return render_template('edit_destination.html', form=form)
+        flash('Destination updated.', 'success')
+        return redirect(url_for('destinations'))
+
+        # # TODO: add JS here to have popup "Are you sure?"
+        # elif request.form['action'] == 'Delete':
+        #     cur = connection.cursor()
+        #     cur.execute("DELETE FROM destinations "
+        #                 "WHERE DestID = %s"
+        #                 , [id])
+
+        #     connection.commit()
+        #     cur.close()
+
+        #     flash('Destination successfully deleted.', 'success')
+        #     return redirect(url_for('destinations'))
+
+    cur = connection.cursor()
+    cur.execute("SELECT TagName FROM tags")
+    tags = cur.fetchall()
+    cur.close()
+
+    tagsList = []
+    for tag in tags:
+        tagsList.append(tag['TagName'])
+
+    return render_template('edit_destination.html', form=form, tags=tagsList)
 
 @app.route('/add_image/<string:id>', methods=['POST', 'GET'])
 @is_logged_in
