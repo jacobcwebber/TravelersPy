@@ -22,7 +22,8 @@ function initMap() {
 
         var map = new google.maps.Map(document.getElementById('map'), {
           zoom: 5,
-          center: latLng
+          center: latLng,
+          mapTypeId: 'hybrid'
         });
 
         var marker = new google.maps.Marker({

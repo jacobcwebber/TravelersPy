@@ -451,7 +451,7 @@ def edit_destination(id):
     cur = connection.cursor()
 
     cur.execute("SELECT * "
-                "FROM destinations "
+                "FROM destinations d JOIN dest_images i ON d.DestID = i.DestID "
                 "WHERE DestID = %s"
                 , [id])
 
@@ -464,6 +464,7 @@ def edit_destination(id):
     form.countryId.data = destination['CountryID']
     form.category.data = destination['Category']
     form.description.data = destination['Description']
+    form.imgUrl.data = destination['ImgURL']
     # form.tags.data = tags['TagName'] --> gonna need to loop through
 
     if request.method == 'POST':
@@ -473,12 +474,18 @@ def edit_destination(id):
         category = request.form['category']
         description = request.form['description']
         tags = request.form['tags']
+        imgUrl = request.form['imgUrl']
 
         cur = connection.cursor()
         cur.execute("UPDATE destinations "
                     "SET DestName=%s, CountryID=%s, Category=%s, Description=%s "
                     "WHERE DestID=%s"
                     , (name, countryId, category, description, id))
+
+        cur.execute("UPDATE dest_images "
+                    "SET ImgURL = %s "
+                    "WHERE DestID=%s"
+                    , (imgUrl, id))
 
         connection.commit()
         cur.close()

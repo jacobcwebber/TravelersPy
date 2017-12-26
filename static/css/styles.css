@@ -39,7 +39,6 @@ div {
     padding: 16px;
     box-sizing: border-box;
     margin-top: 16px;
-    overflow: auto;
 }
 .dest-card-group-title {
     font-size: 20px;

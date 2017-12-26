@@ -6,11 +6,13 @@
         <h2 id="dest-name">{{ destination.DestName }}, <a href='/country/{{ destination.CountryID }}'>{{destination.CountryName}}</a></h2>  
     </section>
 
-    <section class="dest-card-group" style="max-width: 900px">    
+    <section class="dest-card-group" style="max-width: 900px; overflow: auto;">    
         <div class="images">
-            {% for image in images %}
-            <img class="img-responsive image-element" src="{{ image.ImgUrl }}" alt="">
-            {% endfor %}
+                {% for image in images %}
+                <div class="dest-container">
+                    <img class="img-responsive image-element" src="{{ image.ImgUrl }}" alt="">
+                </div>
+                {% endfor %}
         </div> 
         <div class="image-caption" style="color: rgb(255,255,255);">
             <i>{{destination.Description | safe}}</i>
