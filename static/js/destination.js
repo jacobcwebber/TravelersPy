@@ -9,6 +9,7 @@ window.onload=function(){
     });
 };
 
+//Setup for map
 function initMap() {
     var geocoder = new google.maps.Geocoder();
     var location = $('#dest-name').text();

@@ -1,30 +1,44 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<div class="panel panel-default">
-    <div class="panel-heading">{{ country.CountryName }}</div>
-    <div class="panel-body">
-        <center>
-            <div class="images">
+<style>
+    .images .image-container {
+      display: none;
+    }
+    .images .image-container:first-child {
+      display: block;
+    }
+    .images.slick-initialized .image-container {
+      display: block;
+    }
+</style>
+
+<div class="container" align="center">
+    <section class="header dest-card-group" style="max-width: 900px">
+        <h2 id="country-name">{{ country.CountryName }}</h2>  
+    </section>
+    <section class="dest-card-group" style="max-width: 900px; overflow: auto;">    
+        <div class="images">
                 {% for image in images %}
                 <div class="image-container">
-                    <img class='img-responsive image-element' src="{{ image.ImgUrl }}" alt="">
-                    <p>{{ image.DestName }}</p>
+                    <img class="img-responsive image-element" src="{{ image.ImgUrl }}" alt=""> <p></p>
+                    <p style="color: white;">{{ image.DestName }}</p>
                 </div>
                 {% endfor %}
-            </div>
-        </center>        
+        </div> <p></p>
         <hr>  
-        <b>Destinations:</b><br>
-        {% for destination in destinations %}
-            <li><a  href="/destination/{{ destination.DestID }}"> {{ destination.DestName }}</a></li>
-        {% endfor %}
+        <section style="color: white;">
+            <b>Destinations:</b><br>
+            {% for destination in destinations %}
+                <a  href="/destination/{{ destination.DestID }}"> {{ destination.DestName }}</a><br>
+            {% endfor %}
+        </section>
         <hr>
 
         <p><a href="/countries" class="btn btn-primary">Back to Countries</a></p>
-        <small> Last updated on {{country.UpdateDate}}</small>
-    </div>
+        <small style="color:white;"> Last updated on {{country.UpdateDate}}</small>
+    </section>
+    <p></p>
 </div>
-
 <script src="/static/js/country.js"></script>
 {% endblock %}

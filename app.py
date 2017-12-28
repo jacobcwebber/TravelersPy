@@ -165,32 +165,33 @@ def country(id):
     countryCur = connection.cursor()
     destinationsCur = connection.cursor()
     imagesCur = connection.cursor()
-    try:
-        countryCur.execute("SELECT CountryName, Description, UpdateDate "
-                           "FROM countries "
-                           "WHERE CountryID = %s"
-                           , [id])
+    #try:
+    countryCur.execute("SELECT CountryName, Description, UpdateDate "
+                        "FROM countries "
+                        "WHERE CountryID = %s"
+                        , [id])
 
-        destinationsCur.execute("SELECT CountryName, DestName, DestID, c.Description, c.UpdateDate"
-                    " FROM countries c JOIN destinations d"
-                    " WHERE c.CountryID = d.CountryID AND c.CountryID = %s"
-                    , [id])
-
-        imagesCur.execute("SELECT c.CountryId, d.DestName, ImgUrl "
-                "FROM countries c JOIN destinations d ON c.CountryID = d.CountryID "
-                "JOIN dest_images i on d.DestID = i.DestID "
-                "WHERE c.CountryID = %s"
+    destinationsCur.execute("SELECT CountryName, DestName, DestID, c.Description, c.UpdateDate"
+                " FROM countries c JOIN destinations d"
+                " WHERE c.CountryID = d.CountryID AND c.CountryID = %s"
                 , [id])
 
-        country = countryCur.fetchone()
-        destinations = destinationsCur.fetchall()
-        images = imagesCur.fetchall()
-        countryCur.close()
-        destinationsCur.close()
-        return render_template('country.html', country=country, destinations=destinations, images=images)
-    except:
-        msg = "Country does not exist."
-        return render_template('country.html', msg=msg)
+    imagesCur.execute("SELECT c.CountryId, d.DestName, i.ImgUrl "
+            "FROM countries c JOIN destinations d ON c.CountryID = d.CountryID "
+            "JOIN dest_images i on d.DestID = i.DestID "
+            "WHERE c.CountryID = %s "
+            "ORDER BY RAND()"
+            , [id])
+
+    country = countryCur.fetchone()
+    destinations = destinationsCur.fetchall()
+    images = imagesCur.fetchall()
+    countryCur.close()
+    destinationsCur.close()
+    return render_template('country.html', country=country, destinations=destinations, images=images)
+    # except:
+    #     msg = "Country does not exist."
+    #     return render_template('country.html', msg=msg)
 
 
 @app.route('/edit_country/<string:id>', methods=['POST', 'GET'])
@@ -260,7 +261,7 @@ class DestinationForm(Form):
     category = SelectField('Category', choices=[
         (0, ""),
         (1, "Natural Site"),
-        (2, "Cultural/Historic Site"),
+        (2, "Cultural Site"),
         (3, "Activity")], coerce=int)
     description = TextAreaField('Description')
     imgUrl = StringField('Image Upload', [validators.URL(message="Not a valid url")])
@@ -346,13 +347,22 @@ def destination(id):
                          "WHERE DestID = %s"
                          , [id])
 
+
         destination = cur.fetchone()
         images = imageCur.fetchall()
         cur.close()
         imageCur.close()
 
+        cur = connection.cursor()
+        cur.execute("SELECT * "
+                    "FROM vTags "
+                    "WHERE DestName  = %s"
+                    , [destination['DestName']])
+        tags = cur.fetchall()
+        cur.close()
+
         if result > 0:
-            return render_template('destination.html', destination=destination, images=images)
+            return render_template('destination.html', destination=destination, images=images, tags=tags)
         else:
             flash('Destination does not exist.', 'danger')
             return redirect(url_for('destinations'))
@@ -452,7 +462,7 @@ def edit_destination(id):
 
     cur.execute("SELECT * "
                 "FROM destinations d JOIN dest_images i ON d.DestID = i.DestID "
-                "WHERE DestID = %s"
+                "WHERE d.DestID = %s"
                 , [id])
 
     destination = cur.fetchone()
@@ -490,32 +500,33 @@ def edit_destination(id):
         connection.commit()
         cur.close()
 
-        cur = connection.cursor()
+        ##TODO: ALL THIS STUFF DEALS WITH UPDATING TAGS
+        # cur = connection.cursor()
 
-        cur.execute("SELECT DestID "
-                    "FROM destinations "
-                    "WHERE DestName = %s"
-                    , [name])
-        destId = cur.fetchone()
+        # cur.execute("SELECT DestID "
+        #             "FROM destinations "
+        #             "WHERE DestName = %s"
+        #             , [name])
+        # destId = cur.fetchone()
 
-        if len(tags.split(',')) > 0:
-            for tag in tags.split(','):
-                cur = connection.cursor()       
+        # if len(tags.split(',')) > 0:
+        #     for tag in tags.split(','):
+        #         cur = connection.cursor()       
 
-                cur.execute("SELECT TagID "
-                            "FROM Tags "
-                            "WHERE TagName = %s"
-                            , [tag])
-                tagId = cur.fetchone()
+        #         cur.execute("SELECT TagID "
+        #                     "FROM Tags "
+        #                     "WHERE TagName = %s"
+        #                     , [tag])
+        #         tagId = cur.fetchone()
                 
-                cur.execute("INSERT INTO dest_tags "
-                            "VALUES (%s, %s)"
-                            , (destId['DestID'], tagId['TagID']))
-                connection.commit()
-                cur.close()
+        #         cur.execute("INSERT INTO dest_tags "
+        #                     "VALUES (%s, %s)"
+        #                     , (destId['DestID'], tagId['TagID']))
+        #         connection.commit()
+        #         cur.close()
 
         flash('Destination updated.', 'success')
-        return redirect(url_for('destinations'))
+        return redirect(url_for('destinations_user'))
 
         # # TODO: add JS here to have popup "Are you sure?"
         # elif request.form['action'] == 'Delete':
