@@ -1,0 +1,89 @@
+/* This contains the three destinations and the title */
+.dest-group-box {
+    border: 1px solid rgb(51, 64, 85);
+    background: rgba(51, 64, 85, 0.5);
+    border-radius: 6px; 
+    max-width: 720px;
+    width: 100%;
+    align-items: center;
+    padding: 16px;
+    box-sizing: border-box;
+    margin-top: 16px;
+}
+.dest-group-box-title {
+    font-size: 20px; 
+    font-weight: 300; 
+    margin-bottom: 16px; 
+    color: white;
+}
+/* This contains only the three destinations */
+.dest-group {
+    display: flex; 
+    align-items: center; 
+    justify-content: flex-start; 
+    flex-wrap: wrap;
+}
+/* This is a single destination and includes the image, favorite, destination name */
+.dest {
+    overflow: hidden; 
+    background-color: rgb(41, 51, 67);
+    width: 200px; 
+    height: 240px;
+}
+.dest-image {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    text-align: center;
+    height: 240px; 
+    width: 200px; 
+    background-position: center center;
+    background-size: auto 240px;
+    margin: 0 8px 8px 0;
+    position: relative;
+}
+.dest-container {
+    display: flex; 
+    flex-direction: column; 
+    justify-content: space-between; 
+    overflow: hidden; 
+    height: 100%; 
+    width: 100%; 
+    position: relative; 
+}
+.dest-box-header {
+    visibility: hidden;
+    width: auto;
+    position: relative;
+    height: 40px;
+    top: 0px;
+    margin: 9px 9px 0px;
+}
+.dest-box-name {
+    font-weight: 300; 
+    letter-spacing: 0.8px; 
+    color: rgb(255, 255, 255); 
+    text-align: center; 
+    margin: 12px;
+}
+.dest-box-footer {
+    width: auto; 
+    position: relative; 
+    height: 40px; 
+    bottom: 0px; 
+    margin: 0px 12px 12px;
+}
+.dest-group-box-subtext {
+    color: rgb(70, 188, 194); 
+    font-size: 17px;
+    font-weight: 500;
+}
+/* Changes color of star to yellow at mouseover */
+.fa-star-o:hover:before {
+    content: "\f005";
+    color:#ffff51;
+}
+
+.fa-check:hover:before {
+    color:greenyellow;
+}

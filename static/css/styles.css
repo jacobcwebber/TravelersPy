@@ -1,9 +1,16 @@
+/* SITE-WIDE STYLES */
+/* This will define all styles that should be applied to all pages and very rarely overwritten */
+
 body {
     font-family: Arial, Helvetica, sans-serif
 }
 div {
     display: block;
 }
+a {
+    text-decoration: none;
+}
+/* Overrides some Bootstrap styling to alter navigation bar. */
 .navbar-inverse {
     background-color: rgb(32, 41, 51);
     border: 0;
@@ -15,6 +22,11 @@ div {
     left: 50%;
     transform: translate(-50%, -50%);
 }
+.h-center {
+    margin: auto;
+    width: 60%;
+    padding: 10px;
+}
 .image-element {
     height: 350px;
 }
@@ -23,52 +35,6 @@ div {
 }
 #map {
     height: 600px;
-}
-.h-center {
-    margin: auto;
-    width: 60%;
-    padding: 10px;
-}
-.dest-card-group {
-    border: 1px solid rgb(51, 64, 85);
-    background: rgba(51, 64, 85, 0.5);
-    border-radius: 6px; 
-    max-width: 720px;
-    width: 100%;
-    align-items: center;
-    padding: 16px;
-    box-sizing: border-box;
-    margin-top: 16px;
-}
-.dest-card-group-title {
-    font-size: 20px;
-    font-weight: 300;
-    margin-bottom: 16px;
-    color: white;
-}
-.dest-box {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    text-align: center;
-    height: 240px; 
-    width: 200px; 
-    background-position: center center;
-    background-size: auto 240px;
-    margin: 0 8px 8px 0;
-}
-.dest-box-name {
-    font-weight: 350;
-    letter-spacing: 0.8px;
-    color: rgb(255,255,255);
-    margin: 12px;
-    position: relative;
-}
-.title-text {
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%); 
-    text-shadow: 2px 2px 1px rgba(0,0,0,0.2);
 }
 .header {
     color: rgb(255,255,255);

@@ -189,9 +189,6 @@ def country(id):
     countryCur.close()
     destinationsCur.close()
     return render_template('country.html', country=country, destinations=destinations, images=images)
-    # except:
-    #     msg = "Country does not exist."
-    #     return render_template('country.html', msg=msg)
 
 
 @app.route('/edit_country/<string:id>', methods=['POST', 'GET'])
@@ -270,6 +267,16 @@ class DestinationForm(Form):
 class DestImageForm(Form):
     imgUrl = StringField('Image URL', [validators.URL(message="Not a valid url")])
 
+@app.route('/add-favorite', methods=['POST'])
+def add_favorite():
+    id = request.form['id']
+    cur = connection.cursor()
+    cur.execute("INSERT INTO favorites "
+                "VALUES (%s, %s)",
+                (session['user'], id))
+    connection.commit()
+    cur.close()
+
 @app.route('/destinations-user')
 @is_logged_in
 def destinations_user():
@@ -277,8 +284,7 @@ def destinations_user():
     cur.execute("SELECT d.DestID, d.DestName, i.ImgURL "
                 "FROM destinations d JOIN dest_images i on d.destID = i.DestID "
                 "GROUP BY d.DestID "
-                "ORDER BY RAND() "
-                "LIMIT 3")
+                "ORDER BY RAND()")
     recommended = cur.fetchall()
     cur.close()
 
@@ -290,8 +296,7 @@ def destinations_user():
                 "JOIN tags t ON dt.TagID = t.TagID "
                 "WHERE t.TagName = 'Adventure' "
                 "GROUP BY d.DestID "
-                "ORDER BY RAND() "
-                "LIMIT 3")
+                "ORDER BY RAND()")
     topTag = cur.fetchall()
     cur.close()
 
@@ -301,19 +306,30 @@ def destinations_user():
                 "JOIN dest_images i on d.DestID = i.DestID "
                 "JOIN dest_tags dt on d.DestID = dt.DestID "
                 "JOIN tags t ON dt.TagID = t.TagID "
-                "WHERE t.TagName = 'Animals' "
+                "WHERE t.TagName = 'UNESCO' "
                 "GROUP BY d.DestID "
-                "ORDER BY RAND() "
-                "LIMIT 3")
+                "ORDER BY RAND()")
     secondTag = cur.fetchall()
     cur.close()
 
     cur = connection.cursor()
+    cur.execute("SELECT DestID "
+                "FROM favorites "
+                "WHERE UserID = %s"
+                , session['user'])
+    favs = cur.fetchall()
+    cur.close()
+
+    favorites = []
+    for fav in favs:
+        favorites.append(fav['DestID'])
+
+    cur = connection.cursor()
     cur.execute("SELECT COUNT(*) AS Count "
                 "FROM Destinations")
-    count=cur.fetchone()
+    count = cur.fetchone()
 
-    return render_template('destinations_user.html', count=count, recommended=recommended, topTag=topTag, secondTag=secondTag)
+    return render_template('destinations_user.html', count=count, favorites=favorites, recommended=recommended, topTag=topTag, secondTag=secondTag)
 
 @app.route('/destinations')
 @is_logged_in
@@ -486,6 +502,8 @@ def edit_destination(id):
         tags = request.form['tags']
         imgUrl = request.form['imgUrl']
 
+        print("The tags are: " + tags, file=sys.stderr)
+
         cur = connection.cursor()
         cur.execute("UPDATE destinations "
                     "SET DestName=%s, CountryID=%s, Category=%s, Description=%s "
@@ -500,46 +518,33 @@ def edit_destination(id):
         connection.commit()
         cur.close()
 
-        ##TODO: ALL THIS STUFF DEALS WITH UPDATING TAGS
-        # cur = connection.cursor()
+        cur = connection.cursor()
 
-        # cur.execute("SELECT DestID "
-        #             "FROM destinations "
-        #             "WHERE DestName = %s"
-        #             , [name])
-        # destId = cur.fetchone()
+        cur.execute("SELECT DestID "
+                    "FROM destinations "
+                    "WHERE DestName = %s"
+                    , [name])
+        destId = cur.fetchone()
+        try:
+            for tag in tags.split(','):
+                cur = connection.cursor()       
 
-        # if len(tags.split(',')) > 0:
-        #     for tag in tags.split(','):
-        #         cur = connection.cursor()       
-
-        #         cur.execute("SELECT TagID "
-        #                     "FROM Tags "
-        #                     "WHERE TagName = %s"
-        #                     , [tag])
-        #         tagId = cur.fetchone()
+                cur.execute("SELECT TagID "
+                            "FROM Tags "
+                            "WHERE TagName = %s"
+                            , [tag])
+                tagId = cur.fetchone()
                 
-        #         cur.execute("INSERT INTO dest_tags "
-        #                     "VALUES (%s, %s)"
-        #                     , (destId['DestID'], tagId['TagID']))
-        #         connection.commit()
-        #         cur.close()
+                cur.execute("INSERT INTO dest_tags "
+                            "VALUES (%s, %s)"
+                            , (destId['DestID'], tagId['TagID']))
+                connection.commit()
+                cur.close()
+        except TypeError: 
+            print("A TypeError occured because you did not submit any new tags. This is a temporary issues.")
 
         flash('Destination updated.', 'success')
         return redirect(url_for('destinations_user'))
-
-        # # TODO: add JS here to have popup "Are you sure?"
-        # elif request.form['action'] == 'Delete':
-        #     cur = connection.cursor()
-        #     cur.execute("DELETE FROM destinations "
-        #                 "WHERE DestID = %s"
-        #                 , [id])
-
-        #     connection.commit()
-        #     cur.close()
-
-        #     flash('Destination successfully deleted.', 'success')
-        #     return redirect(url_for('destinations'))
 
     cur = connection.cursor()
     cur.execute("SELECT TagName FROM tags")
