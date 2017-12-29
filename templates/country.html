@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block body %}
+<link rel="stylesheet" type="text/css" href="../static/css/destinations_user.css">
 <style>
     .images .image-container {
       display: none;
@@ -14,10 +15,10 @@
 </style>
 
 <div class="container" align="center">
-    <section class="header dest-card-group" style="max-width: 900px">
+    <section class="header dest-group-box" style="max-width: 900px">
         <h2 id="country-name">{{ country.CountryName }}</h2>  
     </section>
-    <section class="dest-card-group" style="max-width: 900px; overflow: auto;">    
+    <section class="dest-group-box" style="max-width: 900px; overflow: auto;">    
         <div class="images">
                 {% for image in images %}
                 <div class="image-container">

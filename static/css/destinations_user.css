@@ -52,7 +52,8 @@
     position: relative; 
 }
 .dest-box-header {
-    visibility: hidden;
+    /* visibility: hidden; */
+    opacity: .75;
     width: auto;
     position: relative;
     height: 40px;
@@ -77,6 +78,10 @@
     color: rgb(70, 188, 194); 
     font-size: 17px;
     font-weight: 500;
+}
+/* Used to show check and star only on hover --> add fadein transition for smoothness */
+.dest:hover .dest-box-header{
+    visibility: visible;
 }
 /* Changes color of star to yellow at mouseover */
 .fa-star-o:hover:before {

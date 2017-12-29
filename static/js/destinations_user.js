@@ -1,26 +1,21 @@
-$(".dest").hover(function() {
-    $("dest-box-header").css("visibility", "visible");
-})
-
-$('.fa-star-o').click(function() {
+// Add destination to favorites and change star color when star is clicked
+$('.fa-star-o').click(function(event) {
+    event.preventDefault();
     $.ajax({
         type: 'POST',
         url: '/add-favorite',
-        data : {
+        context: this,
+        data :{ 
             id: $(this).attr('id')
-        },
-        success: function() {
-            $(this).css({"color": "yellow"}).removeClass('fa-star-o').addClass('fa-star');
-            console.log('Great success!')
-            return false
-        },
-        error: function(error) {
-            console.log(error);
-            return false;
         }
+    }).done(function() {
+        $(this).css({"color": "yellow"}).removeClass('fa-star-o').addClass('fa-star');
+    }).fail(function(error) {
+        console.log(error);
     });
 });
 
+// This is not currently working --> need to add deleting favorite when clicking yellow star
 $('.fa-star').click(function() {
     $(this).css({"color": "white"}).removeClass('fa-star').addClass('fa-star-o');
     return false;

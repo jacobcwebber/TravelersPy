@@ -277,6 +277,8 @@ def add_favorite():
     connection.commit()
     cur.close()
 
+    return "success"
+
 @app.route('/destinations-user')
 @is_logged_in
 def destinations_user():

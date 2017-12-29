@@ -1,23 +1,12 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<style>
-    .images .dest-container {
-      display: none;
-    }
-    .images .dest-container:first-child {
-      display: block;
-    }
-    .images.slick-initialized .dest-container {
-      display: block;
-    }
-</style>
-
+<link rel="stylesheet" type="text/css" href="../static/css/destinations_user.css">
 <div class="container" align="center">
-    <section class="header dest-card-group" style="max-width: 900px">
+    <section class="header dest-group-box" style="max-width: 900px">
         <h2 id="dest-name">{{ destination.DestName }}, <a href='/country/{{ destination.CountryID }}'>{{destination.CountryName}}</a></h2>  
     </section>
-    <section class="dest-card-group" style="max-width: 900px; overflow: auto;">    
+    <section class="dest-group-box" style="max-width: 900px; overflow: auto;">    
         <div class="images">
                 {% for image in images %}
                 <div class="dest-container">
