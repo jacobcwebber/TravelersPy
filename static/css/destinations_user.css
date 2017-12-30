@@ -1,4 +1,4 @@
-/* This contains the three destinations and the title */
+/* Contains three destinations, the title, and footer */
 .dest-group-box {
     border: 1px solid rgb(51, 64, 85);
     background: rgba(51, 64, 85, 0.5);
@@ -42,6 +42,7 @@
     margin: 0 8px 8px 0;
     position: relative;
 }
+/* Intermediary container for single destination */
 .dest-container {
     display: flex; 
     flex-direction: column; 
@@ -51,6 +52,7 @@
     width: 100%; 
     position: relative; 
 }
+/* Where the favorite star and the been there check are */
 .dest-box-header {
     /* visibility: hidden; */
     opacity: .75;
@@ -80,15 +82,21 @@
     font-weight: 500;
 }
 /* Used to show check and star only on hover --> add fadein transition for smoothness */
-.dest:hover .dest-box-header{
+/* .dest:hover .dest-box-header{
     visibility: visible;
-}
+} */
 /* Changes color of star to yellow at mouseover */
-.fa-star-o:hover:before {
+.fa-star-o:hover::before {
     content: "\f005";
     color:#ffff51;
 }
-
-.fa-check:hover:before {
-    color:greenyellow;
+.fa-check:hover::before {
+    color:rgb(123, 255, 47);
+}
+.explored-full::before {
+    color: rgb(123, 255, 47);
+}
+.star-full::before {
+    content: "\f005";
+    color:#ffff51;    
 }

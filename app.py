@@ -267,12 +267,32 @@ class DestinationForm(Form):
 class DestImageForm(Form):
     imgUrl = StringField('Image URL', [validators.URL(message="Not a valid url")])
 
-@app.route('/add-favorite', methods=['POST'])
-def add_favorite():
+@app.route('/alter-favorite', methods=['POST'])
+def alter_favorite():
+    id = request.form['id']
+    action = request.form['action']
+    
+    cur = connection.cursor()
+
+    if action == "add":
+        cur.execute("INSERT INTO favorites "
+                    "VALUES (%s, %s)"
+                    , (session['user'], id))
+    elif action == "remove":
+        cur.execute("DELETE FROM favorites "
+                    "WHERE UserID = %s AND DestID = %s"
+                    , (session['user'], id))  
+
+    connection.commit()
+    cur.close()
+    return "success"
+
+@app.route('/remove-favorite', methods=['POST'])
+def remove_favorite():
     id = request.form['id']
     cur = connection.cursor()
-    cur.execute("INSERT INTO favorites "
-                "VALUES (%s, %s)",
+    cur.execute("DELETE FROM favorites "
+                "WHERE UserID = %s AND DestID = %s)",
                 (session['user'], id))
     connection.commit()
     cur.close()
