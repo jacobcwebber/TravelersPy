@@ -8,3 +8,4 @@ To-do list:
 - Add search with "search by name, key word" to navbar
 - Add destination suggestions based on tags/current favorites/initial sign-up preferences
 - Make loading of all images wait until they're all ready, then fade them in
+- Add bounce CSS animation on check/star click and have "Favorite saved" popup in bottom left corner like on YouTube

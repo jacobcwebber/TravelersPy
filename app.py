@@ -267,6 +267,26 @@ class DestinationForm(Form):
 class DestImageForm(Form):
     imgUrl = StringField('Image URL', [validators.URL(message="Not a valid url")])
 
+@app.route('/alter-explored', methods=['POST'])
+def alter_explored():
+    id = request.form['id']
+    action = request.form['action']
+    
+    cur = connection.cursor()
+
+    if action == "add":
+        cur.execute("INSERT INTO explored "
+                    "VALUES (%s, %s)"
+                    , (session['user'], id))
+    elif action == "remove":
+        cur.execute("DELETE FROM explored "
+                    "WHERE UserID = %s AND DestID = %s"
+                    , (session['user'], id))  
+
+    connection.commit()
+    cur.close()
+    return "success"
+
 @app.route('/alter-favorite', methods=['POST'])
 def alter_favorite():
     id = request.form['id']
@@ -285,18 +305,6 @@ def alter_favorite():
 
     connection.commit()
     cur.close()
-    return "success"
-
-@app.route('/remove-favorite', methods=['POST'])
-def remove_favorite():
-    id = request.form['id']
-    cur = connection.cursor()
-    cur.execute("DELETE FROM favorites "
-                "WHERE UserID = %s AND DestID = %s)",
-                (session['user'], id))
-    connection.commit()
-    cur.close()
-
     return "success"
 
 @app.route('/destinations-user')
@@ -342,16 +350,29 @@ def destinations_user():
     favs = cur.fetchall()
     cur.close()
 
+    cur = connection.cursor()
+    cur.execute("SELECT DestID "
+                "FROM explored "
+                "WHERE UserID = %s"
+                , session['user'])
+    exp = cur.fetchall()
+    cur.close()
+
+    # Convert dictionaries for favorites and explored into lists so they can easier be iterated through in HTML jinja 
     favorites = []
-    for fav in favs:
-        favorites.append(fav['DestID'])
+    for dest in favs:
+        favorites.append(dest['DestID'])
+
+    explored = []
+    for dest in exp:
+        explored.append(dest['DestID'])
 
     cur = connection.cursor()
     cur.execute("SELECT COUNT(*) AS Count "
                 "FROM Destinations")
     count = cur.fetchone()
 
-    return render_template('destinations_user.html', count=count, favorites=favorites, recommended=recommended, topTag=topTag, secondTag=secondTag)
+    return render_template('destinations_user.html', count=count, favorites=favorites, explored=explored, recommended=recommended, topTag=topTag, secondTag=secondTag)
 
 @app.route('/destinations')
 @is_logged_in

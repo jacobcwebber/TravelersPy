@@ -15,11 +15,15 @@
                             <section class='dest-image' style="background-image: linear-gradient(rgba(51, 64, 85, 0.40), rgba(51, 64, 85, 0.40)), url({{ destination.ImgURL }});">
                                 <section class="dest-container">  
                                     <section class="dest-box-header">
-                                        <span id="{{ destination.DestID }}" style="float: left; color: white;" class="fa fa-check fa-lg" aria-hidden="true" ></span> 
-                                        {% if destination.DestID in favorites %}
-                                            <span id="{{ destination.DestID }}" style="float: right; color: yellow;" class="fa fa-star fa-lg fav-full fav-star" aria-hidden="true" ></span> 
+                                        {% if destination.DestID in explored %}
+                                            <span id="{{ destination.DestID }}" class="fa fa-check fa-lg exp-full exp-check" aria-hidden="true"></span> 
                                         {% else %}
-                                            <span id="{{ destination.DestID }}" style="float: right; color: white;" class="fa fa-star-o fa-lg fav-star" aria-hidden="true" ></span> 
+                                            <span id="{{ destination.DestID }}" class="fa fa-check fa-lg exp-check" aria-hidden="true"></span> 
+                                        {% endif %}
+                                        {% if destination.DestID in favorites %}
+                                            <span id="{{ destination.DestID }}" class="fa fa-star-o fa-lg star-full fav-star" aria-hidden="true"></span> 
+                                        {% else %}
+                                            <span id="{{ destination.DestID }}" class="fa fa-star-o fa-lg fav-star" aria-hidden="true"></span> 
                                         {% endif %}
                                     </section>
                                     <section style="margin: 0px auto;">

@@ -1,3 +1,7 @@
+/* //////////////////////// */
+/* DESTINATION BOXES STYLES */
+/* //////////////////////// */
+
 /* Contains three destinations, the title, and footer */
 .dest-group-box {
     border: 1px solid rgb(51, 64, 85);
@@ -14,7 +18,7 @@
     font-size: 20px; 
     font-weight: 300; 
     margin-bottom: 16px; 
-    color: white;
+    color: rgb(255, 255, 255);
 }
 /* This contains only the three destinations */
 .dest-group {
@@ -81,22 +85,33 @@
     font-size: 17px;
     font-weight: 500;
 }
-/* Used to show check and star only on hover --> add fadein transition for smoothness */
-/* .dest:hover .dest-box-header{
-    visibility: visible;
-} */
-/* Changes color of star to yellow at mouseover */
-.fa-star-o:hover::before {
-    content: "\f005";
-    color:#ffff51;
+
+/* /////////// */
+/* ICON STYLES */
+/* /////////// */
+
+/* Changes style of unexplored/unfavorited destinations */
+.fa-star-o {
+    float: right;
+    color: rgb(255, 255, 255);
 }
-.fa-check:hover::before {
-    color:rgb(123, 255, 47);
+.fa-check {
+    float: left;
+    color: rgb(255, 255, 255);
 }
-.explored-full::before {
+/* Changes style of explored/favorited destinations */
+.exp-full::before {
     color: rgb(123, 255, 47);
 }
 .star-full::before {
     content: "\f005";
-    color:#ffff51;    
+    color:rgb(255, 255, 81);    
+}
+/* Changes color of icons on hover */
+.fa-star-o:hover::before {
+    content: "\f005";
+    color:rgb(255, 255, 81);
+}
+.fa-check:hover::before {
+    color:rgb(123, 255, 47);
 }
