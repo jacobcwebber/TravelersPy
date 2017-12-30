@@ -165,7 +165,7 @@ def country(id):
     countryCur = connection.cursor()
     destinationsCur = connection.cursor()
     imagesCur = connection.cursor()
-    #try:
+
     countryCur.execute("SELECT CountryName, Description, UpdateDate "
                         "FROM countries "
                         "WHERE CountryID = %s"

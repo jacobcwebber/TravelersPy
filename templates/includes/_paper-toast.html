@@ -1,0 +1,32 @@
+<link rel = 'import' href = 'bower_components/polymer/polymer.html'>
+<link rel = "import" href = "bower_components/paper-toast/paper-toast.html">
+<link rel = "import" href = "bower_components/paper-button/paper-button.html">
+
+<dom-module id = 'my-paper-toast'>
+   <template>
+      <style>
+         #container {
+            padding: 100px;
+            border: 1px solid gray;
+            width: 30%;
+         }
+      </style>
+      
+      <h3>Paper-Toast Example</h3>
+      <div id = "container">
+         <paper-button raised onclick = "toast.open()">Click Here</paper-button>
+      </div>
+      <paper-toast id = "toast" class = "fit-bottom" text = "Welcome to Tutorialspoint.">
+      </paper-toast>
+   </template>
+   
+   <script>
+      Polymer ({
+         is: 'my-paper-toast', ready: function() {
+            this.async(function() {
+               toast.fitInto = container;      
+            });
+         }
+      });
+   </script>
+</dom-module>

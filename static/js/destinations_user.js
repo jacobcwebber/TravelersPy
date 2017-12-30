@@ -16,6 +16,7 @@ $('.fav-star').click(function(event) {
         }
     }).done(function() {
         $(this).toggleClass('star-full');
+        //$('#notification').toast.open()
     }).fail(function(error) {
         console.log(error);
     });
