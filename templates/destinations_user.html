@@ -2,17 +2,11 @@
 
 {% block body %}
 <link rel="stylesheet" type="text/css" href="../static/css/destinations_user.css">
-<link rel = 'import' href = '../bower_components/polymer/polymer.html'>
-<link rel = "import" href = "../bower_components/paper-toast/paper-toast.html">
-<link rel = "import" href = "../bower_components/paper-button/paper-button.html">
+<link rel = 'import' href = '../static/bower_components/polymer/polymer.html'>
+<link rel = "import" href = "../static/bower_components/paper-toast/paper-toast.html">
 
-<!-- <link rel = 'import' href = 'includes/_paper-toast.html'> -->
 
-<div id = "container">
-    <paper-button raised onclick = "toast.open()">Click Here</paper-button>
- </div>
- <paper-toast id = "toast" class = "fit-bottom" text = "Welcome to Tutorialspoint.">
- </paper-toast>
+<!-- <button onclick = "toast.open()">Click Here</button> -->
 
 <section id="dest-group-boxes" class="h-center">
     <section class="dest-group-box">
@@ -54,7 +48,11 @@
         <span class="dest-group-box-subtext">Explore all {{ count.Count }} destinations...</span>
     </section>
 </section>
-<paper-toast text="Test Notification" duration="3"></paper-toast>
-</section>
+
+<paper-toast id="toastUnexp" text="Removed from Explored destinations"></paper-toast>
+<paper-toast id="toastExp" text="Added to Explored destinations"></paper-toast>
+<paper-toast id="toastUnfav" text="Removed from Favorites"></paper-toast>
+<paper-toast id="toastFav" text="Added to Favorites"></paper-toast>
+
 <script src="/static/js/destinations_user.js"></script>
 {% endblock %}
