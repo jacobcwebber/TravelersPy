@@ -1,21 +1,22 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<div class="panel panel-default">
-    <div class="panel-heading">{{ session['username'] }}</div>
-    <div class="panel-body">
-        <b>My Favorites</b>
-        {% for favorite in favorites %}
-            <li><a href="/destination/{{ favorite.DestID }}">{{ favorite.DestName }}</a></li>
-        {% endfor %}
-        <hr>
-        <b>My Map</b>
-        <div id="map"></div>
-    </div>
-</div>
+<link rel="stylesheet" type="text/css" href="../static/css/destinations_user.css">
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABEVdEk2zQBeCHstcUpXQUkSxPhtmTv0Q&callback=initMap"
-    async defer></script>
-    <script type="text/javascript" src="../static/js/account.js"></script>
-    <hr>
+<section id="dest-group-boxes" style="width: 800px;" class="h-center">
+    <section class="dest-group-box" style="overflow: hidden;">
+        <section style="width: 100%; height: 100%; overflow: auto;"></section>
+            <section style="background-color: rgb(255,255,255); margin: 10px; border-radius: 50%; height: 160px; width: 160px; float:left;">
+                <section style="margin: auto; padding-top: 75px; text-align: center;">Profile Picture</section>
+            </section>
+            <section style="margin: 10px;">
+                <span style="display: block; font-size: 24px;" class="dest-group-box-subtext">Jacob</span>
+                <span style="color: white; font-size: 15px; overflow-wrap: break-word;" class="dest-group-box-subtext">Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas id labore doloribus aperiam distinctio hic quos perspiciatis tenetur error reiciendis, commodi enim quam. Excepturi cumque similique recusandae totam voluptatem officia.</span>
+            </section>
+        </section>
+    </section>
+</section>
+
+
+<script type="text/javascript" src="../static/js/account.js"></script>
 {% endblock %}
