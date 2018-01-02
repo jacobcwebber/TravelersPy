@@ -638,9 +638,26 @@ def account():
                 "FROM favorites f JOIN destinations d ON d.DestID = f.DestID JOIN users u on u.UserID = f.UserID "
                 "WHERE f.UserID = %s"
                 , [session['user']])
-    favorites = cur.fetchall()
 
-    return render_template('account.html', favorites=favorites)
+    captions = ['Explored Destinations', 'Favorites', 'Countries Visited']
+    favorites = cur.fetchall()
+    
+    cur.execute("SELECT count(*) "
+                "FROM explored "
+                "WHERE UserID = %s"
+                , session['user'])
+    explored = cur.fetchall()
+
+    cur.execute("SELECT count(*) "
+                "FROM explored e JOIN destinations d ON e.DestID = d.DestID JOIN countries c ON d.CountryID = c.CountryID "
+                "WHERE e.UserID = %s"
+                , session['user'])
+    countries = cur.fetchall()
+    cur.close()
+
+    counts = [len(favorites), len(explored), len(countries)]
+
+    return render_template('account.html', favorites=favorites, explored = explored, captions=captions, counts=counts)
 
 @app.route('/logout')
 @is_logged_in

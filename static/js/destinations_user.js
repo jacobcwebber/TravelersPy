@@ -55,9 +55,9 @@ $('.exp-check').click(function(event) {
 });
 
 //Hides background images for 500ms on page load then fades then in over 2s
-$(document).ready(function() {
-    $(".dest-image").hide();
-    setTimeout(function() {
-        $(".dest-image").fadeIn(1000);
-    }, 500);    
-});
+// $(document).ready(function() {
+//     $(".dest-image").hide();
+//     setTimeout(function() {
+//         $(".dest-image").fadeIn(1000);
+//     }, 500);    
+// });
