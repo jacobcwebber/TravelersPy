@@ -634,28 +634,29 @@ def add_image(id):
 @is_logged_in
 def account():
     cur = connection.cursor()
-    cur.execute("SELECT f.DestID, DestName "
+    cur.execute("SELECT f.DestID "
                 "FROM favorites f JOIN destinations d ON d.DestID = f.DestID JOIN users u on u.UserID = f.UserID "
                 "WHERE f.UserID = %s"
                 , [session['user']])
-
-    captions = ['Explored Destinations', 'Favorites', 'Countries Visited']
     favorites = cur.fetchall()
     
-    cur.execute("SELECT count(*) "
+    cur.execute("SELECT DestID "
                 "FROM explored "
                 "WHERE UserID = %s"
                 , session['user'])
     explored = cur.fetchall()
 
-    cur.execute("SELECT count(*) "
+    cur.execute("SELECT c.CountryID "
                 "FROM explored e JOIN destinations d ON e.DestID = d.DestID JOIN countries c ON d.CountryID = c.CountryID "
-                "WHERE e.UserID = %s"
+                "WHERE e.UserID = %s "
+                "GROUP BY c.CountryID"
                 , session['user'])
     countries = cur.fetchall()
     cur.close()
 
-    counts = [len(favorites), len(explored), len(countries)]
+    counts = [len(explored), len(favorites), len(countries)]
+    print((explored), file=sys.stderr)
+    captions = ['Destinations Explored', 'Favorites', 'Countries Visited']
 
     return render_template('account.html', favorites=favorites, explored = explored, captions=captions, counts=counts)
 
