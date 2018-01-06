@@ -2,7 +2,8 @@
 /* This will define all styles that should be applied to all pages and very rarely overwritten */
 
 body {
-    font-family: Arial, Helvetica, sans-serif
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: rgb(32, 41, 51);
 }
 div {
     display: block;
@@ -10,6 +11,7 @@ div {
 a {
     text-decoration: none;
 }
+
 /* Overrides some Bootstrap styling to alter navigation bar. */
 .navbar-inverse {
     background-color: rgb(32, 41, 51);

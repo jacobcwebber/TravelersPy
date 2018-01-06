@@ -3,11 +3,13 @@ import pymysql.cursors
 from passlib.hash import sha256_crypt
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators, SelectField, FileField, ValidationError
 from functools import wraps
+from flask_bower import Bower
 import re
 import sys
 import json
 
 app = Flask(__name__)
+Bower(app)
 
 connection = pymysql.connect(host='localhost',
                              user='Jacob',
@@ -372,7 +374,7 @@ def destinations_user():
                 "FROM Destinations")
     count = cur.fetchone()
 
-    return render_template('destinations_user.html', count=count, favorites=favorites, explored=explored, recommended=recommended, topTag=topTag, secondTag=secondTag)
+    return render_template('destinations_user.html', count=count, favorites=favorites, explored=explored, recommended=recommended)
 
 @app.route('/destinations')
 @is_logged_in
@@ -655,7 +657,6 @@ def account():
     cur.close()
 
     counts = [len(explored), len(favorites), len(countries)]
-    print((explored), file=sys.stderr)
     captions = ['Destinations Explored', 'Favorites', 'Countries Visited']
 
     return render_template('account.html', favorites=favorites, explored = explored, captions=captions, counts=counts)
