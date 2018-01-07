@@ -3,13 +3,11 @@ import pymysql.cursors
 from passlib.hash import sha256_crypt
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators, SelectField, FileField, ValidationError
 from functools import wraps
-from flask_bower import Bower
 import re
 import sys
 import json
 
 app = Flask(__name__)
-Bower(app)
 
 connection = pymysql.connect(host='localhost',
                              user='Jacob',
@@ -373,7 +371,6 @@ def destinations_user():
     cur.execute("SELECT COUNT(*) AS Count "
                 "FROM Destinations")
     count = cur.fetchone()
-
     return render_template('destinations_user.html', count=count, favorites=favorites, explored=explored, recommended=recommended)
 
 @app.route('/destinations')

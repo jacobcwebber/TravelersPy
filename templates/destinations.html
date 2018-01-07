@@ -1,5 +1,10 @@
 {% extends 'layout.html' %}
 
+{% block head %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.css" rel="stylesheet"/>
+{% endblock %}
+
 {% block body %}
  <div class="panel panel-default">
     <div class="panel-heading"><strong>Admin Destinations</strong></div>
@@ -14,12 +19,9 @@
             </thead>
             {% for destination in destinations %}
             <tr class="clickable-row">
-                <td><a href="/destination/{{ destination.DestID }}"><p> {{ destination.DestName }} </p></a></td>
-                <td><a href="/country/{{ destination.CountryID }}"><p> {{ destination.CountryName  }} </p></a></td>
-                <td>
-                    <a href="/edit_destination/{{ destination.DestID }}"><p>Edit</p></a>
-<!--                     <a href="/add_image/{{ destination.DestID }}"><p>Add Image</p></a>
- -->                </td>
+                <td><a href="/destination/{{ destination.DestID }}"> {{ destination.DestName }} </a></td>
+                <td><a href="/country/{{ destination.CountryID }}"> {{ destination.CountryName  }} </a></td>
+                <td><a href="/edit_destination/{{ destination.DestID }}">Edit</a></td>
             </tr>
             {% endfor %}
         </table>

@@ -1,27 +1,20 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel = 'import' href = '../static/bower_components/polymer/polymer.html'>
-    <link rel = 'import' href = '../static/bower_components/polymer/polymer.html'>
-    <link rel = "import" href = "../static/bower_components/paper-toast/paper-toast.html">
     <meta charset="utf-8">
     <title>Travelers | Explore More</title>
-    <script src="https://use.fontawesome.com/11b4ccbb21.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick.css"/>
-    <link rel="stylesheet" type="text/css" href="../static/css/styles.css">
     <link rel="shortcut icon" href="../static/images/favicon.ico" />
+    <script src="https://use.fontawesome.com/11b4ccbb21.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="../static/css/styles.css">
+    {% block head %}{% endblock %}
   </head>
   <body>
     {% include 'includes/_navbar.html' %}
     <div class="container">
       {% include 'includes/_flash.html' %}
-      <script type="text/javascript" src="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick.min.js"></script>
       {% block body %}{% endblock %}
     </div>
   </body>

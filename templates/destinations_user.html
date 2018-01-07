@@ -1,12 +1,14 @@
 {% extends 'layout.html' %}
 
-{% block body %}
+{% block head %}
 <link rel = 'import' href = '../static/bower_components/polymer/polymer.html'>
 <link rel = 'import' href = '../static/bower_components/polymer/polymer.html'>
 <link rel = "import" href = "../static/bower_components/paper-toast/paper-toast.html">
 <link rel="stylesheet" type="text/css" href="../static/css/destinations_user.css">
+{% endblock %}
 
-<section class="h-center">
+{% block body %}
+<div class="h-center">
     <section class="dest-group-box">
         <section class="dest-group-box-title">Recommended For You</section>
         <section class="dest-group">
@@ -45,7 +47,7 @@
         </section>
         <span class="dest-group-box-subtext">Explore all {{ count.Count }} destinations...</span>
     </section>
-</section>
+</div>
 
 <paper-toast id="toastUnexp" text="Removed from Explored destinations"></paper-toast>
 <paper-toast id="toastExp" text="Added to Explored destinations"></paper-toast>
