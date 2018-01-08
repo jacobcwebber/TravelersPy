@@ -23,12 +23,12 @@
                 {% for image in images %}
                 <div class="image-container">
                     <img class="img-responsive image-element" src="{{ image.ImgUrl }}" alt=""> <p></p>
-                    <p style="color: white;">{{ image.DestName }}</p>
+                    <p style="color: rgb(253, 253, 253);">{{ image.DestName }}</p>
                 </div>
                 {% endfor %}
         </div> <p></p>
         <hr>  
-        <section style="color: white;">
+        <section style="color: rgb(253, 253, 253);">
             <b>Destinations:</b><br>
             {% for destination in destinations %}
                 <a  href="/destination/{{ destination.DestID }}"> {{ destination.DestName }}</a><br>
@@ -37,7 +37,7 @@
         <hr>
 
         <p><a href="/countries" class="btn btn-primary">Back to Countries</a></p>
-        <small style="color:white;"> Last updated on {{country.UpdateDate}}</small>
+        <small style="color:rgb(253, 253, 253);"> Last updated on {{country.UpdateDate}}</small>
     </section>
     <p></p>
 </div>

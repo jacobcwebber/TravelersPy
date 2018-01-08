@@ -14,7 +14,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a style="color: rgb(70, 188, 194); letter-spacing: 3px; font-weight: 600;" class="navbar-brand" href="/">
+      <a style="color: rgb(70, 188, 194); letter-spacing: 4px; font-weight: 600; font-size: 20px;" class="navbar-brand" href="/">
         <img style="float:left; padding-right: 8px;" src="/static/images/favicon.ico"></img>
         Travelers
       </a>
@@ -24,7 +24,7 @@
         {% if session.logged_in %}
           {% for href, id, caption in navigation_bar %}
             <li{% if id == active_page %} class="active" {% endif %}>
-              <a style="letter-spacing: 1px; font-weight: medium;" href="{{ href|e}}">
+              <a style="letter-spacing: 1px; font-weight: 400; font-size: 17px;" href="{{ href|e}}">
                 <section>{{ caption|e }}</section>
               </a>
             </li>
@@ -33,7 +33,11 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         {% if session.logged_in %}
-        <li{% if "profile" == active_page %} class="active" {% endif %}><a href="/account">Profile</a></li>
+        <li{% if "profile" == active_page %} class="active" {% endif %}>
+          <a style="letter-spacing: 1px; font-weight: 400; font-size: 17px;" href="/account">
+            <section>Profile</section>
+          </a>
+        </li>
         {% else %}
           <li><a href="/register" >Register</a></li>
           <li><a href="/login">Login</a></li>

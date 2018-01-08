@@ -18,6 +18,9 @@ a {
     text-transform: uppercase;
     font-family: 'Roboto', sans-serif;
 }
+.navbar-inverse .navbar-nav > li > a{
+    color: rgb(253, 253, 253);
+} 
 .navbar-inverse .navbar-nav > .active > a,
 .navbar-inverse .navbar-nav > .active > a:hover,
 .navbar-inverse .navbar-nav > .active > a:focus  {
@@ -28,6 +31,7 @@ a {
 .navbar-inverse .navbar-nav > .active > a:focus > section {
     color: rgb(70, 188, 194); 
     border-bottom: 3px solid;
+    padding-bottom: 2px;
 }
 .h-v-center{
     position: absolute;
@@ -50,6 +54,6 @@ a {
     height: 600px;
 }
 .header {
-    color: rgb(255,255,255);
+    color: rgb(253, 253, 253);
     text-decoration: none;
 }
