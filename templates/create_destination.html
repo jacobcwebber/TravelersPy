@@ -11,22 +11,31 @@
   <div class="panel-body">
     <form method="POST" id="submitForm" action="">
       <div class="tab">
-        <div class="form-group">
-          {{ render_field(form.name, id="dest-name", class_="form-control") }}
+        <div style="margin-bottom: 10px">
+          <div style="float: left; width: 45%;">
+              <div class="form-group">
+                {{ render_field(form.name, id="dest-name", class_="form-control") }}
+              </div>
+              <div class="form-group">
+                {{ render_field(form.countryId, class_="form-control") }}
+              </div>
+              <div class="form-group">
+                  {{ render_field(form.lat, class_="form-control") }}
+                  {{ render_field(form.lng, class_="form-control") }}
+              </div>
+              <div class="form-group">
+                  {{ render_field(form.category, class_="form-control") }}
+              </div>       
+          </div>
+          <div id="map" style="float: right; height: 280px; width: 50%; margin-bottom: 10px; background-color: lightgrey;"></div>
         </div>
+      </div> <p></p>
+      <div class="tab" style="display: none;">
         <div class="form-group">
-            {{ render_field(form.category, class_="form-control") }}
+          {{ render_field(form.tags, id="tags", class="form-control", type="text", **{'data-role':'tagsinput'})}}
         </div>
         <div class="form-group">
             {{ render_field(form.description, class_="form-control", id="editor") }}
-        </div>
-      </div>
-      <div class="tab" style="display: none;">
-        <div class="form-group">
-          {{ render_field(form.countryId, class_="form-control") }}
-        </div>
-        <div class="form-group">
-          {{ render_field(form.tags, id="tags", class="form-control", type="text", **{'data-role':'tagsinput'})}}
         </div>
       </div>
       <div class="tab" style="display: none;">
@@ -47,6 +56,7 @@
 <script src="/static/js/create_destination.js"></script>
 <script src="/static/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
 <script src="/static/bower_components/bootstrap3-typeahead/bootstrap3-typeahead.min.js"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABEVdEk2zQBeCHstcUpXQUkSxPhtmTv0Q&callback=initMap"></script>
 <script>
   $('#tags').tagsinput({
     confirmKeys: [13, 44, 9],

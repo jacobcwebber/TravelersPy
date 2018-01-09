@@ -27,16 +27,27 @@ function nextPrev(n) {
     showTab(currentTab)
 }
 
-// function storeLocation(lat, lng) {
-//     $.ajax({
-//         type: 'POST',
-//         url: '/create-destination',
-//         data: {
-//             lat: lat,
-//             lng: lng
-//         },
-//         error: function(e) {
-//             console.log(e);
-//         }
-//     });
-// }
+function initMap() {
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 1,
+      center: {lat: 0, lng: 0}
+    });
+  }
+
+
+$('#countryId').change(function initMap() {
+    var address = $('#dest-name').val() + ', ' + $('#countryId').find(":selected").text();
+    var geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ 'address': address }, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 5,
+                center: results[0].geometry.location
+            });
+            var marker = new google.maps.Marker({
+                map: map,
+                position: results[0].geometry.location
+            });
+        }
+    });
+});
