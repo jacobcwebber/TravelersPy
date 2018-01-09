@@ -112,7 +112,7 @@ def login():
         if result > 0:
             user = cur.fetchone()
             password = user['Password']
-            userId = user['UserID']
+            userId = user['UserID'] 
             firstname = user['FirstName']
 
             #checks if passwords match and logs you in if they do
@@ -432,6 +432,8 @@ def create_destination():
         description = form.description.data
         imgUrl = form.imgUrl.data
         tags = form.tags.data
+        lat = form.lat.data
+        lng = form.lng.data
 
         cur = connection.cursor()
 
@@ -453,6 +455,11 @@ def create_destination():
         cur.execute("INSERT INTO dest_images "
                     " VALUES (%s, %s)",
                     (id['DestID'], imgUrl))
+        connection.commit()
+
+        cur.execute("INSERT INTO dest_locations "
+                    " VALUES (%s, %s, %s)",
+                    (id['DestID'], lat, lng))
         connection.commit()
         cur.close()
 
@@ -494,7 +501,7 @@ def edit_destination(id):
     cur = connection.cursor()
 
     cur.execute("SELECT * "
-                "FROM destinations d JOIN dest_images i ON d.DestID = i.DestID "
+                "FROM destinations d JOIN dest_images i ON d.DestID = i.DestID LEFT JOIN dest_locations l ON d.DestID = l.DestID "
                 "WHERE d.DestID = %s"
                 , [id])
 
@@ -508,16 +515,19 @@ def edit_destination(id):
     form.category.data = destination['Category']
     form.description.data = destination['Description']
     form.imgUrl.data = destination['ImgURL']
+    # form.lat.data = destination['lat']
+    # form.lng.data = destination.['lng']
     # form.tags.data = tags['TagName'] --> gonna need to loop through
 
     if request.method == 'POST':
-        #if request.form['action'] == 'Submit':
         name = request.form['name']
         countryId = request.form['countryId']
         category = request.form['category']
         description = request.form['description']
         tags = request.form['tags']
         imgUrl = request.form['imgUrl']
+        lat = request.form['lat']
+        lng = request.form['lng']
 
         cur = connection.cursor()
         cur.execute("UPDATE destinations "
@@ -529,6 +539,10 @@ def edit_destination(id):
                     "SET ImgURL = %s "
                     "WHERE DestID=%s"
                     , (imgUrl, id))
+        
+        cur.execute("INSERT INTO dest_locations "
+                    " VALUES (%s, %s, %s)",
+                    (id, lat, lng))
 
         connection.commit()
         cur.close()
@@ -559,7 +573,7 @@ def edit_destination(id):
             print("A TypeError occured because you did not submit any new tags. This is a temporary issues.")
 
         flash('Destination updated.', 'success')
-        return redirect(url_for('destinations_user'))
+        return redirect(url_for('destinations'))
 
     cur = connection.cursor()
     cur.execute("SELECT TagName FROM tags")

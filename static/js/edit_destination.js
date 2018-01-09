@@ -28,13 +28,6 @@ function nextPrev(n) {
 }
 
 function initMap() {
-    var map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 1,
-      center: {lat: 0, lng: 0}
-    });
-  }
-
-$('#countryId').change(function initMap() {
     var address = $('#dest-name').val() + ', ' + $('#countryId').find(":selected").text();
     var geocoder = new google.maps.Geocoder();
     geocoder.geocode({ 'address': address }, function(results, status) {
@@ -50,6 +43,5 @@ $('#countryId').change(function initMap() {
             $("#lat").val(results[0].geometry.location.lat());
             $("#lng").val(results[0].geometry.location.lng());
         }
-    });
-});
-
+    }
+)};
