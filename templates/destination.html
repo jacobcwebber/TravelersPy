@@ -1,6 +1,10 @@
 {% extends 'layout.html' %}
 {% set active_page = "destinations" %}
 
+{% block head %}
+<meta id="location" lat="{{location[0].Lat}}" lng="{{location[0].Lng}}">
+{% endblock %}
+
 {% block body %}
 <link rel="stylesheet" type="text/css" href="../static/css/destinations_user.css">
 <div class="container" align="center">

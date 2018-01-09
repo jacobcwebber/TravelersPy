@@ -363,24 +363,31 @@ def destination(id):
                              "WHERE DestID = %s", [id])
         destination = cur.fetchone()
 
-        cur.execute("SELECT ImgUrl "
-                         "FROM dest_images "
-                         "WHERE DestID = %s"
-                         , [id])
-        images = cur.fetchall()
-
-        cur.execute("SELECT * "
-                    "FROM vTags "
-                    "WHERE DestName  = %s"
-                    , [destination['DestName']])
-        tags = cur.fetchall()
-        cur.close()
-
         if result > 0:
-            return render_template('destination.html', destination=destination, images=images, tags=tags)
+            cur.execute("SELECT ImgUrl "
+                        "FROM dest_images "
+                        "WHERE DestID = %s"
+                        , [id])
+            images = cur.fetchall()
+
+            cur.execute("SELECT * "
+                        "FROM dest_locations "
+                        "WHERE DestID = %s"
+                        , [id])
+            location = cur.fetchall()
+
+            cur.execute("SELECT * "
+                        "FROM vTags "
+                        "WHERE DestName  = %s"
+                        , [destination['DestName']])
+            tags = cur.fetchall()
+            cur.close()
+
+            return render_template('destination.html', destination=destination, images=images, location=location, tags=tags)
+            
         else:
             flash('Destination does not exist.', 'danger')
-            return redirect(url_for('destinations'))
+            return redirect(url_for('destinations_user'))
 
     else:
         cur = connection.cursor()
