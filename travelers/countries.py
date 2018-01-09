@@ -1,3 +1,7 @@
+#####################################################
+#####             COUNTRIES PAGES                ####
+#####################################################
+
 class CountryForm(Form):
     cur = connection.cursor()
 
@@ -21,32 +25,29 @@ def countries():
 @app.route('/country/<string:id>')
 @is_logged_in
 def country(id):
-    countryCur = connection.cursor()
-    destinationsCur = connection.cursor()
-    imagesCur = connection.cursor()
+    cur = connection.cursor()
 
-    countryCur.execute("SELECT CountryName, Description, UpdateDate "
+    cur.execute("SELECT CountryName, Description, UpdateDate "
                         "FROM countries "
                         "WHERE CountryID = %s"
                         , [id])
-
-    destinationsCur.execute("SELECT CountryName, DestName, DestID, c.Description, c.UpdateDate"
+    country = cur.fetchone()
+    
+    cur.execute("SELECT CountryName, DestName, DestID, c.Description, c.UpdateDate"
                 " FROM countries c JOIN destinations d"
                 " WHERE c.CountryID = d.CountryID AND c.CountryID = %s"
                 , [id])
+    destinations = cur.fetchall()
 
-    imagesCur.execute("SELECT c.CountryId, d.DestName, i.ImgUrl "
+    cur.execute("SELECT c.CountryId, d.DestName, i.ImgUrl "
             "FROM countries c JOIN destinations d ON c.CountryID = d.CountryID "
             "JOIN dest_images i on d.DestID = i.DestID "
             "WHERE c.CountryID = %s "
             "ORDER BY RAND()"
             , [id])
+    images = cur.fetchall()
+    cur.close()
 
-    country = countryCur.fetchone()
-    destinations = destinationsCur.fetchall()
-    images = imagesCur.fetchall()
-    countryCur.close()
-    destinationsCur.close()
     return render_template('country.html', country=country, destinations=destinations, images=images)
 
 
@@ -68,32 +69,19 @@ def edit_country(id):
     form.description.data = country['Description']
 
     if request.method == 'POST':
-        if request.form['action'] == 'Submit':
-            name = request.form['name']
-            description = request.form['description']
+        name = request.form['name']
+        description = request.form['description']
 
-            cur = connection.cursor()
-            cur.execute("UPDATE countries "
-                        "SET CountryName=%s, Description=%s "
-                        "WHERE CountryID=%s"
-                        ,(name, description, id))
+        cur = connection.cursor()
+        cur.execute("UPDATE countries "
+                    "SET CountryName=%s, Description=%s "
+                    "WHERE CountryID=%s"
+                    ,(name, description, id))
 
-            connection.commit()
-            cur.close()
+        connection.commit()
+        cur.close()
 
-            flash('Country updated.', 'success')
-            return redirect(url_for('countries'))
-
-        elif request.form['action'] == 'Delete':
-            cur = connection.cursor()
-            cur.execute("DELETE FROM countries "
-                        "WHERE CountryID = %s"
-                        , [id])
-
-            connection.commit()
-            cur.close()
-
-            flash('Country successfully deleted.', 'success')
-            return redirect(url_for('destinations'))
+        flash('Country updated.', 'success')
+        return redirect(url_for('countries'))
 
     return render_template('edit_country.html', form=form)

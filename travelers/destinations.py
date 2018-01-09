@@ -1,3 +1,6 @@
+#####################################################
+#####            DESTINATIONS PAGES              ####
+#####################################################
 
 @app.route('/destinations-user')
 @is_logged_in
@@ -50,7 +53,7 @@ def destinations_user():
     exp = cur.fetchall()
     cur.close()
 
-    # Convert dictionaries for favorites and explored into lists so they can easier be iterated through in HTML jinja 
+    # Convert dictionaries for favorites and explored into lists so they can easier be iterated through in jinja 
     favorites = []
     for dest in favs:
         favorites.append(dest['DestID'])
@@ -69,18 +72,14 @@ def destinations_user():
 @is_logged_in
 def destinations():
     cur = connection.cursor()
-    result = cur.execute("SELECT * "
-                         "FROM destinations d JOIN countries c ON d.CountryID = c.CountryID "
-                         "ORDER BY d.DestName")
+    cur.execute("SELECT * "
+                "FROM destinations d JOIN countries c ON d.CountryID = c.CountryID "
+                "ORDER BY d.DestName")
 
     destinations = cur.fetchall()
     cur.close() 
 
-    if result > 0:
-        return render_template('destinations.html', destinations=destinations)
-    else:
-        msg="No destinations found."
-        return render_template('destinations.html',  msg=msg)
+    return render_template('destinations.html', destinations=destinations)
 
 
 class DestinationForm(Form):
@@ -110,68 +109,22 @@ class DestinationForm(Form):
 class DestImageForm(Form):
     imgUrl = StringField('Image URL', [validators.URL(message="Not a valid url")])
 
-@app.route('/alter-explored', methods=['POST'])
-def alter_explored():
-    id = request.form['id']
-    action = request.form['action']
-    
-    cur = connection.cursor()
-
-    if action == "add":
-        cur.execute("INSERT INTO explored "
-                    "VALUES (%s, %s)"
-                    , (session['user'], id))
-    elif action == "remove":
-        cur.execute("DELETE FROM explored "
-                    "WHERE UserID = %s AND DestID = %s"
-                    , (session['user'], id))  
-
-    connection.commit()
-    cur.close()
-    return "success"
-
-@app.route('/alter-favorite', methods=['POST'])
-def alter_favorite():
-    id = request.form['id']
-    action = request.form['action']
-    
-    cur = connection.cursor()
-
-    if action == "add":
-        cur.execute("INSERT INTO favorites "
-                    "VALUES (%s, %s)"
-                    , (session['user'], id))
-    elif action == "remove":
-        cur.execute("DELETE FROM favorites "
-                    "WHERE UserID = %s AND DestID = %s"
-                    , (session['user'], id))  
-
-    connection.commit()
-    cur.close()
-    return "success"
-
 @app.route('/destination/<string:id>', methods=['POST', 'GET'])
 @is_logged_in
 def destination(id):
     if request.method == 'GET':
         cur = connection.cursor()
-        imageCur = connection.cursor()
         result = cur.execute("SELECT DestName, CountryName, DestID, c.CountryID, d.Description, d.UpdateDate "
                              "FROM destinations d JOIN countries c ON d.CountryID = c.CountryID "
                              "WHERE DestID = %s", [id])
+        destination = cur.fetchone()
 
-        imageCur.execute("SELECT ImgUrl "
+        cur.execute("SELECT ImgUrl "
                          "FROM dest_images "
                          "WHERE DestID = %s"
                          , [id])
+        images = cur.fetchall()
 
-
-        destination = cur.fetchone()
-        images = imageCur.fetchall()
-        cur.close()
-        imageCur.close()
-
-        cur = connection.cursor()
         cur.execute("SELECT * "
                     "FROM vTags "
                     "WHERE DestName  = %s"
@@ -358,3 +311,45 @@ def edit_destination(id):
         tagsList.append(tag['TagName'])
 
     return render_template('edit_destination.html', form=form, tags=tagsList)
+
+
+@app.route('/alter-explored', methods=['POST'])
+def alter_explored():
+    id = request.form['id']
+    action = request.form['action']
+    
+    cur = connection.cursor()
+
+    if action == "add":
+        cur.execute("INSERT INTO explored "
+                    "VALUES (%s, %s)"
+                    , (session['user'], id))
+    elif action == "remove":
+        cur.execute("DELETE FROM explored "
+                    "WHERE UserID = %s AND DestID = %s"
+                    , (session['user'], id))  
+
+    connection.commit()
+    cur.close()
+    return "success"
+
+@app.route('/alter-favorite', methods=['POST'])
+def alter_favorite():
+    id = request.form['id']
+    action = request.form['action']
+    
+    cur = connection.cursor()
+
+    if action == "add":
+        cur.execute("INSERT INTO favorites "
+                    "VALUES (%s, %s)"
+                    , (session['user'], id))
+    elif action == "remove":
+        cur.execute("DELETE FROM favorites "
+                    "WHERE UserID = %s AND DestID = %s"
+                    , (session['user'], id))  
+
+    connection.commit()
+    cur.close()
+    return "success"
+
