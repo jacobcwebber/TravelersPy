@@ -169,10 +169,12 @@ def account():
                 , session['user'])
     countries = cur.fetchall()
 
+    # cur.execute("SELECT l.Lat, l.Lng, d.DestName "
+    #             "FROM dest_locations l JOIN explored f ON l.DestID = f.DestID JOIN destinations d on l.DestID = d.DestID "
+    #             "WHERE f.UserID = %s"
+    #             , session['user'])
     cur.execute("SELECT l.Lat, l.Lng, d.DestName "
-                "FROM dest_locations l JOIN favorites f ON l.DestID = f.DestID JOIN destinations d on l.DestID = d.DestID "
-                "WHERE f.UserID = %s"
-                , session['user'])
+                "FROM dest_locations l JOIN destinations d on l.DestID = d.DestID")
     locations = cur.fetchall()
     cur.close()
     
@@ -532,9 +534,6 @@ def edit_destination(id):
     form.category.data = destination['Category']
     form.description.data = destination['Description']
     form.imgUrl.data = destination['ImgURL']
-    # form.lat.data = destination['lat']
-    # form.lng.data = destination.['lng']
-    # form.tags.data = tags['TagName'] --> gonna need to loop through
 
     if request.method == 'POST':
         name = request.form['name']
@@ -557,9 +556,10 @@ def edit_destination(id):
                     "WHERE DestID=%s"
                     , (imgUrl, id))
         
-        cur.execute("INSERT INTO dest_locations "
-                    " VALUES (%s, %s, %s)",
-                    (id, lat, lng))
+        cur.execute("UPDATE dest_locations "
+                    "SET Lat=%s, Lng= %s "
+                    "WHERE DestID=%s"
+                    , (lat, lng, id))
 
         connection.commit()
         cur.close()

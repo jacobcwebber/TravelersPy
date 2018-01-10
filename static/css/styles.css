@@ -33,6 +33,10 @@ a {
     border-bottom: 3px solid;
     padding-bottom: 2px;
 }
+.nav-justified {
+    border-collapse:separate;
+    border-spacing:2px;
+ }
 .h-v-center{
     position: absolute;
     top: 50%;
@@ -56,4 +60,22 @@ a {
 .header {
     color: rgb(253, 253, 253);
     text-decoration: none;
+}
+.pill-element {
+    background-color: rgba(51, 64, 85, 0.5);
+    border-spacing: 5px;
+    border-radius: 4px;
+}
+.nav-pills>li.active>a, 
+.nav-pills>li.active>a:focus, 
+.nav-pills>li.active>a:hover {
+    background-color: rgb(70, 188, 194);
+}
+.nav > li > a {
+    color: rgb(253,253,253);
+    text-decoration: none;
+}
+.nav > li > a:focus, 
+.nav > li > a:hover {
+    background-color: rgba(51, 64, 85, 0.99);
 }
