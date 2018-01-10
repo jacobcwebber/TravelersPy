@@ -3,6 +3,7 @@
 
 {% block head %}
 <link rel="stylesheet" href="/static/css/destinations_user.css">
+<meta lat={{locations[0][0]}} lng={{locations[0][1]}}> 
 {% endblock %}
 
 {% block body %}
@@ -30,7 +31,33 @@
         {% endfor %}
         </div>
     </div>
+    <div class="dest-group-box" style="overflow: hidden;">
+        <div style="display: flex; flex-direction: row; justify-content: space-around;">
+            <div id="map" style="width: 100%; height: 400px;"></div>
+        </div>
+    </div>
 </div>
 
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABEVdEk2zQBeCHstcUpXQUkSxPhtmTv0Q&callback=initMap"
+    async defer></script>
 <script type="text/javascript" src="../static/js/account.js"></script>
+<script>
+var locations = {{locations | safe}};
+
+function initMap() {
+    var map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 0, lng: 0},
+        zoom: 1,
+        mapTypeId: 'satellite'
+    });
+    for (i=0; i<locations.length; i++) {
+        var pos = new google.maps.LatLng(locations[i][0], locations[i][1])
+        var marker = new google.maps.Marker({
+            position: pos,
+            map: map,
+            title: locations[i][2]
+        });
+    }
+}
+</script>
 {% endblock %}

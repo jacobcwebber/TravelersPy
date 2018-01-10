@@ -168,12 +168,22 @@ def account():
                 "GROUP BY c.CountryID"
                 , session['user'])
     countries = cur.fetchall()
+
+    cur.execute("SELECT l.Lat, l.Lng, d.DestName "
+                "FROM dest_locations l JOIN favorites f ON l.DestID = f.DestID JOIN destinations d on l.DestID = d.DestID "
+                "WHERE f.UserID = %s"
+                , session['user'])
+    locations = cur.fetchall()
     cur.close()
+    
+    locationsList = []
+    for location in locations:
+        locationsList.append([float(location['Lat']), float(location['Lng']), location['DestName']])
 
     counts = [len(explored), len(favorites), len(countries)]
     captions = ['Destinations Explored', 'Favorites', 'Countries Visited']
 
-    return render_template('account.html', favorites=favorites, explored = explored, captions=captions, counts=counts)
+    return render_template('account.html', favorites=favorites, explored=explored, locations=locationsList, captions=captions, counts=counts)
 
 @app.route('/logout')
 @is_logged_in
@@ -384,7 +394,7 @@ def destination(id):
             cur.close()
 
             return render_template('destination.html', destination=destination, images=images, location=location, tags=tags)
-            
+
         else:
             flash('Destination does not exist.', 'danger')
             return redirect(url_for('destinations_user'))
