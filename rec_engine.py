@@ -4,7 +4,7 @@
 
 ## This is a large WIP and I'll probably end up employing a bunch of weird libraries I don't currently know about
 
-import numpy
+import numpy as np
 import pymysql.cursors
 
 connection = pymysql.connect(host='localhost',
@@ -19,18 +19,27 @@ cur.execute("SELECT TagID FROM tags")
 tags = cur.fetchall()
 
 cur.execute("SELECT * FROM destinations")
-dests = cur.fetchall()
-
-cur.execute("SELECT TagID FROM dest_tags")
+dest = cur.fetchone()
+cur.execute("SELECT TagID FROM dest_tags WHERE DestID = 12")
 dest_tags = cur.fetchall()
 cur.close()
 
-destList = []
-for dest in dests:
-    destList.append(dest['DestName'].encode("ascii"))
-print(destList)
+destTags = []
+i = 0
+while i < len(tags):
+    destTags.append(tag['TagID'])
+
+listofzeros = [0] * len(tags)
+print(listofzeros)
+print(destTags)
+# zeros = 
+# destList = []
+# destList.append(dest['DestName'])
+# for tag in dest_tags:
+#     if tag['DestID'] == dest['DestID']:
+#         print(tag)
 
 # dests = [0, 1, 1, 0]
 # users = [7, 4, 0, 6]
-# result = numpy.dot(dests, users)
+# result = np.dot(dests, users)
 # print(result)
