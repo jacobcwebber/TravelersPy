@@ -16,9 +16,11 @@ $('.fav-star').click(function(event) {
         }
     }).done(function() {
         if ($(this).hasClass('star-full')) {
-            toastUnfav.show();
+            $('#toast').attr("text", "Removed from Favorites")
+            toast.show();
         } else {
-            toastFav.show()
+            $('#toast').attr("text", "Added to Favorites")
+            toast.show()
         }
         $(this).toggleClass('star-full');
     }).fail(function(error) {
@@ -44,9 +46,11 @@ $('.exp-check').click(function(event) {
         }
     }).done(function() {
         if ($(this).hasClass('exp-full')) {
-            toastUnexp.show();
+            $('#toast').attr("text", "Removed from Explored destinations")
+            toast.show();
         } else {
-            toastExp.show()
+            $('#toast').attr("text", "Added to Explored destinations")
+            toast.show()
         }
         $(this).toggleClass('exp-full');
     }).fail(function(error) {
