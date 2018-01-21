@@ -1,6 +1,6 @@
 {% set navigation_bar = [
-  ('/destinations-user', 'destinations', 'Destinations'),
-  ('/destinations', 'destinations-admin', 'Destinations (Admin)'),
+  ('/destinations', 'destinations', 'Destinations'),
+  ('/destinations-admin', 'destinations-admin', 'Destinations (Admin)'),
   ('/countries', 'countries', 'Countries (Admin)')
 ] -%}
 {% set active_page = active_page|default('index') -%}
@@ -34,7 +34,7 @@
       <ul class="nav navbar-nav navbar-right">
         {% if session.logged_in %}
         <li{% if "profile" == active_page %} class="active" {% endif %}>
-          <a style="letter-spacing: 1px; font-weight: 400; font-size: 17px;" href="/account">
+          <a style="letter-spacing: 1px; font-weight: 400; font-size: 17px;" href="/profile">
             <section>Profile</section>
           </a>
         </li>

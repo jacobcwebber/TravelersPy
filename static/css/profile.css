@@ -1,0 +1,28 @@
+.group-box {
+    border: 1px solid var(--lightnavy);
+    background: rgba(51, 64, 85, 0.5);
+    border-radius: 6px; 
+    width: 900px;
+    padding: 16px 16px 8px;
+    margin: 0px auto 16px;
+}
+.pic-circle {
+    background-color: var(--white); 
+    margin: 10px; 
+    border-radius: 50%; 
+    height: 160px; 
+    width: 160px; 
+    float: left;
+}
+.pro-text {
+    color: var(--white); 
+    font-size: 15px;
+}
+.dest-group-box-subtext {
+    color: var(--teal);
+    margin: 6px 0 3px;
+    font-size: 17px;
+    font-weight: 500;
+    display: block;
+    font-size: 24px; 
+}

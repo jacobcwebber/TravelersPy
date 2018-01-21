@@ -8,8 +8,8 @@
     background: rgba(51, 64, 85, 0.5);
     border-radius: 6px; 
     width: 650px;
-    padding: 16px 16px 8px 16px;
-    margin: 0px auto 16px auto;
+    padding: 16px 16px 8px;
+    margin: 0 auto 16px;
 }
 .dest-group-box-title {
     font-size: 20px; 
@@ -53,7 +53,6 @@
 }
 /* Where the favorite star and the been there check are */
 .dest-box-header {
-    /* visibility: hidden; */
     opacity: .75;
     width: auto;
     position: relative;

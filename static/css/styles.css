@@ -52,7 +52,7 @@ a {
     border-collapse:separate;
     border-spacing:2px;
  }
- @media (max-width: 1000px) {
+@media (max-width: 1000px) {
     .navbar-header {
         float: none;
     }
@@ -111,7 +111,7 @@ a {
     height: 600px;
 }
 .header {
-    color: rgb(253, 253, 253);
+    color: var(--white);
     text-decoration: none;
 }
 .pill-element {
@@ -122,10 +122,10 @@ a {
 .nav-pills>li.active>a, 
 .nav-pills>li.active>a:focus, 
 .nav-pills>li.active>a:hover {
-    background-color: rgb(70, 188, 194);
+    background-color: var(--teal);
 }
 .nav > li > a {
-    color: rgb(253,253,253);
+    color: var(--white);
     text-decoration: none;
 }
 .nav > li > a:focus, 

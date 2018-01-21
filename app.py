@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, url_for, logging, session, flash, redirect, Markup
+from flask import Flask, request, render_template, url_for, logging, session, flash, redirect, Markup, jsonify
 import pymysql.cursors
 from passlib.hash import sha256_crypt
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators, SelectField, FileField, ValidationError, DecimalField
@@ -132,7 +132,6 @@ def login():
                     session['admin'] = False
 
                 cur.close()
-                flash('Welcome, ' + firstname + '. You are now logged in.', 'success')
                 return redirect(url_for('index'))
 
             else:
@@ -146,9 +145,44 @@ def login():
 
     return render_template('login.html')
 
-@app.route('/account')
+@app.route('/change-map', methods=['POST'])
+def change_map():
+    view = request.form['view']
+
+    cur = connection.cursor()
+
+    if view == "all":
+        cur.execute("SELECT l.Lat, l.Lng, d.DestName "
+                    "FROM dest_locations l JOIN destinations d on l.DestID = d.DestID")
+    elif view == "favorites":
+        cur.execute("SELECT l.Lat, l.Lng, d.DestName "
+                    "FROM dest_locations l JOIN destinations d on l.DestID = d.DestID "
+                    "WHERE l.DestID IN "
+                        "(SELECT f.DestID "
+                        "FROM favorites f "
+                        "WHERE UserID = %s)"
+                        , [session['user']])
+    else:
+        cur.execute("SELECT l.Lat, l.Lng, d.DestName "
+                    "FROM dest_locations l JOIN destinations d on l.DestID = d.DestID "
+                    "WHERE l.DestID IN "
+                        "(SELECT e.DestID "
+                        "FROM explored e "
+                        "WHERE UserID = %s)"
+                        , [session['user']])
+
+    locations = cur.fetchall()
+    cur.close()
+
+    locationsList = []
+    for location in locations:
+        locationsList.append([float(location['Lat']), float(location['Lng']), location['DestName']])
+
+    return jsonify(locationsList)
+
+@app.route('/profile')
 @is_logged_in
-def account():
+def profile():
     cur = connection.cursor()
     cur.execute("SELECT f.DestID "
                 "FROM favorites f JOIN destinations d ON d.DestID = f.DestID JOIN users u on u.UserID = f.UserID "
@@ -169,10 +203,6 @@ def account():
                 , session['user'])
     countries = cur.fetchall()
 
-    # cur.execute("SELECT l.Lat, l.Lng, d.DestName "
-    #             "FROM dest_locations l JOIN explored f ON l.DestID = f.DestID JOIN destinations d on l.DestID = d.DestID "
-    #             "WHERE f.UserID = %s"
-    #             , session['user'])
     cur.execute("SELECT l.Lat, l.Lng, d.DestName "
                 "FROM dest_locations l JOIN destinations d on l.DestID = d.DestID")
     locations = cur.fetchall()
@@ -185,7 +215,7 @@ def account():
     counts = [len(explored), len(favorites), len(countries)]
     captions = ['Destinations Explored', 'Favorites', 'Countries Visited']
 
-    return render_template('account.html', favorites=favorites, explored=explored, locations=locationsList, captions=captions, counts=counts)
+    return render_template('profile.html', favorites=favorites, explored=explored, locations=locationsList, captions=captions, counts=counts)
 
 @app.route('/logout')
 @is_logged_in
@@ -277,7 +307,6 @@ def edit_country(id):
         connection.commit()
         cur.close()
 
-        flash('Country updated.', 'success')
         return redirect(url_for('countries'))
 
     return render_template('edit_country.html', form=form)
@@ -286,9 +315,9 @@ def edit_country(id):
 #####            DESTINATIONS PAGES              ####
 #####################################################
 
-@app.route('/destinations-user')
+@app.route('/destinations')
 @is_logged_in
-def destinations_user():
+def destinations():
     cur = connection.cursor()
     cur.execute("SELECT d.DestID, d.DestName, i.ImgURL "
                 "FROM destinations d JOIN dest_images i on d.destID = i.DestID "
@@ -350,11 +379,11 @@ def destinations_user():
     cur.execute("SELECT COUNT(*) AS Count "
                 "FROM Destinations")
     count = cur.fetchone()
-    return render_template('destinations_user.html', count=count, favorites=favorites, explored=explored, recommended=recommended)
+    return render_template('destinations.html', count=count, favorites=favorites, explored=explored, recommended=recommended)
 
-@app.route('/destinations')
+@app.route('/destinations-admin')
 @is_logged_in
-def destinations():
+def destinations_admin():
     cur = connection.cursor()
     cur.execute("SELECT * "
                 "FROM destinations d JOIN countries c ON d.CountryID = c.CountryID "
@@ -363,56 +392,42 @@ def destinations():
     destinations = cur.fetchall()
     cur.close() 
 
-    return render_template('destinations.html', destinations=destinations)
+    return render_template('destinations_admin.html', destinations=destinations)
 
 @app.route('/destination/<string:id>', methods=['POST', 'GET'])
 @is_logged_in
 def destination(id):
-    if request.method == 'GET':
-        cur = connection.cursor()
-        result = cur.execute("SELECT DestName, CountryName, DestID, c.CountryID, d.Description, d.UpdateDate "
-                             "FROM destinations d JOIN countries c ON d.CountryID = c.CountryID "
-                             "WHERE DestID = %s", [id])
-        destination = cur.fetchone()
+    cur = connection.cursor()
+    result = cur.execute("SELECT DestName, CountryName, DestID, c.CountryID, d.Description, d.UpdateDate "
+                            "FROM destinations d JOIN countries c ON d.CountryID = c.CountryID "
+                            "WHERE DestID = %s", [id])
+    destination = cur.fetchone()
 
-        if result > 0:
-            cur.execute("SELECT ImgUrl "
-                        "FROM dest_images "
-                        "WHERE DestID = %s"
-                        , [id])
-            images = cur.fetchall()
+    if result > 0:
+        cur.execute("SELECT ImgUrl "
+                    "FROM dest_images "
+                    "WHERE DestID = %s"
+                    , [id])
+        images = cur.fetchall()
 
-            cur.execute("SELECT * "
-                        "FROM dest_locations "
-                        "WHERE DestID = %s"
-                        , [id])
-            location = cur.fetchall()
+        cur.execute("SELECT * "
+                    "FROM dest_locations "
+                    "WHERE DestID = %s"
+                    , [id])
+        location = cur.fetchall()
 
-            cur.execute("SELECT * "
-                        "FROM vTags "
-                        "WHERE DestName  = %s"
-                        , [destination['DestName']])
-            tags = cur.fetchall()
-            cur.close()
-
-            return render_template('destination.html', destination=destination, images=images, location=location, tags=tags)
-
-        else:
-            flash('Destination does not exist.', 'danger')
-            return redirect(url_for('destinations_user'))
-
-    else:
-        cur = connection.cursor()
-        cur.execute("INSERT INTO favorites "
-                    "VALUES (%s, %s)",
-                    (session['user'], id))
-
-        connection.commit()
+        cur.execute("SELECT * "
+                    "FROM vTags "
+                    "WHERE DestName  = %s"
+                    , [destination['DestName']])
+        tags = cur.fetchall()
         cur.close()
 
-        flash('Added to favorites', 'success')
+        return render_template('destination.html', destination=destination, images=images, location=location, tags=tags)
 
-        return redirect(url_for('destinations'))
+    else:
+        flash('Destination does not exist.', 'danger')
+        return redirect(url_for('destinations_user'))
 
 class DestinationForm(Form):
     cur = connection.cursor()
@@ -498,8 +513,6 @@ def create_destination():
                             , (id['DestID'], tagId['TagID']))
                 connection.commit()
                 cur.close()
-
-        flash('Your new destination has been created!', 'success')
 
         return redirect(url_for('destinations'))
             
@@ -589,7 +602,6 @@ def edit_destination(id):
         except TypeError: 
             print("A TypeError occured because you did not submit any new tags. This is a temporary issues.")
 
-        flash('Destination updated.', 'success')
         return redirect(url_for('destinations'))
 
     cur = connection.cursor()

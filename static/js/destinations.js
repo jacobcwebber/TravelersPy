@@ -10,7 +10,7 @@ $('.fav-star').click(function(event) {
         type: 'POST',
         url: '/alter-favorite',
         context: this,
-        data :{ 
+        data: { 
             id : $(this).attr('id'),
             action : action
         }

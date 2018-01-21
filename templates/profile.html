@@ -1,0 +1,48 @@
+{% extends 'layout.html' %}
+{% set active_page = "profile" %}
+
+{% block head %}
+<link rel="stylesheet" href="/static/css/profile.css">
+{% endblock %}
+
+{% block body %}
+
+<div class="group-box" style="overflow: hidden;">
+    <div style="float: left;">
+        <div class="pic-circle">
+            <div style="margin: auto; padding-top: 75px; text-align: center;">Profile Picture</div>
+        </div>
+    </div>
+    <div style="margin-top: 10px;">
+        <span class="dest-group-box-subtext">Jacob</span>
+        <span class="pro-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas id labore doloribus aperiam distinctio hic quos perspiciatis tenetur error reiciendis, commodi enim quam. Excepturi cumque similique recusandae totam voluptatem officia.</span>
+    </div>
+</div>
+<div class="group-box" style="overflow: hidden;">
+    <div style="display: flex; flex-direction: row; justify-content: space-around;">
+    {% for n in range(0,3) %}
+    <div style="display: flex; flex-direction: column; text-align: center;">
+        <div id="profile-pic-circle" style="text-align: center; vertical-align: middle; border-style: solid; border-width: 5px; border-color: rgb(70, 188, 194); margin: 10px; border-radius: 50%; height: 160px; width: 160px;">
+            <p style="line-height: 160px; color: rgb(253, 253, 253); font-size: 48px;">{{ counts[n] }}</p>
+        </div>
+        <div style="color: rgb(253, 253, 253); font-size: 16px;">{{ captions[n] }}</div>
+    </div>
+    {% endfor %}
+    </div>
+</div>
+<div class="group-box" style="overflow: hidden;">
+    <ul class="nav nav-pills nav-justified">
+        <li id="all" class="pill-element active"><a>All Destinations</a></li>
+        <li id="favorites" class="pill-element"><a>Favorited Destinations</a></li>
+        <li id="explored" class="pill-element"><a>Explored Destinations</a></li>
+    </ul>
+    <div id="map" style="width: 100%; height: 550px;"></div>
+</div>
+
+<script type="text/javascript" src="../static/js/profile.js"></script>
+<script>
+    var locations = {{locations | safe}};
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABEVdEk2zQBeCHstcUpXQUkSxPhtmTv0Q&callback=initMap" async defer></script>
+
+{% endblock %}
