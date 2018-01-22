@@ -18,25 +18,25 @@
         <span class="pro-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas id labore doloribus aperiam distinctio hic quos perspiciatis tenetur error reiciendis, commodi enim quam. Excepturi cumque similique recusandae totam voluptatem officia.</span>
     </div>
 </div>
-<div class="group-box" style="overflow: hidden;">
-    <div style="display: flex; flex-direction: row; justify-content: space-around;">
-    {% for n in range(0,3) %}
-    <div style="display: flex; flex-direction: column; text-align: center;">
-        <div id="profile-pic-circle" style="text-align: center; vertical-align: middle; border-style: solid; border-width: 5px; border-color: rgb(70, 188, 194); margin: 10px; border-radius: 50%; height: 160px; width: 160px;">
-            <p style="line-height: 160px; color: rgb(253, 253, 253); font-size: 48px;">{{ counts[n] }}</p>
+<div class="group-box">
+    <div class="stats">
+        {% for n in range(0,3) %}
+        <div class="inner-stats">
+            <div class="stat-circle">
+                <p class="stat-number">{{ counts[n] }}</p>
+            </div>
+            <div class="stat-name">{{ captions[n] }}</div>
         </div>
-        <div style="color: rgb(253, 253, 253); font-size: 16px;">{{ captions[n] }}</div>
-    </div>
-    {% endfor %}
+        {% endfor %}
     </div>
 </div>
-<div class="group-box" style="overflow: hidden;">
+<div class="group-box">
     <ul class="nav nav-pills nav-justified">
         <li id="all" class="pill-element active"><a>All Destinations</a></li>
         <li id="favorites" class="pill-element"><a>Favorited Destinations</a></li>
         <li id="explored" class="pill-element"><a>Explored Destinations</a></li>
     </ul>
-    <div id="map" style="width: 100%; height: 550px;"></div>
+    <div id="map"></div>
 </div>
 
 <script type="text/javascript" src="../static/js/profile.js"></script>

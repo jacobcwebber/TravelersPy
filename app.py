@@ -217,6 +217,51 @@ def profile():
 
     return render_template('profile.html', favorites=favorites, explored=explored, locations=locationsList, captions=captions, counts=counts)
 
+@app.route('/search')
+def search():
+    cur = connection.cursor()
+    cur.execute("SELECT d.DestID, d.DestName, i.ImgURL "
+                "FROM destinations d JOIN dest_images i on d.destID = i.DestID "
+                "GROUP BY d.DestID "
+                "ORDER BY RAND()")
+    destinations = cur.fetchall()
+
+    cur.execute("SELECT DestID "
+                "FROM favorites "
+                "WHERE UserID = %s"
+                , session['user'])
+    favs = cur.fetchall()
+
+    cur.execute("SELECT DestID "
+                "FROM explored "
+                "WHERE UserID = %s"
+                , session['user'])
+    exp = cur.fetchall()
+
+    cur.execute("SELECT TagName "
+                "FROM tags")
+    tags = cur.fetchall()
+    cur.close()
+
+    tagsList = []
+    for tag in tags:
+        tagsList.append(tag['TagName'])
+
+    favorites = []
+    for dest in favs:
+        favorites.append(dest['DestID'])
+
+    explored = []
+    for dest in exp:
+        explored.append(dest['DestID'])
+
+    cur = connection.cursor()
+    cur.execute("SELECT COUNT(*) AS Count "
+                "FROM Destinations")
+    count = cur.fetchone()
+
+    return render_template('search.html', count=count, destinations=destinations, explored=explored, favorites=favorites, tags=tagsList)
+
 @app.route('/logout')
 @is_logged_in
 def logout():
@@ -324,41 +369,13 @@ def destinations():
                 "GROUP BY d.DestID "
                 "ORDER BY d.UpdateDate DESC")
     recommended = cur.fetchall()
-    cur.close()
 
-    cur = connection.cursor()
-    cur.execute("SELECT d.DestID, d.DestName, i.ImgURL "
-                "FROM destinations d "
-                "JOIN dest_images i on d.DestID = i.DestID "
-                "JOIN dest_tags dt on d.DestID = dt.DestID "
-                "JOIN tags t ON dt.TagID = t.TagID "
-                "WHERE t.TagName = 'Adventure' "
-                "GROUP BY d.DestID "
-                "ORDER BY RAND()")
-    topTag = cur.fetchall()
-    cur.close()
-
-    cur = connection.cursor()
-    cur.execute("SELECT d.DestID, d.DestName, i.ImgURL "
-                "FROM destinations d "
-                "JOIN dest_images i on d.DestID = i.DestID "
-                "JOIN dest_tags dt on d.DestID = dt.DestID "
-                "JOIN tags t ON dt.TagID = t.TagID "
-                "WHERE t.TagName = 'UNESCO' "
-                "GROUP BY d.DestID "
-                "ORDER BY RAND()")
-    secondTag = cur.fetchall()
-    cur.close()
-
-    cur = connection.cursor()
     cur.execute("SELECT DestID "
                 "FROM favorites "
                 "WHERE UserID = %s"
                 , session['user'])
     favs = cur.fetchall()
-    cur.close()
 
-    cur = connection.cursor()
     cur.execute("SELECT DestID "
                 "FROM explored "
                 "WHERE UserID = %s"
@@ -366,7 +383,6 @@ def destinations():
     exp = cur.fetchall()
     cur.close()
 
-    # Convert dictionaries for favorites and explored into lists so they can easier be iterated through in jinja 
     favorites = []
     for dest in favs:
         favorites.append(dest['DestID'])

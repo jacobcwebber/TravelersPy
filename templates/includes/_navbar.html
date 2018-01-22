@@ -1,7 +1,6 @@
 {% set navigation_bar = [
-  ('/destinations', 'destinations', 'Destinations'),
-  ('/destinations-admin', 'destinations-admin', 'Destinations (Admin)'),
-  ('/countries', 'countries', 'Countries (Admin)')
+  ('/destinations', 'destinations', 'Explore'),
+  ('/search', 'search', 'Search')
 ] -%}
 {% set active_page = active_page|default('index') -%}
 
@@ -24,7 +23,7 @@
         {% if session.logged_in %}
           {% for href, id, caption in navigation_bar %}
             <li{% if id == active_page %} class="active" {% endif %}>
-              <a style="letter-spacing: 1px; font-weight: 400; font-size: 17px;" href="{{ href|e}}">
+              <a style="letter-spacing: 1px; font-weight: 400; font-size: 17px;" href="{{ href|e }}">
                 <section>{{ caption|e }}</section>
               </a>
             </li>

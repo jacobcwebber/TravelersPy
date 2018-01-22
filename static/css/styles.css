@@ -4,6 +4,7 @@
 :root {
     --navy: rgb(32, 41, 51);
     --lightnavy: rgb(51, 64, 85);
+    --darknavy: rgba(32, 41, 51, 0.99);
     --white: rgb(253, 253, 253);
     --black: rgb(39, 39, 39);
     --teal: rgb(70, 188, 194); 
@@ -113,22 +114,4 @@ a {
 .header {
     color: var(--white);
     text-decoration: none;
-}
-.pill-element {
-    background-color: rgba(51, 64, 85, 0.5);
-    border-spacing: 5px;
-    border-radius: 4px;
-}
-.nav-pills>li.active>a, 
-.nav-pills>li.active>a:focus, 
-.nav-pills>li.active>a:hover {
-    background-color: var(--teal);
-}
-.nav > li > a {
-    color: var(--white);
-    text-decoration: none;
-}
-.nav > li > a:focus, 
-.nav > li > a:hover {
-    background-color: rgba(51, 64, 85, 0.99);
 }
