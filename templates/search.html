@@ -10,15 +10,16 @@
 
 {% block body %}
 <div class="input-group search">
-    <input class="form-control input-lg search-input" type="text" name="search" placeholder="Search...">
+    <input class="form-control input-lg search-input" type="text" placeholder="Search...">
     <span class="input-group-btn">
         <button class="btn btn-default btn-lg search-btn" type="button"><i class="fa fa-search fa-lg"></i></button>
     </span>
 </div>
 <div class="search-dest-group-box">
+    <div class="no-results hidden">No destinations found for your search.</div>
     <section class="search-dest-group">
-        {% for destination in destinations[:35] %}
-        <section class="dest hoverable">
+        {% for destination in destinations[:309] %}
+        <section id ="dest{{ destination.DestID }}" class="dest">
             <a style="text-decoration: none;" href="/destination/{{ destination.DestID }}">
                 <section class='dest-image' style="background-image: linear-gradient(rgba(51, 64, 85, 0.40), rgba(51, 64, 85, 0.40)), url({{ destination.ImgURL }});">
                     <section class="dest-container">  
@@ -46,5 +47,8 @@
 
 <paper-toast id="toast"></paper-toast>
 
+<script src="/static/bower_components/fuse.js/dist/fuse.min.js"></script>
+<script src="/static/js/search.js"></script>
 <script src="/static/js/destinations.js"></script>
+
 {% endblock %}

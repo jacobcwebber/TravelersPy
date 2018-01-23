@@ -164,3 +164,9 @@
 .fa-search {
     color: var(--teal);
 }
+.no-results {
+    color: var(--teal);
+    margin: 6px auto;
+    font-size: 20px;
+    font-weight: 500;
+}

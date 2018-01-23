@@ -238,14 +238,15 @@ def search():
                 , session['user'])
     exp = cur.fetchall()
 
-    cur.execute("SELECT TagName "
-                "FROM tags")
-    tags = cur.fetchall()
-    cur.close()
+    # Currently not dealing with tags for search
+    # cur.execute("SELECT TagName "
+    #             "FROM tags")
+    # tags = cur.fetchall()
+    # cur.close()
 
-    tagsList = []
-    for tag in tags:
-        tagsList.append(tag['TagName'])
+    # tagsList = []
+    # for tag in tags:
+    #     tagsList.append(tag['TagName'])
 
     favorites = []
     for dest in favs:
@@ -255,12 +256,64 @@ def search():
     for dest in exp:
         explored.append(dest['DestID'])
 
-    cur = connection.cursor()
-    cur.execute("SELECT COUNT(*) AS Count "
-                "FROM Destinations")
-    count = cur.fetchone()
+    return render_template('search.html', destinations=destinations, explored=explored, favorites=favorites)
 
-    return render_template('search.html', count=count, destinations=destinations, explored=explored, favorites=favorites, tags=tagsList)
+@app.route('/search-results', methods=['POST'])
+def search_results():
+    cur = connection.cursor()
+    cur.execute('SELECT d.DestID, d.DestName, c.CountryName, i.ImgUrl '
+                'FROM destinations d JOIN dest_images i ON d.DestID = i.DestID JOIN countries c on c.CountryID = d.CountryID')
+    dests = cur.fetchall()
+
+    i = 0
+    while i < len(dests):
+        tagsList = []
+        cur.execute('SELECT TagName FROM vTags WHERE DestName = %s'
+                    , dests[i]['DestName'])
+        tags = cur.fetchall()
+        for tag in tags:
+            tagsList.append(tag['TagName'])
+        dests[i]['Tags'] = tagsList
+        i += 1
+
+    return jsonify(dests)
+
+@app.route('/filter-results', methods=['POST'])
+def filter_results():
+    ids = json.loads(request.form['ids'])
+    destinations = []
+    cur = connection.cursor()
+    for id in ids:
+        cur.execute("SELECT d.DestID, d.DestName, i.ImgURL "
+                    "FROM destinations d JOIN dest_images i on d.destID = i.DestID "
+                    "WHERE d.DestID = %s "
+                    "GROUP BY d.DestID "
+                    "ORDER BY RAND()"
+                    , [id])
+        destination = cur.fetchone()
+        destinations.append(destination)
+
+    cur.execute("SELECT DestID "
+                "FROM favorites "
+                "WHERE UserID = %s"
+                , session['user'])
+    favs = cur.fetchall()
+
+    cur.execute("SELECT DestID "
+                "FROM explored "
+                "WHERE UserID = %s"
+                , session['user'])
+    exp = cur.fetchall()
+
+    favorites = []
+    for dest in favs:
+        favorites.append(dest['DestID'])
+
+    explored = []
+    for dest in exp:
+        explored.append(dest['DestID'])
+
+    return jsonify(destinations)
 
 @app.route('/logout')
 @is_logged_in
