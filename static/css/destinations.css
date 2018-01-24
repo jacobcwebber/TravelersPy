@@ -148,6 +148,7 @@
 .search-input::placeholder {
     color: var(--teal);
 }
+
 .search-input:focus {
     border-color: var(--teal);
 }
