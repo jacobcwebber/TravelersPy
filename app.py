@@ -221,7 +221,8 @@ def profile():
 def search():
     cur = connection.cursor()
     cur.execute('SELECT d.DestID, d.DestName, c.CountryName, i.ImgUrl '
-                'FROM destinations d JOIN dest_images i ON d.DestID = i.DestID JOIN countries c ON c.CountryID = d.CountryID')
+                'FROM destinations d JOIN dest_images i ON d.DestID = i.DestID JOIN countries c ON c.CountryID = d.CountryID '
+                'ORDER BY RAND()')
     destinations = cur.fetchall()
 
     # Add list of tags to the dictionaries for each destination

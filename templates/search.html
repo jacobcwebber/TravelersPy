@@ -20,26 +20,30 @@
     <section class="search-dest-group">
         {% for destination in destinations %}
         <section id ="dest{{ destination.DestID }}" class="dest hidden">
-            <a style="text-decoration: none;" href="/destination/{{ destination.DestID }}">
-                <section class='dest-image' style="background-image: linear-gradient(rgba(51, 64, 85, 0.40), rgba(51, 64, 85, 0.40)), url({{ destination.ImgUrl }});">
-                    <section class="dest-container">  
-                        <section class="dest-box-header">
-                            {% if destination.DestID in explored %}
-                                <span id="{{ destination.DestID }}" class="fa fa-check fa-lg exp-full exp-check" aria-hidden="true"></span> 
-                            {% else %}
-                                <span id="{{ destination.DestID }}" class="fa fa-check fa-lg exp-check" aria-hidden="true"></span> 
-                            {% endif %}
-                            {% if destination.DestID in favorites %}
-                                <span id="{{ destination.DestID }}" class="fa fa-star-o fa-lg star-full fav-star" aria-hidden="true"></span> 
-                            {% else %}
-                                <span id="{{ destination.DestID }}" class="fa fa-star-o fa-lg fav-star" aria-hidden="true"></span> 
-                            {% endif %}
-                        </section>
-                        <section class="dest-box-name">{{ destination.DestName }}</section>
-                        <section class="dest-box-footer"></section>
+            <section class='dest-image' style="background-image: linear-gradient(rgba(51, 64, 85, 0.40), rgba(51, 64, 85, 0.40)), url({{ destination.ImgUrl }});">
+                <section class="dest-container">  
+                    <section class="dest-box-header">
+                        {% if destination.DestID in explored %}
+                            <span id="{{ destination.DestID }}" class="fa fa-check exp-full exp-check" aria-hidden="true"></span> 
+                        {% else %}
+                            <span id="{{ destination.DestID }}" class="fa fa-check fa-lg exp-check" aria-hidden="true"></span> 
+                        {% endif %}
+                        {% if destination.DestID in favorites %}
+                            <span id="{{ destination.DestID }}" class="fa fa-star-o fa-lg star-full fav-star" aria-hidden="true"></span> 
+                        {% else %}
+                            <span id="{{ destination.DestID }}" class="fa fa-star-o fa-lg fav-star" aria-hidden="true"></span> 
+                        {% endif %}
+                    </section>
+                    <a href="/destination/{{ destination.DestID }}" class="dest-box-mid">
+                        <span class="dest-box-name">{{ destination.DestName }}</span>
+                    </a>
+                    <section class="dest-box-footer">
+                        <a href="/edit_destination/{{ destination.DestID }}">
+                            <span class="fa fa-pencil fa-lg" aria-hidden="true"></span>                             
+                        </a>
                     </section>
                 </section>
-            </a>
+            </section>
         </section>
         {% endfor %}
     </section>

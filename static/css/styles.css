@@ -16,11 +16,9 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
     background-color: var(--navy);
+    padding-top: 65px;
 }
-div {
-    display: block;
-}
-a {
+a:link {
     text-decoration: none;
 }
 

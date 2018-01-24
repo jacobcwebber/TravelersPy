@@ -1,7 +1,7 @@
 // Options used for search
 var options = {
     shouldSort: true,
-    threshold: 0.10,
+    threshold: 0.075,
     location: 0,
     distance: 100,
     maxPatternLength: 32,
@@ -16,8 +16,8 @@ var options = {
 var fuse = new Fuse(dests, options);
 var allDestIds = [];
 
-// Only shows first 30 destinations on page load
-$('.dest').slice(0, 30).removeClass('hidden');
+// Only shows first 20 destinations on page load
+$('.dest').slice(0, 20).removeClass('hidden');
 
 // Adds the IDs of all destinations to an array
 $('.dest').each(function() {
@@ -65,11 +65,9 @@ function searchDests() {
         // do not appear in resultsIds list
         for (var i = 0; i < allDestIds.length; i++) {
             $(`.dest#${allDestIds[i]}`).removeClass('hidden');
-            if (resultIds.indexOf(allDestIds[i]) == -1) {
+            if (resultIds.indexOf(allDestIds[i]) == -1 && query != '') {
                 $(`.dest#${allDestIds[i]}`).addClass('hidden');
             };
         };
     };  
 };
-
-

@@ -4,7 +4,7 @@
 ] -%}
 {% set active_page = active_page|default('index') -%}
 
-<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -15,7 +15,7 @@
       </button>
       <a style="color: rgb(70, 188, 194); letter-spacing: 4px; font-weight: 600; font-size: 20px;" class="navbar-brand" href="/">
         <img style="float:left; padding-right: 8px;" src="/static/images/favicon.ico"></img>
-        Travelers
+        <span>Travelers</span>
       </a>
     </div>
     <div id="navbar" class="collapse navbar-collapse navbar-trav">

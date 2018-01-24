@@ -38,7 +38,6 @@
     width: 200px; 
     background-position: center center;
     background-size: auto 240px;
-    margin: 0 8px 8px 0;
     position: relative;
 }
 /* Intermediary container for single destination */
@@ -56,24 +55,31 @@
     opacity: .75;
     width: auto;
     position: relative;
-    height: 40px;
+    height: 30px;
     top: 0px;
     margin: 9px 9px 0px;
+}
+.dest-box-mid {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .dest-box-name {
     font-weight: 300; 
     letter-spacing: 0.8px; 
     color: var(--white);
     text-align: center; 
-    margin: 0px auto;
+    margin: 0px 2px;
     font-size: 20px;
 }
 .dest-box-footer {
+    opacity: .75;
     width: auto; 
     position: relative; 
-    height: 40px; 
+    height: 30px; 
     bottom: 0px; 
-    margin: 0px 12px 12px;
+    margin: 0px 9px 9px;
 }
 .dest-group-box-subtext {
     color: var(--teal);
@@ -86,7 +92,7 @@
 /* ICON STYLES */
 /* /////////// */
 
-/* Changes style of unexplored/unfavorited destinations */
+/* Changes style of icons */
 .fa-star-o {
     float: right;
     color: var(--white);
@@ -96,6 +102,18 @@
     float: left;
     color: var(--white);
     transition: all .2s ease-in-out;
+}
+.fa-pencil {
+    display: none;
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    color: var(--white);
+    transition: all .2s ease-in-out;
+}
+/* Shows edit pencil on hover of dest footer */
+.dest-box-footer:hover .fa-pencil {
+    display: block;
 }
 /* Changes style of explored/favorited destinations */
 .exp-full::before {
@@ -117,7 +135,10 @@
     color: var(--limegreen);
     transform: scale(1.175);
 }
-
+.fa-pencil:hover {
+    color: var(--black);
+    transform: scale(1.175);
+}
 /* /////////////// */
 /* SEARCH SPECIFIC */
 /* /////////////// */
