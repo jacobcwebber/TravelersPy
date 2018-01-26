@@ -29,7 +29,7 @@ def is_logged_in(f):
 def is_admin(f):
     @wraps(f)
     def wrap(*args, **kwargs):
-        if session['admin'] == True:
+        if session['is_admin'] == True:
             return f(*args, **kwargs)
         else:
             flash ('Unauthorized. Requires administrator access.', 'danger')
@@ -107,31 +107,25 @@ def login():
                              "FROM users "
                              "WHERE Username = %s"
                              , [username])
-
+        user = cur.fetchone()
+        cur.close()
 
         if result > 0:
-            user = cur.fetchone()
             password = user['Password']
             userId = user['UserID'] 
             firstname = user['FirstName']
 
-            #checks if passwords match and logs you in if they do
             if sha256_crypt.verify(password_attempt, password):
+                
+                # set session variables
                 session['logged_in'] = True
                 session['user'] = userId
 
-                #sets admin session status from db query
-                cur.execute("SELECT IsAdmin "
-                            "FROM users "
-                            "WHERE UserID = %s"
-                            , [userId])
-
-                if cur.fetchone()['IsAdmin'] == 1:
-                    session['admin'] = True
+                if user['IsAdmin'] == 1:
+                    session['is_admin'] = True
                 else:
-                    session['admin'] = False
+                    session['is_admin'] = False
 
-                cur.close()
                 return redirect(url_for('index'))
 
             else:
@@ -184,6 +178,12 @@ def change_map():
 @is_logged_in
 def profile():
     cur = connection.cursor()
+    cur.execute("SELECT FirstName "
+                "FROM users "
+                "WHERE UserID = %s"
+                , [session['user']])
+    user = cur.fetchone()
+
     cur.execute("SELECT f.DestID "
                 "FROM favorites f JOIN destinations d ON d.DestID = f.DestID JOIN users u on u.UserID = f.UserID "
                 "WHERE f.UserID = %s"
@@ -215,7 +215,7 @@ def profile():
     counts = [len(explored), len(favorites), len(countries)]
     captions = ['Destinations Explored', 'Favorites', 'Countries Visited']
 
-    return render_template('profile.html', favorites=favorites, explored=explored, locations=locationsList, captions=captions, counts=counts)
+    return render_template('profile.html', user=user, favorites=favorites, explored=explored, locations=locationsList, captions=captions, counts=counts)
 
 @app.route('/search')
 def search():

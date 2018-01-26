@@ -97,11 +97,13 @@
     float: right;
     color: var(--white);
     transition: all .2s ease-in-out;
+    cursor: pointer;
 }
 .fa-check {
     float: left;
     color: var(--white);
     transition: all .2s ease-in-out;
+    cursor: pointer;
 }
 .fa-pencil {
     display: none;
@@ -110,6 +112,7 @@
     right: 0px;
     color: var(--white);
     transition: all .2s ease-in-out;
+    cursor: pointer;
 }
 /* Shows edit pencil on hover of dest footer */
 .dest-box-footer:hover .fa-pencil {
@@ -136,7 +139,7 @@
     transform: scale(1.175);
 }
 .fa-pencil:hover {
-    color: var(--black);
+    color: var(--brown);
     transform: scale(1.175);
 }
 /* /////////////// */

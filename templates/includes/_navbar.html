@@ -4,7 +4,7 @@
 ] -%}
 {% set active_page = active_page|default('index') -%}
 
-<nav class="navbar navbar-inverse navbar-fixed-top">
+<nav class="navbar navbar-inverse navbar-fixed-top navbar-toggleable-md">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -13,17 +13,17 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a style="color: rgb(70, 188, 194); letter-spacing: 4px; font-weight: 600; font-size: 20px;" class="navbar-brand" href="/">
-        <img style="float:left; padding-right: 8px;" src="/static/images/favicon.ico"></img>
-        <span>Travelers</span>
+      <a class="navbar-brand" href="/">
+        <img class="icon" src="/static/images/favicon.ico"></img>
+        <span class="logo">Travelers</span>
       </a>
     </div>
-    <div id="navbar" class="collapse navbar-collapse navbar-trav">
+    <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
         {% if session.logged_in %}
           {% for href, id, caption in navigation_bar %}
             <li{% if id == active_page %} class="active" {% endif %}>
-              <a style="letter-spacing: 1px; font-weight: 400; font-size: 17px;" href="{{ href|e }}">
+              <a class="nav-item" href="{{ href|e }}">
                 <section>{{ caption|e }}</section>
               </a>
             </li>
@@ -32,14 +32,29 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         {% if session.logged_in %}
-        <li{% if "profile" == active_page %} class="active" {% endif %}>
-          <a style="letter-spacing: 1px; font-weight: 400; font-size: 17px;" href="/profile">
-            <section>Profile</section>
-          </a>
-        </li>
+          {% if session.is_admin %}
+          <li{% if "new_destination" == active_page %} class="active" {% endif %}>
+            <a class="nav-item" href="/create-destination">
+              <section>New Destination</section>  
+            </a>
+          </li>
+          {% endif %}
+          <li{% if "profile" == active_page %} class="active" {% endif %}>
+            <a class="nav-item" href="/profile">
+              <section>Profile</section>
+            </a>
+          </li>
         {% else %}
-          <li><a href="/register" >Register</a></li>
-          <li><a href="/login">Login</a></li>
+          <li>
+            <a class="nav-item" href="/register" >
+              <section>Create an Account</section>
+            </a>
+          </li>
+          <li>
+            <a class="nav-item" href="/login">
+              <section>Login</section>
+            </a>
+          </li>
         {% endif %}
       </ul>
     </div>
