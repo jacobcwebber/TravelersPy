@@ -174,6 +174,32 @@ def change_map():
 
     return jsonify(locationsList)
 
+@app.route('/favorites')
+@is_logged_in
+def favorites():
+    cur = connection.cursor()
+    cur.execute('SELECT d.DestID, DestName, ImgUrl '
+                'FROM favorites f JOIN destinations d ON f.DestID = d.DestID '
+                                 'JOIN dest_images i ON d.DestID = i.DestID '
+                'WHERE f.UserID = %s'
+                , session['user'])
+    favorites = cur.fetchall()
+    
+    return render_template('favorites.html', favorites=favorites)
+
+@app.route('/explored')
+@is_logged_in
+def explored(): 
+    cur = connection.cursor()
+    cur.execute('SELECT d.DestID, DestName, ImgUrl '
+                'FROM explored e JOIN destinations d ON e.DestID = d.DestID '
+                                'JOIN dest_images i ON d.DestID = i.DestID '
+                'WHERE e.UserID = %s'
+                , session['user'])
+    explored = cur.fetchall()
+
+    return render_template('explored.html', explored=explored)
+
 @app.route('/profile')
 @is_logged_in
 def profile():
@@ -220,8 +246,10 @@ def profile():
 @app.route('/search')
 def search():
     cur = connection.cursor()
-    cur.execute('SELECT d.DestID, d.DestName, c.CountryName, i.ImgUrl '
-                'FROM destinations d JOIN dest_images i ON d.DestID = i.DestID JOIN countries c ON c.CountryID = d.CountryID '
+    cur.execute('SELECT d.DestID, DestName, c.CountryName, ImgUrl, ContName '
+                'FROM destinations d JOIN dest_images i ON d.DestID = i.DestID '
+                                    'JOIN countries c ON c.CountryID = d.CountryID '
+                                    'JOIN continents co ON co.ContID = c.ContID '
                 'ORDER BY RAND()')
     destinations = cur.fetchall()
 
@@ -281,7 +309,7 @@ class CountryForm(Form):
 def countries():
     cur = connection.cursor()
     result = cur.execute("SELECT c.CountryName, count(d.DestName) AS DestCount, c.CountryID "
-                         "FROM Countries c LEFT OUTER JOIN Destinations d ON c.CountryID = d.CountryID "
+                         "FROM countries c LEFT OUTER JOIN destinations d ON c.CountryID = d.CountryID "
                          "GROUP BY c.CountryName "
                          "ORDER BY c.CountryName")
 
@@ -295,13 +323,13 @@ def countries():
 def country(id):
     cur = connection.cursor()
 
-    cur.execute("SELECT CountryName, Description, UpdateDate "
+    cur.execute("SELECT CountryName, UpdateDate "
                         "FROM countries "
                         "WHERE CountryID = %s"
                         , [id])
     country = cur.fetchone()
     
-    cur.execute("SELECT CountryName, DestName, DestID, c.Description, c.UpdateDate"
+    cur.execute("SELECT CountryName, DestName, DestID , c.UpdateDate"
                 " FROM countries c JOIN destinations d"
                 " WHERE c.CountryID = d.CountryID AND c.CountryID = %s"
                 , [id])
@@ -319,7 +347,7 @@ def country(id):
     return render_template('country.html', country=country, destinations=destinations, images=images)
 
 
-@app.route('/edit_country/<string:id>', methods=['POST', 'GET'])
+@app.route('/edit-country/<string:id>', methods=['POST', 'GET'])
 @is_logged_in
 def edit_country(id):
     cur = connection.cursor()
@@ -361,7 +389,7 @@ def edit_country(id):
 @is_logged_in
 def destinations():
     cur = connection.cursor()
-    cur.execute("SELECT d.DestID, d.DestName, i.ImgURL "
+    cur.execute("SELECT d.DestID, d.DestName, i.ImgUrl "
                 "FROM destinations d JOIN dest_images i on d.destID = i.DestID "
                 "GROUP BY d.DestID "
                 "ORDER BY d.UpdateDate DESC")

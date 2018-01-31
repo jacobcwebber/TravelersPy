@@ -1,8 +1,11 @@
+{% set title = title|default('') -%}
+
 <!DOCTYPE html>
+
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Travelers | Explore More</title>
+    <title>Travelers {{ title }}</title>
     <link rel="shortcut icon" href="../static/images/favicon.ico" />
     <script src="https://use.fontawesome.com/11b4ccbb21.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

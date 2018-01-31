@@ -70,8 +70,8 @@
     letter-spacing: 0.8px; 
     color: var(--white);
     text-align: center; 
-    margin: 0px 2px;
-    font-size: 20px;
+    margin: 0px 4px;
+    font-size: 19px;
 }
 .dest-box-footer {
     opacity: .75;

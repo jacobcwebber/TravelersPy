@@ -10,6 +10,7 @@ var options = {
         'DestName',
         'CountryName',
         'Tags'
+        ,'ContName'
     ]
 };
 

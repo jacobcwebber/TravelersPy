@@ -1,5 +1,11 @@
 {% extends 'layout.html' %}
+{% set links = [
+    ('/explored'),
+    ('/favorites')
+  ] -%}
 {% set active_page = "profile" %}
+{% set title = "| Profile" %}
+
 
 {% block head %}
 <link rel="stylesheet" href="/static/css/profile.css">
@@ -23,7 +29,9 @@
         {% for n in range(0,3) %}
         <div class="inner-stats">
             <div class="stat-circle">
-                <p class="stat-number">{{ counts[n] }}</p>
+                <a href="{{ links[n] }}">
+                    <p class="stat-number">{{ counts[n] }}</p>
+                </a>
             </div>
             <div class="stat-name">{{ captions[n] }}</div>
         </div>
