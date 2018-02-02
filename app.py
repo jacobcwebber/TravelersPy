@@ -481,8 +481,8 @@ class DestinationForm(Form):
         (1, "Natural Site"),
         (2, "Cultural Site"),
         (3, "Activity")], coerce=int)
-    lat = DecimalField('Latitude')
-    lng = DecimalField('Longitude')
+    lat = DecimalField('Latitude', places=8, rounding=None)
+    lng = DecimalField('Longitude', places=8, rounding=None)
     description = TextAreaField('Description')
     imgUrl = StringField('Image Upload', [validators.URL(message="Not a valid url")])
     tags = StringField('Tags')
@@ -564,21 +564,34 @@ def create_destination():
 def edit_destination(id):
     cur = connection.cursor()
 
-    cur.execute("SELECT * "
-                "FROM destinations d JOIN dest_images i ON d.DestID = i.DestID LEFT JOIN dest_locations l ON d.DestID = l.DestID "
+    cur.execute("SELECT d.DestID, DestName, CountryID, Category, Description, ImgUrl, Lat, Lng "
+                "FROM destinations d JOIN dest_images i ON d.DestID = i.DestID "
+                                    "JOIN dest_locations l ON d.DestID = l.DestID "
                 "WHERE d.DestID = %s"
-                , [id])
-
+                , id)
     destination = cur.fetchone()
+
+    cur.execute("SELECT t.TagName "
+                "FROM tags t JOIN dest_tags dt ON t.TagID = dt.TagID "
+                "WHERE dt.DestID = %s"
+                , id)
+    tags = cur.fetchall()
+
     cur.close()
 
+    tagsList = []
+    for tag in tags:
+        tagsList.append(tag['TagName'])
+    myTags = ','.join(tagsList)
     form = DestinationForm(request.form)
 
     form.name.data = destination['DestName']
     form.countryId.data = destination['CountryID']
     form.category.data = destination['Category']
     form.description.data = destination['Description']
-    form.imgUrl.data = destination['ImgURL']
+    form.imgUrl.data = destination['ImgUrl']
+    form.lat.data = destination['Lat']
+    form.lng.data = destination['Lng']
 
     if request.method == 'POST':
         name = request.form['name']
@@ -609,31 +622,30 @@ def edit_destination(id):
         connection.commit()
         cur.close()
 
+        # Deletes all existing tags, then adds the current ones back.
         cur = connection.cursor()
+        cur.execute("DELETE "
+                    "FROM dest_tags "
+                    "WHERE DestID = %s"
+                    , id)
+        connection.commit()
+        cur.close()
 
-        cur.execute("SELECT DestID "
-                    "FROM destinations "
-                    "WHERE DestName = %s"
-                    , [name])
-        destId = cur.fetchone()
-        try:
-            for tag in tags.split(','):
-                cur = connection.cursor()       
+        for tag in tags.split(','):
+            cur = connection.cursor()
 
-                cur.execute("SELECT TagID "
-                            "FROM Tags "
-                            "WHERE TagName = %s"
-                            , [tag])
-                tagId = cur.fetchone()
-                
-                cur.execute("INSERT INTO dest_tags "
-                            "VALUES (%s, %s)"
-                            , (destId['DestID'], tagId['TagID']))
-                connection.commit()
-                cur.close()
-        except TypeError: 
-            print("A TypeError occured because you did not submit any new tags. This is a temporary issues.")
-
+            cur.execute("SELECT TagID "
+                        "FROM Tags "
+                        "WHERE TagName = %s"
+                        , [tag])
+            tagId = cur.fetchone()
+            
+            cur.execute("INSERT INTO dest_tags "
+                        "VALUES (%s, %s)"
+                        , (id, tagId['TagID']))
+            connection.commit()
+            cur.close()
+        
         return redirect(url_for('destinations'))
 
     cur = connection.cursor()
@@ -641,11 +653,11 @@ def edit_destination(id):
     tags = cur.fetchall()
     cur.close()
 
-    tagsList = []
+    allTags = []
     for tag in tags:
-        tagsList.append(tag['TagName'])
+        allTags.append(tag['TagName'])
 
-    return render_template('edit_destination.html', form=form, tags=tagsList)
+    return render_template('edit_destination.html', form=form, allTags=allTags, myTags=myTags)
 
 
 @app.route('/alter-explored', methods=['POST'])

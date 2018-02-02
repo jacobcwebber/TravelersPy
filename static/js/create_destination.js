@@ -27,6 +27,8 @@ function nextPrev(n) {
     showTab(currentTab)
 }
 
+
+// Creates tags input and the autocomplete
 $('#tags').tagsinput({
     confirmKeys: [13, 44, 9],
     maxTags: 10,
@@ -39,7 +41,7 @@ $('#tags').tagsinput({
     freeInput: false
   });
 
-/// Initiates map, changes viewport and adds pins when country form is changed, and fills in location forms
+/// Initiates map
 function initMap() {
     var map = new google.maps.Map(document.getElementById('map'), {
       zoom: 1,
@@ -47,6 +49,7 @@ function initMap() {
     });
   }
 
+// Changes map viewport and adds pins when country form is changed
 $('#countryId').change(function initMap() {
     var address = $('#dest-name').val() + ', ' + $('#countryId').find(":selected").text();
     var geocoder = new google.maps.Geocoder();
@@ -67,8 +70,8 @@ $('#countryId').change(function initMap() {
 });
 
 // Saves image address to server
-var CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/jacobcwebber/upload';
-var CLOUDINARY_UPLOAD_PRESET = 'pzrian47';
+const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/jacobcwebber/upload/';
+const CLOUDINARY_UPLOAD_PRESET = 'pzrian47';
 
 var imgPreview = $('#img-preview');
 var fileUpload = $('#file-upload');
@@ -87,10 +90,9 @@ fileUpload.on('change', function(event) {
         },
         data: formData
     }).then(function(res) {
-        console.log(res.data.secure_url);
         imgPreview.attr('src', res.data.secure_url);
+        $('#img-link').attr('value', res.data.secure_url)
     }).catch(function(error) {
         console.log(error);
     })
 });
-
