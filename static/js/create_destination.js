@@ -27,6 +27,19 @@ function nextPrev(n) {
     showTab(currentTab)
 }
 
+$('#tags').tagsinput({
+    confirmKeys: [13, 44, 9],
+    maxTags: 10,
+    trimValue: true,
+    typeahead: {
+      afterSelect: function(val) {this.$element.val(""); },
+      showHintOnFocus: true,
+      source: tagsSource
+    },
+    freeInput: false
+  });
+
+/// Initiates map, changes viewport and adds pins when country form is changed, and fills in location forms
 function initMap() {
     var map = new google.maps.Map(document.getElementById('map'), {
       zoom: 1,
@@ -51,5 +64,33 @@ $('#countryId').change(function initMap() {
             $("#lng").val(results[0].geometry.location.lng());
         }
     });
+});
+
+// Saves image address to server
+var CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/jacobcwebber/upload';
+var CLOUDINARY_UPLOAD_PRESET = 'pzrian47';
+
+var imgPreview = $('#img-preview');
+var fileUpload = $('#file-upload');
+
+fileUpload.on('change', function(event) {
+    var file = event.target.files[0];
+    var formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+    axios({
+        url: CLOUDINARY_URL,
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        data: formData
+    }).then(function(res) {
+        console.log(res.data.secure_url);
+        imgPreview.attr('src', res.data.secure_url);
+    }).catch(function(error) {
+        console.log(error);
+    })
 });
 

@@ -2,34 +2,25 @@
 {% set active_page = "destinations" %}
 
 {% block head %}
-<meta id="location" lat="{{location[0].Lat}}" lng="{{location[0].Lng}}">
+<meta id="location" lat="{{destination.Lat}}" lng="{{destination.Lng}}">
 <link rel="stylesheet" type="text/css" href="../static/css/destinations.css">
 {% endblock %}
 
 {% block body %}
-<div class="container" align="center">
-    <section class="header dest-group-box" style="width: 900px">
-        <h2 id="dest-name">{{ destination.DestName }}, <a href='/country/{{ destination.CountryID }}'>{{destination.CountryName}}</a></h2>  
-    </section>
-    <section class="dest-group-box" style="width: 900px; overflow: auto;">    
-        <div class="images">
-                {% for image in images %}
-                <div class="dest-container">
-                    <img class="img-responsive image-element" src="{{ image.ImgUrl }}" alt="">
-                </div>
-                {% endfor %}
-        </div> <p></p>
-        <div class="image-caption" style="color: rgb(253, 253, 253);">
-            {{destination.Description | safe}}
-        </div>
-        {% for tag in tags %}
-            <h4 style="display: inline;"><span class="label label-primary">{{ tag.TagName }}</span></h4>
-        {% endfor %}
-        <hr>
-        <div id="map" style="height: 500px; width: 100%;"></div>
-        <hr>
-    </section>
-</div>
+<section class="box wide center-text">
+    <span class="title">{{ destination.DestName }}, {{destination.CountryName}}</span>  
+</section>
+<section class="box wide center-text">    
+    <img class="image-element" src="{{ destination.ImgUrl }}" alt="">
+    <div class="caption">{{destination.Description | safe}}</div>
+    {% for tag in tags %}
+        <h4 style="display: inline;"><div class="label">{{ tag.TagName }}</div></h4>
+    {% endfor %}
+    <hr>
+    <div id="map" style="height: 500px; width: 100%;"></div>
+    <hr>
+</section>
+
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABEVdEk2zQBeCHstcUpXQUkSxPhtmTv0Q&callback=initMap"
     async defer></script>
 <script src="/static/js/destination.js"></script>

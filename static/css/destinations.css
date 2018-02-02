@@ -142,6 +142,7 @@
     color: var(--brown);
     transform: scale(1.175);
 }
+
 /* /////////////// */
 /* SEARCH SPECIFIC */
 /* /////////////// */
@@ -194,4 +195,30 @@
     margin: 6px auto;
     font-size: 20px;
     font-weight: 500;
+}
+
+/* ///////////// */
+/* DEST SPECIFIC */
+/* ///////////// */
+
+.box {
+    border: 1px solid var(--lightnavy);
+    background: rgba(51, 64, 85, 0.5);
+    border-radius: 6px; 
+    padding: 16px 16px 8px;
+    margin: 8px auto 16px;
+}
+.wide {
+    width: 900px;
+}
+.title {
+    font-family:'Roboto', sans-serif;
+    font-size: 32px;
+    color: var(--teal);
+    text-decoration: none;
+}
+.caption {
+    color: var(--white);
+    width: 75%;
+    margin: 4px auto 0;
 }

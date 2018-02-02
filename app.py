@@ -438,37 +438,28 @@ def destinations_admin():
 @app.route('/destination/<string:id>', methods=['POST', 'GET'])
 @is_logged_in
 def destination(id):
-    cur = connection.cursor()
-    result = cur.execute("SELECT DestName, CountryName, DestID, c.CountryID, d.Description, d.UpdateDate "
-                            "FROM destinations d JOIN countries c ON d.CountryID = c.CountryID "
-                            "WHERE DestID = %s", [id])
-    destination = cur.fetchone()
-
-    if result > 0:
-        cur.execute("SELECT ImgUrl "
-                    "FROM dest_images "
-                    "WHERE DestID = %s"
+    try:
+        cur = connection.cursor()
+        cur.execute("SELECT DestName, CountryName, d.DestID, c.CountryID, d.Description, ImgUrl, Lat, Lng "
+                    "FROM destinations d JOIN countries c ON d.CountryID = c.CountryID "
+                                        "JOIN dest_images i ON d.DestID = i.DestID "
+                                        "JOIN dest_locations l ON d.DestID = l.DestID "
+                    "WHERE d.DestID = %s"
                     , [id])
-        images = cur.fetchall()
-
-        cur.execute("SELECT * "
-                    "FROM dest_locations "
-                    "WHERE DestID = %s"
-                    , [id])
-        location = cur.fetchall()
+        destination = cur.fetchone()
 
         cur.execute("SELECT * "
                     "FROM vTags "
                     "WHERE DestName  = %s"
-                    , [destination['DestName']])
+                    , destination['DestName'])
         tags = cur.fetchall()
         cur.close()
 
-        return render_template('destination.html', destination=destination, images=images, location=location, tags=tags)
+        return render_template('destination.html', destination=destination, tags=tags)
 
-    else:
+    except:
         flash('Destination does not exist.', 'danger')
-        return redirect(url_for('destinations_user'))
+        return redirect(url_for('destinations'))
 
 class DestinationForm(Form):
     cur = connection.cursor()

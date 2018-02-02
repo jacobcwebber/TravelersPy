@@ -18,7 +18,9 @@ body {
     background-color: var(--navy);
     padding-top: 65px;
 }
-a:link {
+a:link,
+a:hover,
+a:focus {
     text-decoration: none;
 }
 
@@ -103,15 +105,8 @@ a:link {
 .image-element {
     height: 350px;
 }
-.image-caption {
-    width: 75%;
-}
 #map {
     height: 600px;
-}
-.header {
-    color: var(--white);
-    text-decoration: none;
 }
 .logo {
     color: var(--teal); 
@@ -137,4 +132,17 @@ a:link {
 .header-container {
     padding-bottom: 6px;
     text-align: center;
+}
+.center-text {
+    text-align: center;
+}
+.label {
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--teal);
+    text-align: center;
+    white-space: nowrap;
+    border-radius: 1em;
+    border: 1px solid var(--teal);
 }

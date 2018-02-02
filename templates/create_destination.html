@@ -38,8 +38,10 @@
         </div>
       </div>
       <div class="tab" style="display: none;">
+        <img src="http://longwallpapers.com/Desktop-Wallpaper/pretty-nature-wallpapers-photo-For-Desktop-Wallpaper.jpg" id="img-preview" style="height: 300px;">
         <div class="form-group">
             {{ render_field(form.imgUrl, class_="form-control") }}
+            <input type="file" id="file-upload">
         </div>
       </div>
     </form>
@@ -50,23 +52,15 @@
     </div>
   </div>
 </div>
+
+<script>
+    var tagsSource = {{ tags | safe }};
+  </script>
 <script src="//cdn.ckeditor.com/4.6.2/basic/ckeditor.js"></script>
 <script type="text/javascript">CKEDITOR.replace('editor')</script>
-<script src="/static/js/create_destination.js"></script>
 <script src="/static/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
 <script src="/static/bower_components/bootstrap3-typeahead/bootstrap3-typeahead.min.js"></script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABEVdEk2zQBeCHstcUpXQUkSxPhtmTv0Q&callback=initMap"></script>
-<script>
-  $('#tags').tagsinput({
-    confirmKeys: [13, 44, 9],
-    maxTags: 10,
-    trimValue: true,
-    typeahead: {
-      afterSelect: function(val) {this.$element.val(""); },
-      showHintOnFocus: true,
-      source: {{ tags | safe }}
-    },
-    freeInput: false
-  });
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.min.js"></script>
+<script src="/static/js/create_destination.js"></script>
 {% endblock %}
