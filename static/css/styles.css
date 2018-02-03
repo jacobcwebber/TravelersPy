@@ -28,6 +28,9 @@ a:focus {
 .container {
     width: 95%;
 }
+.bootstrap-input {
+    width: 100%;
+}
 .navbar-inverse {
     background-color: var(--navy);
     border: 0;

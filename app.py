@@ -583,6 +583,7 @@ def edit_destination(id):
     for tag in tags:
         tagsList.append(tag['TagName'])
     myTags = ','.join(tagsList)
+
     form = DestinationForm(request.form)
 
     form.name.data = destination['DestName']

@@ -1,6 +1,7 @@
 var currentTab = 0;
 showTab(currentTab);
 
+// Initiates tag form with existing tags
 $('#tags').val(myTags);
 
 function showTab(n) {
@@ -60,7 +61,6 @@ function initMap() {
         }
     }
 )};
-
 
 // Saves image address to server
 const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/jacobcwebber/upload/';

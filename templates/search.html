@@ -12,7 +12,7 @@
 
 {% block body %}
 <div class="input-group search">
-    <input class="form-control input-lg search-input" type="text" placeholder="Search by destination, country, keyword...">
+    <input class="form-control input-lg search-input" type="text" data-role="tagsinput">
     <span class="input-group-btn">
         <button class="btn btn-default btn-lg search-btn" type="button"><i class="fa fa-search fa-lg"></i></button>
     </span>
@@ -56,6 +56,8 @@
 <script>
     var dests={{ destinations | safe }};
 </script>
+<script src="/static/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.js"></script>
+<script src="/static/bower_components/bootstrap3-typeahead/bootstrap3-typeahead.min.js"></script>
 <script src="/static/bower_components/fuse.js/dist/fuse.min.js"></script>
 <script src="/static/js/search.js"></script>
 <script src="/static/js/destinations.js"></script>
