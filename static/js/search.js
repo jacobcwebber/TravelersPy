@@ -14,7 +14,6 @@ var options = {
     ]
 };
 
-var fuse = new Fuse(dests, options);
 var allDestIds = [];
 
 // Only shows first 20 destinations on page load
@@ -38,13 +37,19 @@ $('.search').keypress(function(e) {
 });
 
 function searchDests() {
-    // Create/truncate list of IDs of destinations matching previous search
+    // Create list of IDs of destinations matching previous search
     var resultIds = [];
+    var query = '';
+    var fuse = new Fuse(dests, options);
 
-    // Grab search query from input field and plug into fuse.js to get JSON results
-    var query = $('.tag:first-of-type').text();
-    var results = fuse.search(query);
+    $('.tag').each(function() {
+        query = $(this).text();
+        destOptions = fuse.search(query);
+        fuse = new Fuse(destOptions, options);
+    });
 
+    var results = destOptions;
+    
     // If there are not results, then hide all destinations and show "No results" text
     if (Object.keys(results).length == 0 && query != '') {
         $('.no-results').removeClass('hidden');
@@ -83,10 +88,3 @@ $('#search').tagsinput({
     },
     freeInput: true    
 });
-
-$('.bootstrap-tagsinput input').on('keypress', function(e){
-    if (e.keyCode == 13){
-      e.keyCode = 188;
-      e.preventDefault();
-    };
-  });
