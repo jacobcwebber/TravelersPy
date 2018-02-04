@@ -149,3 +149,9 @@ a:focus {
     border-radius: 1em;
     border: 1px solid var(--teal);
 }
+.label-small {
+    font-size: 75%;
+}
+.label-lg {
+    font-size: 90%;
+}

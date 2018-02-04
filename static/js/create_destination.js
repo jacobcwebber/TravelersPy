@@ -39,7 +39,7 @@ $('#tags').tagsinput({
       source: tagsSource
     },
     freeInput: false
-  });
+});
 
 /// Initiates map
 function initMap() {

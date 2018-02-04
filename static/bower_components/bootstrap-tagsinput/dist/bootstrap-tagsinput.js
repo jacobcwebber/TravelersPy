@@ -8,7 +8,7 @@
 
   var defaultOptions = {
     tagClass: function(item) {
-      return 'label';
+      return 'label label-lg';
     },
     focusClass: 'focus',
     itemValue: function(item) {
@@ -319,7 +319,7 @@
             var map = this.map,
                 data = typeahead.source(query);
 
-            if ($.isFunction(data.success)) {
+              if ($.isFunction(data.success)) {
               // support for Angular callbacks
               data.success(processItems);
             } else if ($.isFunction(data.then)) {
@@ -351,13 +351,15 @@
       // typeahead.js
       if (self.options.typeaheadjs) {
           var typeaheadConfig = null;
-          var typeaheadDatasets = {};
+          var typeaheadDatasets = [];
 
           // Determine if main configurations were passed or simply a dataset
           var typeaheadjs = self.options.typeaheadjs;
           if ($.isArray(typeaheadjs)) {
-            typeaheadConfig = typeaheadjs[0];
-            typeaheadDatasets = typeaheadjs[1];
+            if (typeaheadjs.length > 1) {
+              typeaheadConfig = typeaheadjs[0];
+              typeaheadDatasets = typeaheadjs.slice(1);
+            }
           } else {
             typeaheadDatasets = typeaheadjs;
           }
@@ -473,6 +475,7 @@
             if (text.length !== 0) {
                self.add(maxLengthReached ? text.substr(0, self.options.maxChars) : text);
                $input.val('');
+               event.preventDefault();
             }
 
             // If the field is empty, let the event triggered fire as usual
@@ -653,7 +656,7 @@
   function keyCombinationInList(keyPressEvent, lookupList) {
       var found = false;
       $.each(lookupList, function (index, keyCombination) {
-          if (typeof (keyCombination) === 'number' && keyPressEvent.which === keyCombination) {
+          if (typeof (keyCombination) === 'number' && (keyPressEvent.which === keyCombination || keyPressEvent.keyCode === keyCombination)) {
               found = true;
               return false;
           }

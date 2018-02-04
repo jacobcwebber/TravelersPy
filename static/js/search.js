@@ -9,8 +9,8 @@ var options = {
     keys: [
         'DestName',
         'CountryName',
-        'Tags'
-        ,'ContName'
+        'Tags',
+        'ContName'
     ]
 };
 
@@ -42,7 +42,7 @@ function searchDests() {
     var resultIds = [];
 
     // Grab search query from input field and plug into fuse.js to get JSON results
-    var query = $('.search-input').val();
+    var query = $('.tag:first-of-type').text();
     var results = fuse.search(query);
 
     // If there are not results, then hide all destinations and show "No results" text
@@ -72,3 +72,21 @@ function searchDests() {
         };
     };  
 };
+
+$('#search').tagsinput({
+    confirmKeys: [9, 13, 44],
+    trimValue: true,
+    typeahead: {
+        afterSelect: function(val) {this.$element.val(""); },
+        limit: 5,
+        source: searchList
+    },
+    freeInput: true    
+});
+
+$('.bootstrap-tagsinput input').on('keypress', function(e){
+    if (e.keyCode == 13){
+      e.keyCode = 188;
+      e.preventDefault();
+    };
+  });

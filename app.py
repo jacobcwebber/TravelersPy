@@ -254,16 +254,18 @@ def search():
     destinations = cur.fetchall()
 
     # Add list of tags to the dictionaries for each destination
-    for destination in destinations:
+    for dest in destinations:
         tagsList = []
-        cur.execute('SELECT TagName FROM vTags WHERE DestName = %s'
-                    , destination['DestName'])
+        cur.execute('SELECT TagName '
+                    'FROM vTags '
+                    'WHERE DestName = %s'
+                    , dest['DestName'])
         tags = cur.fetchall()
         
         for tag in tags:
             tagsList.append(tag['TagName'])
     
-        destination['Tags'] = tagsList
+        dest['Tags'] = tagsList
 
     cur.execute("SELECT DestID "
                 "FROM favorites "
@@ -285,7 +287,29 @@ def search():
     for dest in exp:
         explored.append(dest['DestID'])
 
-    return render_template('search.html', destinations=destinations, explored=explored, favorites=favorites)
+    cur.execute('SELECT TagName '
+                'FROM tags')
+    tags = cur.fetchall()
+
+    cur.execute('SELECT CountryName '
+                'FROM countries')
+    countries = cur.fetchall()
+
+    cur.execute('SELECT ContName '
+                'FROM continents')
+    continents = cur.fetchall()
+
+    searchList = []
+    for tag in tags:
+        searchList.append(tag['TagName'])
+
+    for country in countries:
+        searchList.append(country['CountryName'])
+
+    for continent in continents:
+        searchList.append(continent['ContName'])
+    
+    return render_template('search.html', destinations=destinations, explored=explored, favorites=favorites, searchList=searchList)
 
 @app.route('/logout')
 @is_logged_in
