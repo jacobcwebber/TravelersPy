@@ -38,6 +38,7 @@ $('.search').keypress(function(e) {
 
 function searchDests() {
     // Create list of IDs of destinations matching previous search
+
     var resultIds = [];
     var query = '';
     var fuse = new Fuse(dests, options);
@@ -88,3 +89,4 @@ $('#search').tagsinput({
     },
     freeInput: true    
 });
+
