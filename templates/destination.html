@@ -1,11 +1,6 @@
 {% extends 'layout.html' %}
 {% set active_page = "destinations" %}
 
-{% block head %}
-<meta id="location" lat="{{destination.Lat}}" lng="{{destination.Lng}}">
-<link rel="stylesheet" type="text/css" href="../static/css/destinations.css">
-{% endblock %}
-
 {% block body %}
 <section class="box wide center-text">
     <span class="title">{{ destination.DestName }}, {{destination.CountryName}}</span>  
@@ -22,8 +17,11 @@
     <hr>
 </section>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABEVdEk2zQBeCHstcUpXQUkSxPhtmTv0Q&callback=initMap"
-    async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABEVdEk2zQBeCHstcUpXQUkSxPhtmTv0Q&callback=initMap" async defer></script>
+<script>
+    var lat = {{destination.Lat}};
+    var lng = {{destination.Lng}};
+</script>
 <script src="/static/js/destination.js"></script>
 {% endblock %}
 

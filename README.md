@@ -5,6 +5,7 @@ A website with curated travel destinations from across the world that allows use
 To-do list:
 - Add destination suggestions based on tags/current favorites/initial sign-up preferences
 - Add tag categories and give every tag a category
-- Add auto-complete and tag-like look to search
+- Clean up Search
 - Add images to Cloudinary
-- Make search more filter-y (so I can type West Africa Churches and find churches in West Africa)
+- Totally rework styles.less to make it much more efficient and compact
+- Update UpdateTime on change on picture/tags/etc. Not just dests table

@@ -29,7 +29,7 @@ $('.fav-star').click(function(event) {
 });
 
 // Add/removes destination to explored, changes check color, and pops up notification when check is clicked
-$('.exp-check').click(function(event) {
+$('.fa-check').click(function(event) {
     event.preventDefault();
     if ($(this).hasClass('exp-full')) {
         action = "remove";
