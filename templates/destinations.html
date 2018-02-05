@@ -23,9 +23,9 @@
                             <span id="{{ destination.DestID }}" class="fa fa-check fa-lg" aria-hidden="true"></span> 
                         {% endif %}
                         {% if destination.DestID in favorites %}
-                            <span id="{{ destination.DestID }}" class="fa fa-star-o fa-lg star-full fav-star" aria-hidden="true"></span> 
+                            <span id="{{ destination.DestID }}" class="fa fa-star-o fa-lg star-full" aria-hidden="true"></span> 
                         {% else %}
-                            <span id="{{ destination.DestID }}" class="fa fa-star-o fa-lg fav-star" aria-hidden="true"></span> 
+                            <span id="{{ destination.DestID }}" class="fa fa-star-o fa-lg" aria-hidden="true"></span> 
                         {% endif %}
                     </div>
                     <a href="/destination/{{ destination.DestID }}" class="item-mid">

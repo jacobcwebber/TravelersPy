@@ -1,5 +1,5 @@
 // Add/removes destination to favorites, changes star color, and pops up notification when star is clicked
-$('.fav-star').click(function(event) {
+$('.fa-star-o').click(function(event) {
     event.preventDefault();
     if ($(this).hasClass('star-full')) {
         action = "remove";

@@ -157,6 +157,7 @@ a:focus {
 //////////////////////////////////
 //         DESTINATIONS         //
 //////////////////////////////////
+
 .box-group {
     margin: 16px auto;
     width: 650px;
@@ -176,7 +177,7 @@ a:focus {
 
     .item-group {
         display: grid; 
-        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-columns: repeat(3, 1fr);
         grid-gap: 8px;
         align-items: center; 
 
@@ -205,10 +206,8 @@ a:focus {
                 justify-content: center;
 
                 .item-title {
-                    font-weight: 300; 
                     letter-spacing: 0.8px; 
                     color: @white;
-                    text-align: center; 
                     margin: 0px 4px;
                     font-size: 19px;
                 }
@@ -233,11 +232,10 @@ a:focus {
     }
 }
 
-/* /////////// */
-/* ICON STYLES */
-/* /////////// */
+///////////////////////////
+//         ICONS         //
+///////////////////////////
 
-/* Changes style of icons */
 .fa-star-o {
     float: right;
     color: @white;
@@ -256,14 +254,9 @@ a:focus {
     bottom: 0px;
     right: 0px;
     color: @white;
-    transition: all .2s ease-in-out;
     cursor: pointer;
 }
-/* Shows edit pencil on hover of dest footer */
-.item-footer:hover .fa-pencil {
-    display: block;
-}
-/* Changes style of explored/favorited destinations */
+// Changes style of explored/favorited destinations after they are clicked
 .exp-full::before {
     color: @limegreen;
 }
@@ -271,7 +264,10 @@ a:focus {
     content: "\f005";
     color: @yellow;  
 }
-/* Changes color of icons on hover, separate style with 'before' needed to alter content */
+// Changes display/color of icons on hover
+.item-footer:hover .fa-pencil {
+    display: block;
+}
 .fa-star-o:hover::before {
     content: "\f005";
     color: @yellow;
@@ -288,18 +284,11 @@ a:focus {
     transform: scale(1.175);
 }
 
-/* /////////////// */
-/* SEARCH SPECIFIC */
-/* /////////////// */
 
-.search-dest-group-box {
-    border: 1px solid @lightnavy;
-    background: rgba(51, 64, 85, 0.5);
-    border-radius: 6px; 
-    width: 1075px;
-    padding: 16px;
-    margin: 0 auto 16px;
-}
+///////////////////////////
+//         SEARCH        //
+///////////////////////////
+
 .search-dest-group {
     display: grid; 
     grid-template-columns: repeat(5, 1fr);
@@ -310,8 +299,11 @@ a:focus {
     width: 1075px;
     margin: 0 auto 16px;
 }
+.search-item-group {
+    grid-template-columns: repeat(5, 1fr) !important;
+}
 .search-input {
-    background-color: @teal;
+    background-color: @navy;
     border-color: @teal;
     color: @teal;
 }
@@ -355,6 +347,9 @@ a:focus {
 }
 .wide {
     width: 900px;
+}
+.extra-wide {
+    width: 1075px;
 }
 .caption {
     color: @white;

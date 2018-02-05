@@ -17,10 +17,10 @@ var options = {
 var allDestIds = [];
 
 // Only shows first 20 destinations on page load
-$('.dest').slice(0, 20).removeClass('hidden');
+$('.item').slice(0, 20).removeClass('hidden');
 
 // Adds the IDs of all destinations to an array
-$('.dest').each(function() {
+$('.item').each(function() {
     allDestIds.push(this.id)
 });
 
@@ -54,7 +54,7 @@ function searchDests() {
     // If there are not results, then hide all destinations and show "No results" text
     if (Object.keys(results).length == 0 && query != '') {
         $('.no-results').removeClass('hidden');
-        $('.dest').each(function() {
+        $('#dest').each(function() {
             $(this).addClass('hidden');
         });
     
@@ -71,9 +71,9 @@ function searchDests() {
         // Compare resultIds array to array of all destIds, unhide all destinations, then hide those that
         // do not appear in resultsIds list
         for (var i = 0; i < allDestIds.length; i++) {
-            $(`.dest#${allDestIds[i]}`).removeClass('hidden');
+            $(`#dest#${allDestIds[i]}`).removeClass('hidden');
             if (resultIds.indexOf(allDestIds[i]) == -1 && query != '') {
-                $(`.dest#${allDestIds[i]}`).addClass('hidden');
+                $(`#dest#${allDestIds[i]}`).addClass('hidden');
             };
         };
     };  
