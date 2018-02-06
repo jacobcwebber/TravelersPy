@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block body %}
-<div class="input-group search">
+<div class="input-group search extra-wide">
     <input id="search" class="form-control input-lg search-input" type="text" data-role="tagsinput" placeholder="Search...">
     <span class="input-group-btn">
         <button class="btn btn-default btn-lg search-btn" type="button"><i class="fa fa-search fa-lg"></i></button>
@@ -19,10 +19,10 @@
 <div class="box-group extra-wide">
     <div class="box">
         <div class="no-results hidden">No destinations found for your search.</div>
-        <section class="search-item-group item-group">
+        <div class="item-group five-wide">
             {% for destination in destinations %}
-                <section id ="dest{{ destination.DestID }}" class='item hidden' style="background-image: linear-gradient(rgba(51, 64, 85, 0.40), rgba(51, 64, 85, 0.40)), url({{ destination.ImgUrl }});">
-                    <section class="item-header">
+                <div id ="dest{{ destination.DestID }}" class='item hidden' style="background-image: linear-gradient(rgba(51, 64, 85, 0.40), rgba(51, 64, 85, 0.40)), url({{ destination.ImgUrl }});">
+                    <div class="item-header">
                         {% if destination.DestID in explored %}
                             <span id="{{ destination.DestID }}" class="fa fa-check fa-lg exp-full" aria-hidden="true"></span> 
                         {% else %}
@@ -33,18 +33,18 @@
                         {% else %}
                             <span id="{{ destination.DestID }}" class="fa fa-star-o fa-lg" aria-hidden="true"></span> 
                         {% endif %}
-                    </section>
+                    </div>
                     <a href="/destination/{{ destination.DestID }}" class="item-mid">
                         <span class="item-title">{{ destination.DestName }}</span>
                     </a>
-                    <section class="item-footer">
+                    <div class="item-footer">
                         <a href="/edit_destination/{{ destination.DestID }}">
                             <span class="fa fa-pencil fa-lg" aria-hidden="true"></span>                             
                         </a>
-                    </section>
-                </section>
+                    </div>
+                </div>
             {% endfor %}
-        </section>
+        </div>
     </div>
 </div>
 

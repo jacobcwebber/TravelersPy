@@ -54,7 +54,7 @@ function searchDests() {
     // If there are not results, then hide all destinations and show "No results" text
     if (Object.keys(results).length == 0 && query != '') {
         $('.no-results').removeClass('hidden');
-        $('#dest').each(function() {
+        $('.item').each(function() {
             $(this).addClass('hidden');
         });
     
@@ -71,9 +71,9 @@ function searchDests() {
         // Compare resultIds array to array of all destIds, unhide all destinations, then hide those that
         // do not appear in resultsIds list
         for (var i = 0; i < allDestIds.length; i++) {
-            $(`#dest#${allDestIds[i]}`).removeClass('hidden');
+            $(`.item#${allDestIds[i]}`).removeClass('hidden');
             if (resultIds.indexOf(allDestIds[i]) == -1 && query != '') {
-                $(`#dest#${allDestIds[i]}`).addClass('hidden');
+                $(`.item#${allDestIds[i]}`).addClass('hidden');
             };
         };
     };  
@@ -83,7 +83,7 @@ $('#search').tagsinput({
     confirmKeys: [9, 13, 44],
     trimValue: true,
     typeahead: {
-        afterSelect: function(val) {this.$element.val(""); },
+        afterSelect: function() {this.$element.val(''); },
         limit: 5,
         source: searchList
     },
