@@ -7,7 +7,7 @@
     <span class="fa fa-pencil fa-lg" aria-hidden="true"></span>                             
 </section>
 <section class="box wide center-text">    
-    <img class="image-element" src="{{ destination.ImgUrl }}" alt="">
+    <img class="image-element" style="height: 350px;" src="{{ destination.ImgUrl }}" alt="">
     <div class="caption">{{destination.Description | safe}}</div>
     {% for tag in tags %}
         <h4 style="display: inline;"><div class="label">{{ tag.TagName }}</div></h4>

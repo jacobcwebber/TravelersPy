@@ -9,7 +9,7 @@
         <div class="images">
                 {% for image in images %}
                 <div class="image-container">
-                    <img class="img-responsive image-element" src="{{ image.ImgUrl }}" alt=""> <p></p>
+                    <img class="img-responsive image-element" style="height: 350px;" src="{{ image.ImgUrl }}" alt=""> <p></p>
                     <p style="color: rgb(253, 253, 253);">{{ image.DestName }}</p>
                 </div>
                 {% endfor %}
