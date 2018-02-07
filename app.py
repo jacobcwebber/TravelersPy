@@ -36,10 +36,6 @@ def is_admin(f):
             return redirect(url_for('index'))
     return
 
-@app.route('/')
-def index():
-    return render_template('home.html')
-
 @app.errorhandler(404)
 def not_found(error):
     return render_template('error.html'), 404
@@ -51,38 +47,32 @@ def not_found(error):
 
 #Forms
 class RegisterForm(Form):
-    username = StringField('', [
-        validators.Length(min=4, max=25, message='Username must be 4 to 25 characters long')
-        ], render_kw={"placeholder": "username"})
     email = StringField('', [
         validators.Email(message = "Please submit a valid email"),
         validators.Length(min=4, max=50, message='Email must be 5 to 50 character long')
-        ], render_kw={"placeholder": "email"})
+        ], render_kw={"placeholder": "Email"})
     firstName = StringField('', [
         validators.InputRequired()
-    ], render_kw={"placeholder": "first name"})
+    ], render_kw={"placeholder": "First name"})
     lastName = StringField('', [
         validators.InputRequired()
-    ], render_kw={"placeholder": "last name"}) 
+    ], render_kw={"placeholder": "Last name"}) 
     password = PasswordField('', [
         validators.DataRequired(),
-        validators.EqualTo('confirm', message='Passwords do not match')
-    ], render_kw={"placeholder": "password"})
-    confirm = PasswordField('', render_kw={"placeholder": "confirm password"})
+    ], render_kw={"placeholder": "Password"})
 
-@app.route('/register', methods=['POST', 'GET'])
-def register():
+@app.route('/', methods=['POST', 'GET'])
+def index():
     form = RegisterForm(request.form)
 
     if request.method == 'POST' and form.validate():
-        username = form.username.data
         email = form.email.data
         first = form.firstName.data
         last = form.lastName.data
         password = sha256_crypt.encrypt(str(form.password.data))
 
         cur = connection.cursor()
-        cur.execute("INSERT INTO users(Username, FirstName, LastName, Password, Email) "
+        cur.execute("INSERT INTO users(FirstName, LastName, Password, Email) "
                     "VALUES (%s, %s, %s, %s, %s)"
                     , (username, first, last, password, email))
 
@@ -93,7 +83,7 @@ def register():
 
         return redirect(url_for('login'))
 
-    return render_template('register.html', form=form)
+    return render_template('home.html', form=form)
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():

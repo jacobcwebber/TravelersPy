@@ -2,7 +2,6 @@
 {% set active_page = "search" %}
 {% set title = "Travelers | Search" %}
 
-
 {% block head %}
 <link rel = 'import' href = '../static/bower_components/polymer/polymer.html'>
 <link rel = 'import' href = '../static/bower_components/polymer/polymer.html'>
@@ -13,7 +12,7 @@
 <div class="input-group search extra-wide">
     <input id="search" class="form-control input-lg search-input" type="text" data-role="tagsinput" placeholder="Search...">
     <span class="input-group-btn">
-        <button class="btn btn-default btn-lg search-btn" type="button"><i class="fa fa-search fa-lg"></i></button>
+        <button class="btn btn-default btn-lg search-btn" type="button"><i class="fas fa-search fa-lg"></i></button>
     </span>
 </div>
 <div class="box-group extra-wide">
@@ -24,14 +23,14 @@
                 <div id ="dest{{ destination.DestID }}" class='item hidden' style="background-image: linear-gradient(rgba(51, 64, 85, 0.40), rgba(51, 64, 85, 0.40)), url({{ destination.ImgUrl }});">
                     <div class="item-header">
                         {% if destination.DestID in explored %}
-                            <span id="{{ destination.DestID }}" class="fa fa-check fa-lg exp-full" aria-hidden="true"></span> 
+                            <i id="{{ destination.DestID }}" class="fas fa-check fa-lg exp-full" aria-hidden="true"></i> 
                         {% else %}
-                            <span id="{{ destination.DestID }}" class="fa fa-check fa-lg" aria-hidden="true"></span> 
+                            <i id="{{ destination.DestID }}" class="fas fa-check fa-lg" aria-hidden="true"></i> 
                         {% endif %}
                         {% if destination.DestID in favorites %}
-                            <span id="{{ destination.DestID }}" class="fa fa-star-o fa-lg star-full" aria-hidden="true"></span> 
+                            <i id="{{ destination.DestID }}" class="fas fa-star fa-lg star-full" aria-hidden="true"></i> 
                         {% else %}
-                            <span id="{{ destination.DestID }}" class="fa fa-star-o fa-lg" aria-hidden="true"></span> 
+                            <i id="{{ destination.DestID }}" class="far fa-star fa-lg" aria-hidden="true"></i> 
                         {% endif %}
                     </div>
                     <a href="/destination/{{ destination.DestID }}" class="item-mid">
@@ -39,7 +38,7 @@
                     </a>
                     <div class="item-footer">
                         <a href="/edit_destination/{{ destination.DestID }}">
-                            <span class="fa fa-pencil fa-lg" aria-hidden="true"></span>                             
+                            <span class="fas fa-pencil-alt fa-lg" aria-hidden="true"></span>                             
                         </a>
                     </div>
                 </div>

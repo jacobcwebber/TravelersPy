@@ -1,12 +1,45 @@
 {% extends 'layout.html' %}
+{% from "includes/_formhelpers.html" import render_field %}
 
 {% block body %}
-<center><div class="jumbotron text-center">
-    <h1>Travelers</h1>
-    <p>Organize your travel goals</p>
-    {% if session.logged_in == NULL %}
-      <a href="/register" class="btn btn-primary btn-lg">Register</a>
-      <a href="/login" class="btn btn-success btn-lg">Login</a>
-    {% endif %}
-  </div></center>
+<div class="welcome box extra-wide">
+  <section class="left">
+    <h2 class="header">Explore the world with <span>Travelers</span></h2>
+      <div class="bullet-group">
+      <div class="bullet">
+        <div class="icon-holder">
+            <i class="fas fa-suitcase fa-3x"></i>
+        </div>
+        <span class="bullet-text">Get travel recommendations</span>
+      </div>
+      <div class="bullet">
+        <div class="icon-holder">
+          <i class="far fa-map fa-3x"></i>
+        </div>
+        <span class="bullet-text">Find new destinations</span>
+      </div>
+      <div class="bullet">
+        <div class="icon-holder">
+          <i class="fas fa-globe fa-3x"></i>
+        </div>
+        <span class="bullet-text">Feed your wanderlust</span>
+      </div>
+    </div>
+  </section>
+  <section class="right">
+    <h2 class="header large">Sign Up</h2>
+    <form method="POST" action="">
+        <div class="form-group">
+          <div class="inline-input-group">
+            {{render_field(form.firstName, class_="form-control input-lg")}}
+            {{render_field(form.lastName, class_="form-control input-lg ")}}
+          </div>
+            {{render_field(form.email, class_="form-control input-lg ")}}                
+            {{render_field(form.password, class_="form-control input-lg ")}}
+        </div>
+        <input type="submit" class="btn btn-teal btn-lg" value="Create account">
+    </form>
+  </section>
+</div>
+
 {% endblock %}
