@@ -1,10 +1,11 @@
 {% extends 'layout.html' %}
 {% from "includes/_formhelpers.html" import render_field %}
+{% set active_page = "home" %}
 
 {% block body %}
 <div class="welcome box extra-wide">
   <section class="left">
-    <h2 class="header">Explore the world with <span>Travelers</span></h2>
+    <h2 class="header">Explore the world with <span class="teal">Travelers</span></h2>
       <div class="bullet-group">
       <div class="bullet">
         <div class="icon-holder">
@@ -28,16 +29,16 @@
   </section>
   <section class="right">
     <h2 class="header large">Sign Up</h2>
-    <form method="POST" action="">
+    <form method="post" action="">
         <div class="form-group">
           <div class="inline-input-group">
-            {{render_field(form.firstName, class_="form-control input-lg")}}
-            {{render_field(form.lastName, class_="form-control input-lg ")}}
+            {{render_field(form.firstName, class_="form-control input-lg signup-form")}}
+            {{render_field(form.lastName, class_="form-control input-lg signup-form")}}
           </div>
-            {{render_field(form.email, class_="form-control input-lg ")}}                
-            {{render_field(form.password, class_="form-control input-lg ")}}
+            {{render_field(form.email, class_="form-control input-lg signup-form")}}                
+            {{render_field(form.password, class_="form-control input-lg signup-form")}}
         </div>
-        <input type="submit" class="btn btn-teal btn-lg" value="Create account">
+        <input type="submit" name="submit" class="btn btn-teal btn-lg" value="Create account">
     </form>
   </section>
 </div>

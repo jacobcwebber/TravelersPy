@@ -11,12 +11,39 @@
 @yellow: rgb(255, 255, 81);  
 @brown: rgb(205,133,63);
 
+/////////////////////////
+//       GENERAL       //
+/////////////////////////
 
-// Tags
 body {
     font-family: Arial, Helvetica, sans-serif;
     background-color: @navy;
     padding-top: 65px;
+}
+.footer {
+    position: absolute;
+    bottom: 0;
+    margin-top: 24px;
+    width:100%; 
+    height: 45px; 
+    padding: 12px;
+    background: @lightnavy;
+}
+.standard-text {
+    color: @white; 
+    font-size: 16px;
+}
+.link {
+    color: @teal;
+    text-decoration: underline;
+    cursor: pointer;
+
+    &:hover {
+        color: darken(@teal, 15%);
+    }
+}
+#logout {
+    margin-top: 12px;
 }
 a:link,
 a:hover,
@@ -29,31 +56,35 @@ a:focus {
 .extra-wide {
     width: 1075px !important;
 }
-
-/* BOOTSTRAP OVERRIDES */
 .container {
-    width: 95%;
+    width: 90%;
 }
-.navbar-inverse {
+.trav-nav {
     background-color: @navy;
     border: 0;
     text-transform: uppercase;
     font-family: 'Roboto', sans-serif;
-}
-.navbar-inverse .navbar-nav > li > a {
-    color: @white;
-}
-.navbar-inverse .navbar-nav > .active > a,
-.navbar-inverse .navbar-nav > .active > a:hover,
-.navbar-inverse .navbar-nav > .active > a:focus  {
-    background-color: transparent;
-}
-.navbar-inverse .navbar-nav > .active > a > section,
-.navbar-inverse .navbar-nav > .active > a:hover > section,
-.navbar-inverse .navbar-nav > .active > a:focus > section {
-    color: @teal;
-    border-bottom: 3px solid;
-    padding-bottom: 2px;
+    top: 0;
+    position: fixed;
+    right:0;
+    left: 0;
+    z-index: 1030;
+
+    .navbar-nav > .active > a > section {
+        color: @teal;
+        border-bottom: 3px solid;
+        padding-bottom: 2px;
+    }
+
+    .nav-item {
+        letter-spacing: 1px; 
+        font-weight: 400; 
+        font-size: 17px;
+
+        &:hover {
+            background:  transparent;
+        }
+    }   
 }
 .nav-justified {
     border-collapse:separate;
@@ -95,8 +126,26 @@ a:focus {
         display:block !important;
     }
 }
+.teal {
+    color: @teal;
+}
+.caption {
+    text-align: center;
+    width: 75%;
+    margin: 5px auto;
+    color: @white;
+}
+.btn-teal {
+    color: @white;
+    background-color: @teal;
+    border-color: @navy;
 
-
+    &:hover,
+    &:focus {
+        color: @white;
+        background-color: darken(@teal, 5%);
+    }
+}
 .logo {
     color: @teal;
     letter-spacing: 4px; 
@@ -106,11 +155,6 @@ a:focus {
 .icon {
     float:left; 
     padding-right: 8px;
-}
-.nav-item {
-    letter-spacing: 1px; 
-    font-weight: 400; 
-    font-size: 17px;
 }
 .large-header {
     color: @teal;
@@ -202,7 +246,7 @@ a:focus {
 }
 
 /////////////////////////////////
-//           EXPLORE           //
+//            BOXES            //
 /////////////////////////////////
 
 .box-group {
@@ -325,9 +369,9 @@ a:focus {
     .search-btn:hover,
     .search-btn:active,
     .search-btn:focus {
-    background-color:@navy !important;
-    border-color: @teal !important;   
-}   
+        background-color: @navy !important;
+        border-color: @teal !important;   
+    }   
 }
 
 .no-results {
@@ -346,30 +390,25 @@ a:focus {
     flex-direction: row; 
     justify-content: space-around;
 
-        .circle-with-text {
-            display: flex; 
-            flex-direction: column; 
-            text-align: center;
+    .circle-with-text {
+        display: flex; 
+        flex-direction: column; 
+        text-align: center;
 
-            .circle {
-                text-align: center; 
-                vertical-align: middle; 
-                border: 5px solid @teal;
-                border-radius: 50%; 
-                margin: 10px; 
-                height: 160px; 
-                width: 160px;
+        .circle {
+            text-align: center; 
+            vertical-align: middle; 
+            border: 5px solid @teal;
+            border-radius: 50%; 
+            margin: 10px; 
+            height: 160px; 
+            width: 160px;
 
-                .stat-number {
-                    line-height: 160px; 
-                    color: @white; 
-                    font-size: 48px;
-                }
-        }
-
-        .stat-name {
-            color: @white; 
-            font-size: 16px;
+            .stat-number {
+                line-height: 160px; 
+                color: @white; 
+                font-size: 48px;
+            }
         }
     }
 }
@@ -428,7 +467,7 @@ a:focus {
         
         .bullet-group {
             width: 400px;
-            margin: 0 auto;
+            margin: 36px auto 0;
         }
 
         .bullet {
@@ -438,7 +477,6 @@ a:focus {
             font-size: 18px;
 
             .icon-holder {
-                display: inline;
                 color: lighten(@lightnavy, 15%);
                 height: 54px;
                 width: 54px;
@@ -447,7 +485,7 @@ a:focus {
                 margin-left: 20px;
                 font-size: 20px;
                 font-weight: 600;
-                letter-spacing: .1em;
+                letter-spacing: .075em;
                 color: @teal;
             }
         }
@@ -455,21 +493,30 @@ a:focus {
 
     .right {
         float: right;
-        width: 50%;
     }
-}
-
-.btn-teal {
-    color: @white;
-    background-color: @teal;
-    border-color: @navy;
 }
 
 .large {
     font-size: 42px;
 }
-.form-control {
-    margin-bottom: 16px;
+
+.trav-input {
+    background-color: @navy;
+    border-color: @teal;
+    color: @white;
+    border-radius: 12px;
+    margin-right: 6px;
+
+    &:focus {
+        border-color: @teal;
+        outline: 0;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px fade(@teal, 60%);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px fade(@teal, 60%); 
+    }
+
+    &::placeholder {
+        color: fade(@white, 85%);
+    }
 }
 
 .inline-input-group {
@@ -480,4 +527,11 @@ a:focus {
     input:first-of-type {
         margin-right: 8px;
     }
+}
+.login-form {
+    padding: 16px;
+    margin-right: -15px;
+}
+.signup-form {
+    margin-bottom: 16px;
 }

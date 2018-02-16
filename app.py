@@ -65,69 +65,99 @@ class RegisterForm(Form):
 def index():
     form = RegisterForm(request.form)
 
-    if request.method == 'POST' and form.validate():
-        email = form.email.data
-        first = form.firstName.data
-        last = form.lastName.data
-        password = sha256_crypt.encrypt(str(form.password.data))
+    if request.method == 'POST':
+        if request.form['submit'] == "Create account":
+            email = form.email.data
+            first = form.firstName.data
+            last = form.lastName.data
+            password = sha256_crypt.encrypt(str(form.password.data))
 
-        cur = connection.cursor()
-        cur.execute("INSERT INTO users(FirstName, LastName, Password, Email) "
-                    "VALUES (%s, %s, %s, %s, %s)"
-                    , (username, first, last, password, email))
+            cur = connection.cursor()
+            cur.execute("INSERT INTO users(FirstName, LastName, Password, Email) "
+                        "VALUES (%s, %s, %s, %s, %s)"
+                        , (first, last, password, email))
 
-        connection.commit()
-        cur.close()
+            connection.commit()
+            cur.close()
 
-        flash('Congratulations! You are now registered.', 'success')
+            flash('Congratulations! You are now registered.', 'success')
 
-        return redirect(url_for('login'))
+            return redirect(url_for('login'))
+        elif request.form['submit'] == "Login":
+            email = request.form['email']
+            password_attempt = request.form['password']
+
+            cur = connection.cursor()
+            result = cur.execute("SELECT * "
+                                "FROM users "
+                                "WHERE Email = %s"
+                                , [email])
+            user = cur.fetchone()
+            cur.close()
+
+            if result > 0:
+                password = user['Password']
+                userId = user['UserID'] 
+                firstname = user['FirstName']
+                isAdmin = user['IsAdmin']
+
+                if sha256_crypt.verify(password_attempt, password):
+                    
+                    session['user'] = userId
+                    session['logged_in'] = True
+                    session['is_admin'] = isAdmin
+
+                    return redirect(url_for('destinations'))
+
+                else:
+                    error = 'Invalid login. Please try again.'
+                    return render_template('login.html', error=error)
+                cur.close()
+
+            else:
+                error = "User not found."
+                return render_template('login.html', error=error)
 
     return render_template('home.html', form=form)
 
-@app.route('/login', methods=['POST', 'GET'])
 def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password_attempt = request.form['password']
+    password_attempt = request.form['password']
 
-        cur = connection.cursor()
+    cur = connection.cursor()
 
-        result = cur.execute("SELECT * "
-                             "FROM users "
-                             "WHERE Username = %s"
-                             , [username])
-        user = cur.fetchone()
-        cur.close()
+    result = cur.execute("SELECT * "
+                            "FROM users "
+                            "WHERE Username = %s"
+                            , [username])
+    user = cur.fetchone()
+    cur.close()
 
-        if result > 0:
-            password = user['Password']
-            userId = user['UserID'] 
-            firstname = user['FirstName']
+    if result > 0:
+        password = user['Password']
+        userId = user['UserID'] 
+        firstname = user['FirstName']
 
-            if sha256_crypt.verify(password_attempt, password):
-                
-                # set session variables
-                session['logged_in'] = True
-                session['user'] = userId
+        if sha256_crypt.verify(password_attempt, password):
+            
+            # set session variables
+            session['logged_in'] = True
+            session['user'] = userId
 
-                if user['IsAdmin'] == 1:
-                    session['is_admin'] = True
-                else:
-                    session['is_admin'] = False
-
-                return redirect(url_for('index'))
-
+            if user['IsAdmin'] == 1:
+                session['is_admin'] = True
             else:
-                error = 'Invalid login'
-                return render_template('login.html', error=error)
-            cur.close()
+                session['is_admin'] = False
+
+            return redirect(url_for('index'))
 
         else:
-            error = "Username not found."
+            error = 'Invalid login'
             return render_template('login.html', error=error)
+        cur.close()
 
-    return render_template('login.html')
+    else:
+        error = "Username not found."
+        return render_template('login.html', error=error)
 
 @app.route('/change-map', methods=['POST'])
 def change_map():
@@ -305,7 +335,6 @@ def search():
 @is_logged_in
 def logout():
     session.clear()
-    flash('You are now logged out', 'success')
     return redirect(url_for('index'))
 
 #####################################################

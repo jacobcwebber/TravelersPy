@@ -4,8 +4,8 @@
 ] -%}
 {% set active_page = active_page|default('index') -%}
 
-<nav class="navbar navbar-inverse navbar-fixed-top navbar-toggleable-md">
-  <div class="container">
+<nav class="navbar trav-nav navbar-toggleable-md">
+  <div class="container {%if active_page == 'home'%}extra-wide{% endif %}">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
         <span class="sr-only">Toggle navigation</span>
@@ -13,7 +13,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="/destinations">
+      <a class="navbar-brand" {% if session.logged_in %} href="/destinations" {% else %} href="/" {% endif %}>
         <img class="icon" src="/static/images/favicon.ico"></img>
         <span class="logo">Travelers</span>
       </a>
@@ -24,7 +24,7 @@
           {% for href, id, caption in navigation_bar %}
             <li{% if id == active_page %} class="active" {% endif %}>
               <a class="nav-item" href="{{ href|e }}">
-                <section>{{ caption|e }}</section>
+                <section class="nav-text">{{ caption|e }}</section>
               </a>
             </li>
           {% endfor %}
@@ -44,19 +44,14 @@
               <section>Profile</section>
             </a>
           </li>
+        </ul>
         {% else %}
-          <li>
-            <a class="nav-item" href="/register" >
-              <section>Create an Account</section>
-            </a>
-          </li>
-          <li>
-            <a class="nav-item" href="/login">
-              <section>Login</section>
-            </a>
-          </li>
+        <form method="POST" action="" class="form-inline login-form">
+            <input class="form-control input-sm trav-input" name="email"  type="text" placeholder="Email">
+            <input class="form-control input-sm trav-input" name="password" type="password" placeholder="Password">
+            <input type="submit" name="submit" class="btn btn-sm btn-teal" value="Login">
+          </form>
         {% endif %}
-      </ul>
     </div>
   </div>
 </nav>

@@ -2,20 +2,21 @@
 {% set active_page = "destinations" %}
 
 {% block body %}
-<section class="box wide center-text">
-    <span class="title">{{ destination.DestName }}, {{destination.CountryName}}</span>  
-    <span class="fa fa-pencil fa-lg" aria-hidden="true"></span>                             
-</section>
-<section class="box wide center-text">    
-    <img class="image-element" style="height: 350px;" src="{{ destination.ImgUrl }}" alt="">
-    <div class="caption">{{destination.Description | safe}}</div>
-    {% for tag in tags %}
-        <h4 style="display: inline;"><div class="label">{{ tag.TagName }}</div></h4>
-    {% endfor %}
-    <hr>
-    <div id="map" style="height: 500px; width: 100%;"></div>
-    <hr>
-</section>
+<div class="box-group wide">
+    <div class="box center-text">
+        <span class="large teal">{{ destination.DestName }}, {{destination.CountryName}}</span>  
+    </div>
+    <div class="box wide center-text">    
+        <img class="image-element" style="height: 350px;" src="{{ destination.ImgUrl }}" alt="">
+        <div class="caption">{{destination.Description | safe}}</div>
+        {% for tag in tags %}
+            <h4 style="display: inline;"><div class="label">{{ tag.TagName }}</div></h4>
+        {% endfor %}
+        <hr>
+        <div id="map" style="height: 500px; width: 100%;"></div>
+        <hr>
+    </div>
+</div>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABEVdEk2zQBeCHstcUpXQUkSxPhtmTv0Q&callback=initMap" async defer></script>
 <script>
