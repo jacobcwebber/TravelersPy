@@ -5,6 +5,7 @@ A website with curated travel destinations from across the world that allows use
 To-do list:
 - Add destination suggestions based on tags/current favorites/initial sign-up preferences
 - Add tag categories and give every tag a category
+- Convert Search to GET request so that I can redirect from other pages with search (search from clicking on a tag)
 - Clean up Search
 - Add images to Cloudinary
 - Rework styles.less to make it much more efficient and compact

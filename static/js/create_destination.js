@@ -27,7 +27,6 @@ function nextPrev(n) {
     showTab(currentTab)
 }
 
-
 // Creates tags input and the autocomplete
 $('#tags').tagsinput({
     confirmKeys: [13, 44, 9],
@@ -49,7 +48,7 @@ function initMap() {
     });
   }
 
-// Changes map viewport and adds pins when country form is changed
+// Changes map viewport and adds pins when country input is changed
 $('#countryId').change(function initMap() {
     var address = $('#dest-name').val() + ', ' + $('#countryId').find(":selected").text();
     var geocoder = new google.maps.Geocoder();

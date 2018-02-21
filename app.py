@@ -227,13 +227,13 @@ def profile():
     cur.execute("SELECT FirstName "
                 "FROM users "
                 "WHERE UserID = %s"
-                , [session['user']])
+                , session['user'])
     user = cur.fetchone()
 
     cur.execute("SELECT f.DestID "
                 "FROM favorites f JOIN destinations d ON d.DestID = f.DestID JOIN users u on u.UserID = f.UserID "
                 "WHERE f.UserID = %s"
-                , [session['user']])
+                , session['user'])
     favorites = cur.fetchall()
     
     cur.execute("SELECT DestID "
@@ -249,6 +249,14 @@ def profile():
                 , session['user'])
     countries = cur.fetchall()
 
+    cur.execute("SELECT d.DestID "
+                "FROM explored e JOIN destinations d ON e.DestID = d.DestID "
+                                "JOIN dest_tags dt ON  dt.DestID = d.DestID "
+                                "JOIN tags t ON t.TagID = dt.TagID "
+                "WHERE e.UserID = %s AND t.TagName = 'UNESCO'"
+                , session['user'])
+    unesco = cur.fetchall()
+
     cur.execute("SELECT l.Lat, l.Lng, d.DestName "
                 "FROM dest_locations l JOIN destinations d on l.DestID = d.DestID")
     locations = cur.fetchall()
@@ -258,8 +266,8 @@ def profile():
     for location in locations:
         locationsList.append([float(location['Lat']), float(location['Lng']), location['DestName']])
 
-    counts = [len(explored), len(favorites), len(countries)]
-    captions = ['Destinations Explored', 'Favorites', 'Countries Visited']
+    counts = [len(explored), len(favorites), len(countries), len(unesco)]
+    captions = ['Explored', 'Favorites', 'Countries Visited', 'UNESCO Sites Visited']
 
     return render_template('profile.html', user=user, favorites=favorites, explored=explored, locations=locationsList, captions=captions, counts=counts)
 
@@ -432,11 +440,17 @@ def edit_country(id):
 @is_logged_in
 def destinations():
     cur = connection.cursor()
-    cur.execute("SELECT d.DestID, d.DestName, i.ImgUrl "
+    cur.execute("SELECT d.DestID, DestName, ImgUrl "
                 "FROM destinations d JOIN dest_images i on d.destID = i.DestID "
-                "GROUP BY d.DestID "
                 "ORDER BY d.UpdateDate DESC")
-    recommended = cur.fetchall()
+    recent = cur.fetchall()
+
+    cur.execute("SELECT d.DestID, d.DestName, i.ImgUrl, count(f.DestID) AS Favorites "
+                "FROM destinations d JOIN dest_images i on d.destID = i.DestID "
+                                    "JOIN favorites f on d.destID = f.DestID "
+                "GROUP BY f.DestID "
+                "ORDER BY Favorites DESC")
+    popular = cur.fetchall()
 
     cur.execute("SELECT DestID "
                 "FROM favorites "
@@ -463,7 +477,8 @@ def destinations():
     cur.execute("SELECT COUNT(*) AS Count "
                 "FROM Destinations")
     count = cur.fetchone()
-    return render_template('destinations.html', count=count, favorites=favorites, explored=explored, recommended=recommended)
+
+    return render_template('destinations.html', count=count, favorites=favorites, explored=explored, recent=recent, popular=popular)
 
 @app.route('/destinations-admin')
 @is_logged_in
