@@ -84,9 +84,17 @@ $('#search').tagsinput({
     trimValue: true,
     typeahead: {
         afterSelect: function() {this.$element.val(''); },
-        limit: 5,
         source: searchList
     },
     freeInput: true    
 });
 
+// Get rid of placeholder if there is at least one tag
+$('.bootstrap-tagsinput input').keypress(function() {
+    var numberOfTags = $('.tag').length
+    if (numberOfTags != 0) {
+        $(this).attr('placeholder', '')   
+    } else {
+        $(this).attr('placeholder', 'Search...')
+    }
+});
