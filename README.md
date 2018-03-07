@@ -9,6 +9,7 @@ Short term:
 - Convert Search to GET request so that I can redirect from other pages with search (search from clicking on a tag)
 - Clean up Search
 - Add images to Cloudinary
+- Add more stats to Profile page (Waterfalls visisted, cities visisted, etc.)
 - Update UpdateTime on change on picture/tags/etc. Not just dests table
 - Rewatch CSS Grid videos and make the Search page responsive
 - On Search, have normal query search without pre-fill, then Advanced Search by Filter with Location, Keyword, etc

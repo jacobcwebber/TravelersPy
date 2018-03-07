@@ -9,24 +9,27 @@
 {% endblock %}
 
 {% block body %}
-<div class="input-group search extra-wide">
-    <input id="basic-search" class="form-control input-lg search-input" type="text" placeholder="Search...">
+<form action="/search" method="GET" class="input-group search extra-wide">
+    <input id="basic-search" class="form-control input-lg search-input" type="text" name="q" placeholder="Search by destination...">
     <span class="input-group-btn">
-        <button id="basic-search-btn" class="btn btn-default btn-lg search-btn" type="button"><i class="fas fa-search fa-lg"></i></button>
+        <button id="basic-search-btn" class="btn btn-default btn-lg search-btn" type="submit"><i class="fas fa-search fa-lg"></i></button>
     </span>
-</div>
-<div class="input-group search extra-wide">
+</form>
+<div class="input-group search extra-wide hidden">
     <input id="adv-search" class="form-control input-lg search-input" type="text" data-role="tagsinput" placeholder="Advanced Search...">
     <span class="input-group-btn">
-        <button id="adv-search-btn" class="btn btn-default btn-lg search-btn" type="button"><i class="fas fa-search fa-lg"></i></button>
+        <button id="adv-search-btn" class="btn btn-default btn-lg search-btn" type="button"><i class="fas fa-search fa-lg"></i></button >
     </span>
 </div>
 <div class="box-group extra-wide">
     <div class="box">
         <div class="no-results hidden">No destinations found for your search.</div>
+        <div id="loading" class="hidden">
+            <i class="fas loading-icon fa-circle-notch fa-spin"></i> <br>
+        </div>
         <div class="item-group five-wide">
             {% for destination in destinations %}
-                <div id ="dest{{ destination.DestID }}" class='item hidden' style="background-image: linear-gradient(rgba(51, 64, 85, 0.40), rgba(51, 64, 85, 0.40)), url({{ destination.ImgUrl }});">
+                <div id ="dest{{ destination.DestID }}" class='item' style="background-image: linear-gradient(rgba(51, 64, 85, 0.40), rgba(51, 64, 85, 0.40)), url({{ destination.ImgUrl }});">
                     <div class="item-header">
                         {% if destination.DestID in explored %}
                             <i id="{{ destination.DestID }}" class="fas fa-check fa-lg exp-full" aria-hidden="true"></i> 
