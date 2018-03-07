@@ -10,9 +10,15 @@
 
 {% block body %}
 <div class="input-group search extra-wide">
-    <input id="search" class="form-control input-lg search-input" type="text" data-role="tagsinput" placeholder="Search...">
+    <input id="basic-search" class="form-control input-lg search-input" type="text" placeholder="Search...">
     <span class="input-group-btn">
-        <button class="btn btn-default btn-lg search-btn" type="button"><i class="fas fa-search fa-lg"></i></button>
+        <button id="basic-search-btn" class="btn btn-default btn-lg search-btn" type="button"><i class="fas fa-search fa-lg"></i></button>
+    </span>
+</div>
+<div class="input-group search extra-wide">
+    <input id="adv-search" class="form-control input-lg search-input" type="text" data-role="tagsinput" placeholder="Advanced Search...">
+    <span class="input-group-btn">
+        <button id="adv-search-btn" class="btn btn-default btn-lg search-btn" type="button"><i class="fas fa-search fa-lg"></i></button>
     </span>
 </div>
 <div class="box-group extra-wide">

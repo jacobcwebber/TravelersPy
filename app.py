@@ -273,12 +273,24 @@ def profile():
 
 @app.route('/search')
 def search():
+    tag = request.args.get('q')
     cur = connection.cursor()
-    cur.execute('SELECT d.DestID, DestName, c.CountryName, ImgUrl, ContName '
-                'FROM destinations d JOIN dest_images i ON d.DestID = i.DestID '
-                                    'JOIN countries c ON c.CountryID = d.CountryID '
-                                    'JOIN continents co ON co.ContID = c.ContID '
-                'ORDER BY RAND()')
+    if tag == None:
+        cur.execute('SELECT d.DestID, DestName, c.CountryName, ImgUrl, ContName '
+                    'FROM destinations d JOIN dest_images i ON d.DestID = i.DestID '
+                                        'JOIN countries c ON c.CountryID = d.CountryID '
+                                        'JOIN continents co ON co.ContID = c.ContID '
+                    'ORDER BY RAND()')
+    else:
+         cur.execute('SELECT d.DestID, DestName, c.CountryName, ImgUrl, ContName '
+                    'FROM destinations d JOIN dest_images i ON d.DestID = i.DestID '
+                                        'JOIN countries c ON c.CountryID = d.CountryID '
+                                        'JOIN continents co ON co.ContID = c.ContID '
+                                        'JOIN dest_tags dt ON dt.DestID = d.DestID '
+                                        'JOIN tags t on t.TagID = dt.TagID '
+                    'WHERE t.TagName = %s '
+                    'ORDER BY RAND()'
+                    , tag)       
     destinations = cur.fetchall()
 
     # Add list of tags to the dictionaries for each destination

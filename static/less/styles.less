@@ -178,6 +178,13 @@ a:focus {
     padding: .3em .6em;
     border: 1px solid @teal;
     border-radius: 1em;
+    display: inline;
+    transition: all .3s ease-in-out;
+
+    &:hover {
+        font-size: 100%;
+        color: @teal !important;
+    }
 }
 .label-small {
     font-size: 75%;
@@ -346,7 +353,7 @@ a:focus {
         color: @teal;
         cursor: text;
     
-        ::placeholder {
+        &::placeholder {
             color: @teal;
         }
     
@@ -355,7 +362,7 @@ a:focus {
             outline: none;
             border-width: 0px;
     
-            ::placeholder {
+            &::placeholder {
                 color: @teal;
             }
         }

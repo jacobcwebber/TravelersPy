@@ -9,9 +9,9 @@ Short term:
 - Convert Search to GET request so that I can redirect from other pages with search (search from clicking on a tag)
 - Clean up Search
 - Add images to Cloudinary
-- Rework styles.less to make it much more efficient and compact
 - Update UpdateTime on change on picture/tags/etc. Not just dests table
 - Rewatch CSS Grid videos and make the Search page responsive
+- On Search, have normal query search without pre-fill, then Advanced Search by Filter with Location, Keyword, etc
 
 Long term:
 - Add "Trips" so users can make and name a Trip and add destinations they want to go on that trip to it

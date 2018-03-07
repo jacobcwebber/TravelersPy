@@ -1,3 +1,27 @@
+//Basic search
+var basicSearchOptions = {
+    shouldSort: true,
+    threshold: 0.25,
+    location: 0,
+    distance: 100,
+    maxPatternLength: 32,
+    minMatchCharLength: 1,
+    keys: [
+        'DestName',
+    ]
+};
+
+$('#basic-search-btn').click(function() {
+    basicSearch();
+});
+
+function basicSearch() {
+    basicSearchQuery = $('#basic-search').val();
+    basicSearchFuse = new Fuse(dests, basicSearchOptions);
+    basicSearchResults = basicSearchFuse.search(basicSearchQuery);
+    console.log(basicSearchResults);
+};
+
 // Options used for search
 var options = {
     shouldSort: true,
@@ -25,18 +49,18 @@ $('.item').each(function() {
 });
 
 // Triggers search on button click
-$('.search-btn').click(function(event) {
-    searchDests()
+$('#adv-search-btn').click(function(event) {
+    advSearch()
 });
 
 // Triggers search on enter key press when in input box
-$('.search').keypress(function(e) {
+$('#adv-search').keypress(function(e) {
     if(e.which == 13) {
-        searchDests();
+        advSearch();
     }
 });
 
-function searchDests() {
+function advSearch() {
     // Create list of IDs of destinations matching previous search
 
     var resultIds = [];
@@ -79,7 +103,7 @@ function searchDests() {
     };  
 };
 
-$('#search').tagsinput({
+$('#adv-search').tagsinput({
     confirmKeys: [9, 13, 44],
     trimValue: true,
     typeahead: {
@@ -89,12 +113,14 @@ $('#search').tagsinput({
     freeInput: true    
 });
 
+
+
 // Get rid of placeholder if there is at least one tag
-$('.bootstrap-tagsinput input').keypress(function() {
-    var numberOfTags = $('.tag').length
-    if (numberOfTags != 0) {
-        $(this).attr('placeholder', '')   
-    } else {
-        $(this).attr('placeholder', 'Search...')
-    }
-});
+// $('.bootstrap-tagsinput input').keypress(function() {
+//     var numberOfTags = $('.tag').length
+//     if (numberOfTags != 0) {
+//         $(this).attr('placeholder', '')   
+//     } else {
+//         $(this).attr('placeholder', 'Search...')
+//     }
+// });
