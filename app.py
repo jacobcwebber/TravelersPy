@@ -349,7 +349,7 @@ def search():
     for continent in continents:
         searchList.append(continent['ContName'])
     
-    return render_template('search.html', destinations=destinations, explored=explored, favorites=favorites, searchList=searchList)
+    return render_template('search.html', query=query, destinations=destinations, explored=explored, favorites=favorites, searchList=searchList)
 
 @app.route('/logout')
 @is_logged_in
