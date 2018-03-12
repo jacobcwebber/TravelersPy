@@ -15,7 +15,7 @@
       <span class="input-group-btn">
         <button class="btn btn-lg search-btn" id="basic-search-btn" type="submit"><i class="fas fa-search fa-lg"></i></button>
       </span>
-      <input class="form-control input-lg search-input" type="text" name="q" placeholder="Search by destination..." {% if query|length != 0 %}value="{{ query }}"{% endif %}>
+      <input class="form-control input-lg search-input" type="text" name="q" placeholder="Search by destination..." {% if search %}value="{{ search[0] }}"{% endif %}>
       <span class="input-group-btn">
         <button class="btn btn-lg search-btn" id="basic-search-btn" type="submit"><i class="fas fa-search fa-lg"></i></button>
       </span>

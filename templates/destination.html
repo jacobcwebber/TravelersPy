@@ -10,7 +10,7 @@
     <img class="image-element" style="height: 350px;" src="{{ destination.ImgUrl }}" alt="">
     <div class="caption">{{destination.Description | safe}}</div>
     {% for tag in tags %}
-      <a href="/search?q={{tag.TagName}}" class="label label-lg">{{ tag.TagName }}</a>
+      <a href="/search?t={{tag.TagName}}" class="label label-lg">{{ tag.TagName }}</a>
     {% endfor %}
     <hr>
     <div id="map" style="height: 500px; width: 100%;"></div>

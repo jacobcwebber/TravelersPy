@@ -274,23 +274,34 @@ def profile():
 @app.route('/search')
 def search():
     query = request.args.get('q')
+    tag = request.args.get('t')
+    search = []
     cur = connection.cursor()
-    if query == None:
+    if query:
         cur.execute('SELECT d.DestID, DestName, c.CountryName, ImgUrl, ContName '
                     'FROM destinations d JOIN dest_images i ON d.DestID = i.DestID '
                                         'JOIN countries c ON c.CountryID = d.CountryID '
                                         'JOIN continents co ON co.ContID = c.ContID '
-                    'ORDER BY RAND() '
-                    'LIMIT 5'
-                    )
+                    'WHERE d.DestName LIKE %s OR d.Description LIKE %s'
+        , ("%" + query + "%", "% " + query + " %"))
+        search.append(query) 
+    elif tag:
+        cur.execute('SELECT d.DestID, DestName, c.CountryName, ImgUrl, ContName '
+                    'FROM destinations d JOIN dest_images i ON d.DestID = i.DestID '
+                            'JOIN countries c ON c.CountryID = d.CountryID '
+                            'JOIN continents co ON co.ContID = c.ContID '
+                            'JOIN dest_tags dt ON dt.DestID = d.DestID '
+                            'JOIN tags t on dt.TagID = t.TagID '
+                    'WHERE t.TagName = %s'
+        , tag)   
+        search.append(tag)
     else:
-         cur.execute('SELECT d.DestID, DestName, c.CountryName, ImgUrl, ContName '
+        cur.execute('SELECT d.DestID, DestName, c.CountryName, ImgUrl, ContName '
                     'FROM destinations d JOIN dest_images i ON d.DestID = i.DestID '
                                         'JOIN countries c ON c.CountryID = d.CountryID '
                                         'JOIN continents co ON co.ContID = c.ContID '
-                    'WHERE d.DestName LIKE %s OR d.Description LIKE %s'
-                    'ORDER BY RAND()'
-                    , ("%" + query + "%", "% " + query + " %"))       
+                    'LIMIT 5'
+                )
     destinations = cur.fetchall()
 
     # Add list of tags to the dictionaries for each destination
@@ -349,7 +360,7 @@ def search():
     for continent in continents:
         searchList.append(continent['ContName'])
     
-    return render_template('search.html', query=query, destinations=destinations, explored=explored, favorites=favorites, searchList=searchList)
+    return render_template('search.html', search=search, destinations=destinations, explored=explored, favorites=favorites, searchList=searchList)
 
 @app.route('/logout')
 @is_logged_in
