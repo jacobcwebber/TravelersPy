@@ -1,28 +1,3 @@
-//Basic search
-// var basicSearchOptions = {
-//     shouldSort: true,
-//     threshold: 0.25,
-//     location: 0,
-//     distance: 100,
-//     maxPatternLength: 32,
-//     minMatchCharLength: 1,
-//     keys: [
-//         'DestName',
-//     ]
-// };
-
-
-// $('#basic-search-btn').click(function() {
-//     basicSearch();
-// });
-
-// function basicSearch() {
-//     basicSearchQuery = $('#basic-search').val();
-//     basicSearchFuse = new Fuse(dests, basicSearchOptions);
-//     basicSearchResults = basicSearchFuse.search(basicSearchQuery);
-//     console.log(basicSearchResults);
-// };
-
 
 // Options used for search
 var options = {
@@ -138,3 +113,7 @@ $('#adv-search').tagsinput({
 //         $(this).attr('placeholder', 'Search...')
 //     }
 // });
+
+$('.filter-search-dropdown').click(function() {
+    $('#filter-search').toggleClass('hidden');
+})

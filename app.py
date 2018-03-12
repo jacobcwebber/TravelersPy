@@ -288,9 +288,9 @@ def search():
                     'FROM destinations d JOIN dest_images i ON d.DestID = i.DestID '
                                         'JOIN countries c ON c.CountryID = d.CountryID '
                                         'JOIN continents co ON co.ContID = c.ContID '
-                    'WHERE d.DestName LIKE %s '
+                    'WHERE d.DestName LIKE %s OR d.Description LIKE %s'
                     'ORDER BY RAND()'
-                    , "%" + query + "%")       
+                    , ("%" + query + "%", "% " + query + " %"))       
     destinations = cur.fetchall()
 
     # Add list of tags to the dictionaries for each destination
