@@ -50,47 +50,7 @@ function advSearch() {
         $('#loading').toggleClass('hidden');
 
     });
-
-    // Create list of IDs of destinations matching previous search
-//     var resultIds = [];
-//     var query = '';
-//     var fuse = new Fuse(dests, options);
-
-//     $('.tag').each(function() {
-//         query = $(this).text();
-//         destOptions = fuse.search(query);
-//         fuse = new Fuse(destOptions, options);
-//     });
-
-//     var results = destOptions;
-    
-//     // If there are not results, then hide all destinations and show "No results" text
-//     if (Object.keys(results).length == 0 && query != '') {
-//         $('.no-results').removeClass('hidden');
-//         $('.item').each(function() {
-//             $(this).addClass('hidden');
-//         });
-    
-//     // If there are results
-//     } else {
-//         // Hide the "No results" text
-//         $('.no-results').addClass('hidden');
-
-//         // Create array of IDs of dests in result
-//         for (var i = 0; i < results.length; i++) {
-//             resultIds.push("dest".concat(results[i].DestID));
-//         };
-
-//         // Compare resultIds array to array of all destIds, unhide all destinations, then hide those that
-//         // do not appear in resultsIds list
-//         for (var i = 0; i < allDestIds.length; i++) {
-//             $(`.item#${allDestIds[i]}`).removeClass('hidden');
-//             if (resultIds.indexOf(allDestIds[i]) == -1 && query != '') {
-//                 $(`.item#${allDestIds[i]}`).addClass('hidden');
-//             };
-//         };
-//     };  
-};
+}
 
 $('#adv-search').tagsinput({
     confirmKeys: [9, 13, 44],
@@ -102,18 +62,6 @@ $('#adv-search').tagsinput({
     freeInput: true    
 });
 
-
-
-// Get rid of placeholder if there is at least one tag
-// $('.bootstrap-tagsinput input').keypress(function() {
-//     var numberOfTags = $('.tag').length
-//     if (numberOfTags != 0) {
-//         $(this).attr('placeholder', '')   
-//     } else {
-//         $(this).attr('placeholder', 'Search...')
-//     }
-// });
-
-$('.filter-search-dropdown').click(function() {
+$('#search-filter-btn').click(function() {
     $('#filter-search').toggleClass('hidden');
-})
+});

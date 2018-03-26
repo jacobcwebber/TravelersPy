@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 {% set active_page = "search" %}
-{% set title = "Travelers | Search" %}
+{% set title = "Travelers | Discover" %}
 
 {% block head %}
 <link rel = 'import' href = '../static/bower_components/polymer/polymer.html'>
@@ -10,55 +10,42 @@
 
 {% block body %}
 <div class="extra-wide-container">
-  <div class="search-bars">
-    <form class="input-group search" id="basic-search" action="/search" method="GET">
-      <span class="input-group-btn">
-        <button class="btn btn-lg search-btn" id="basic-search-btn" type="submit"><i class="fas fa-search fa-lg"></i></button>
-      </span>
-      <input class="form-control input-lg search-input" type="text" name="q" placeholder="Search by destination..." {% if search %}value="{{ search[0] }}"{% endif %}>
-      <span class="input-group-btn">
-        <button class="btn btn-lg search-btn" id="basic-search-btn" type="submit"><i class="fas fa-search fa-lg"></i></button>
-      </span>
-    </form>
-    <form class="input-group search hidden" id="filter-search">
-      <input class="form-control input-lg search-input" data-role="tagsinput" type="text" placeholder="Country">
-      <span class="input-group-btn">
-        <button id="adv-search-btn" class="btn btn-lg search-btn" type="button"><i class="fas fa-search fa-lg"></i></button >
-      </span>
-    </form>
-  </div>
-    <div class="box">
-      <div class="no-results {% if destinations|length != 0 %}hidden{% endif %}">No destinations found for your search.</div>
-      <div id="loading" class="hidden">
-        <i class="fas loading-icon fa-circle-notch fa-spin"></i> <br>
-      </div>
-        <div class="item-group five-wide">
-          {% for destination in destinations %}
-            <div id ="dest{{ destination.DestID }}" class='item' style="background-image: linear-gradient(rgba(51, 64, 85, 0.40), rgba(51, 64, 85, 0.40)), url({{ destination.ImgUrl }});">
-              <div class="item-header">
-                {% if destination.DestID in explored %}
-                  <i id="{{ destination.DestID }}" class="fas fa-check fa-lg exp-full" aria-hidden="true"></i> 
-                {% else %}
-                  <i id="{{ destination.DestID }}" class="fas fa-check fa-lg" aria-hidden="true"></i> 
-                {% endif %}
-                {% if destination.DestID in favorites %}
-                  <i id="{{ destination.DestID }}" class="fas fa-star fa-lg star-full" aria-hidden="true"></i> 
-                {% else %}
-                  <i id="{{ destination.DestID }}" class="far fa-star fa-lg" aria-hidden="true"></i> 
-                {% endif %}
-              </div>
-                <a href="/destination/{{ destination.DestID }}" class="item-mid">
-                  <span class="item-title">{{ destination.DestName }}</span>
-                </a>
-                  <div class="item-footer">
-                    <a href="/edit_destination/{{ destination.DestID }}">
-                      <span class="fas fa-pencil-alt fa-lg" aria-hidden="true"></span>                             
-                    </a>
-                  </div>
-            </div>
-          {% endfor %}
-        </div>
+  <form action="/search" method="GET">
+    <div class="search search-filters" id="basic-search">
+      <input class="form-control input-lg search-input" type="text" name="l" placeholder="Search by location" {% if location %}value={{ location }}{% endif %}>
+      <input class="form-control input-lg search-input" type="text" name="t" placeholder="Filter by keywords" {% if keyword %}value={{ keyword }}{% endif %}>
+      <button class="btn btn-lg search-btn" type="submit"><i class="fas fa-search fa-x-lg"></i></button>
     </div>
+  </form>
+  <div class="box">
+    <div class="no-results {% if destinations|length != 0 %}hidden{% endif %}">No destinations found for your search.</div>
+      <div class="item-group five-wide">
+        {% for destination in destinations %}
+          <div id ="dest{{ destination.DestID }}" class='item' style="background-image: linear-gradient(rgba(51, 64, 85, 0.40), rgba(51, 64, 85, 0.40)), url({{ destination.ImgUrl }});">
+            <div class="item-header">
+              {% if destination.DestID in explored %}
+                <i id="{{ destination.DestID }}" class="fas fa-check fa-lg exp-full" aria-hidden="true"></i> 
+              {% else %}
+                <i id="{{ destination.DestID }}" class="fas fa-check fa-lg" aria-hidden="true"></i> 
+              {% endif %}
+              {% if destination.DestID in favorites %}
+                <i id="{{ destination.DestID }}" class="fas fa-star fa-lg star-full" aria-hidden="true"></i> 
+              {% else %}
+                <i id="{{ destination.DestID }}" class="far fa-star fa-lg" aria-hidden="true"></i> 
+              {% endif %}
+            </div>
+              <a href="/destination/{{ destination.DestID }}" class="item-mid">
+                <span class="item-title">{{ destination.DestName }}</span>
+              </a>
+                <div class="item-footer">
+                  <a href="/edit_destination/{{ destination.DestID }}">
+                    <span class="fas fa-pencil-alt fa-lg" aria-hidden="true"></span>                             
+                  </a>
+                </div>
+          </div>
+        {% endfor %}
+      </div>
+  </div>
 </div>
 
 <paper-toast id="toast"></paper-toast>

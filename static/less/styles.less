@@ -219,7 +219,9 @@ a:focus {
     transition: all .2s ease-in-out;
     cursor: pointer;
 }
-.fa-search {
+.fa-search,
+.fa-cog,
+.fa-filter {
     color: @teal;
     cursor: pointer;
 }
@@ -255,6 +257,9 @@ a:focus {
 .fa-pencil-alt:hover {
     color: @brown;
     transform: scale(1.175);
+}
+.fa-x-lg {
+    font-size: 2.33em;
 }
 
 /////////////////////////////////
@@ -352,29 +357,16 @@ a:focus {
 
 .search {
     margin: 0px auto 16px;
+    display: grid;
+    grid-template-columns: 6fr 1fr;
+    grid-gap: 16px;
 
     .search-input {
         background-color: @navy;
         border-color: @teal;
         color: @teal;
-        cursor: text;
-    
         &::placeholder {
             color: @teal;
-        }
-    
-        input {
-            background-color: transparent;
-            outline: none;
-            border-width: 0px;
-    
-            &::placeholder {
-                color: @teal;
-            }
-        }
-    
-        input:focus::-webkit-input-placeholder {
-            color: transparent;
         }
     } 
 
@@ -384,6 +376,8 @@ a:focus {
     .search-btn:focus {
         background-color: @navy !important;
         border-color: @teal !important;   
+        grid-column: 2;
+        grid-row: 1 / span 2;
     } 
 
     .dropdown-menu {
@@ -392,27 +386,12 @@ a:focus {
     
         .active > a {
             background-color: darken(@teal, 5%);
-    
             &:hover,
             &:focus {
                 background-color: darken(@teal, 5%); 
             }
         }
     }  
-}
-
-.search-bars {
-    text-align: right;
-
-
-    .filter-search-dropdown {
-        color: @teal;
-        margin-bottom: 16px;
-    }
-}
-
-#loading {
-    text-align: center;
 }
 
 .no-results {
