@@ -3,17 +3,17 @@
 {% set title = "Travelers | Discover" %}
 
 {% block head %}
-<link rel = 'import' href = '../static/bower_components/polymer/polymer.html'>
-<link rel = 'import' href = '../static/bower_components/polymer/polymer.html'>
+<link rel = "import" href = '../static/bower_components/polymer/polymer.html'>
+<link rel = "import" href = '../static/bower_components/polymer/polymer.html'>
 <link rel = "import" href = "../static/bower_components/paper-toast/paper-toast.html">
 {% endblock %}
 
 {% block body %}
 <div class="extra-wide-container">
-  <form action="/search" method="GET">
+  <form action="/search" method="GET" autocomplete="off">
     <div class="search search-filters" id="basic-search">
-      <input class="form-control input-lg search-input" type="text" name="l" placeholder="Search by location" {% if location %}value={{ location }}{% endif %}>
-      <input class="form-control input-lg search-input" type="text" name="t" placeholder="Filter by keywords" {% if keyword %}value={{ keyword }}{% endif %}>
+      <input class="form-control input-lg search-input" type="text" name="l" autocomplete="off" placeholder="Search by location" {% if location %}value="{{ location }}"{% endif %}>
+      <input class="form-control input-lg search-input" type="text" name="t" autocomplete="off" placeholder="Filter by keywords" {% if keyword %}value="{{ keyword }}"{% endif %}>
       <button class="btn btn-lg search-btn" type="submit"><i class="fas fa-search fa-x-lg"></i></button>
     </div>
   </form>

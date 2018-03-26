@@ -370,28 +370,26 @@ a:focus {
         }
     } 
 
-    .search-btn,
-    .search-btn:hover,
-    .search-btn:active,
-    .search-btn:focus {
-        background-color: @navy !important;
-        border-color: @teal !important;   
+    .search-btn {
+        background-color: @navy;
+        border-color: @teal;   
         grid-column: 2;
         grid-row: 1 / span 2;
+        &:hover {
+            background-color: lighten(@navy, 5%);
+        }
     } 
 
     .dropdown-menu {
         margin: 10px 0px 0px -16px;
         min-width: 200px;
     
-        .active > a {
-            background-color: darken(@teal, 5%);
-            &:hover,
-            &:focus {
-                background-color: darken(@teal, 5%); 
+        .active {
+            a {
+                background-color: darken(@teal, 5%);
             }
         }
-    }  
+    }
 }
 
 .no-results {

@@ -276,6 +276,7 @@ def search():
     keyword = request.args.get('t')
     location = request.args.get('l')
     cur = connection.cursor()
+
     if location:
         if keyword:
             cur.execute('SELECT d.DestID, DestName, c.CountryName, ImgUrl, ContName '
@@ -311,6 +312,7 @@ def search():
                     'LIMIT 5 '
                 )
     destinations = cur.fetchall()
+
 
     # Add list of tags to the dictionaries for each destination
     for dest in destinations:
@@ -369,6 +371,9 @@ def search():
 
     for continent in continents:
         searchList.append(continent['ContName'])
+
+    print(location, file=sys.stderr)
+    
     
     return render_template('search.html', location=location, keyword=keyword, destinations=destinations, explored=explored, favorites=favorites, searchList=searchList)
 
