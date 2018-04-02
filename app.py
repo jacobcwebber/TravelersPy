@@ -273,8 +273,8 @@ def profile():
 
 @app.route('/search')
 def search():
-    keyword = request.args.get('t')
-    location = request.args.get('l')
+    keyword = request.args.get('keywords')
+    location = request.args.get('location')
     cur = connection.cursor()
 
     if location:
@@ -315,7 +315,6 @@ def search():
                 )
     destinations = cur.fetchall()
 
-
     # Add list of tags to the dictionaries for each destination
     for dest in destinations:
         cur.execute('SELECT TagName '
@@ -323,7 +322,7 @@ def search():
                     'WHERE DestName = %s'
                     , dest['DestName'])
         tags = cur.fetchall()
-        
+
         tagsList = [tag['TagName'] for tag in tags]
         dest['Tags'] = tagsList
 
@@ -362,10 +361,11 @@ def search():
     countriesList = [country['CountryName'] for country in countries]
     continentsList = [continent['ContName'] for continent in continents]
     regionsList = [region['RegionName'] for region in regions]
+    tagsList = [tag['TagName'] for tag in tags]
 
     locationsList = countriesList + list(set(continentsList).union(set(regionsList)))
     
-    return render_template('search.html', location=location, keyword=keyword, destinations=destinations, explored=explored, favorites=favorites, countriesList=countriesList, continentsList=continentsList, regionsList=regionsList, locationsList=locationsList)
+    return render_template('search.html', location=location, keyword=keyword, destinations=destinations, explored=explored, favorites=favorites, locationsList=locationsList, tagsList=tagsList)
 
 @app.route('/logout')
 @is_logged_in

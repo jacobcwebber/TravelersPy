@@ -179,10 +179,8 @@ a:focus {
     border: 1px solid @teal;
     border-radius: 1em;
     display: inline;
-    transition: all .3s ease-in-out;
 
     &:hover {
-        font-size: 100%;
         color: @teal !important;
     }
 }
@@ -278,6 +276,13 @@ a:focus {
     margin-bottom: 16px;
     overflow: hidden;
 
+    .label {
+        transition: all .3s ease-in-out;       
+        &:hover {
+            font-size: 100%;
+        }
+    }
+
     .box-header-text {
         font-size: 20px; 
         font-weight: 300; 
@@ -364,8 +369,28 @@ a:focus {
         background-color: @navy;
         border-color: @teal;
         color: @teal;
+
         &::placeholder {
             color: @teal;
+        }
+        &:focus {
+            &::-webkit-input-placeholder { color:transparent; }
+            &:-moz-placeholder { color:transparent; }
+        }
+
+        input {
+            background-color: transparent;
+            border: 0px;
+
+            &::placeholder {
+                color: @teal;
+            }
+
+            &:focus {
+                outline: 0px;
+                &::-webkit-input-placeholder { color:transparent; }
+                &:-moz-placeholder { color:transparent; }
+            }
         }
     } 
 
@@ -393,7 +418,6 @@ a:focus {
 
 .no-results {
     color: @teal;
-    margin: 0px auto;
     font-size: 20px;
     font-weight: 500;
 }
