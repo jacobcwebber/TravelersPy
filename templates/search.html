@@ -17,15 +17,15 @@
       <button class="btn btn-lg search-btn" type="submit"><i class="fas fa-search fa-x-lg"></i></button>
     </div>
   </form>
-  <!-- <button id="testButton" class="btn">Click this to show.</button> -->
   <div class="box">
     <div class="no-results {% if destinations|length != 0 %}hidden{% endif %}">No destinations found for your search.</div>
-      <div class="featured-dest item-group hidden">
-        <img id="feat-dest-img" src="" alt=""></img>   
-        <div>
-          <span class="teal" id="feat-dest-name">Featured Destination Name</span>
-          <span class="teal" id="feat-dest-desc">Featured Destination Description</span>
-          <span class="teal" id="feat-dest-tags">Featured Destination Tags</span>
+      <div class="feat-dest-wrapper item-group hidden">
+        <img id="feat-dest-img" src="" alt="" width="500"></img>   
+        <div class="right">
+          <h3 class="header" style="font-weight: 700" id="feat-dest-name"></h3>
+          <span class="body" id="feat-dest-desc"></span>
+          <!-- <span class="teal" id="feat-dest-tags">Featured Destination Tags</span> -->
+          <hr>
         </div>
       </div>
       <div class="item-group five-wide">

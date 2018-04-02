@@ -356,13 +356,6 @@ a:focus {
     }
 }
 
-#featured-id {
-    object-fit: none; /* Do not scale the image */
-    object-position: center; /* Center the image within the element */
-    height: 100%;
-    width: auto;
-}
-
 /////////////////////////////////
 //            SEARCH           //
 /////////////////////////////////
@@ -421,6 +414,27 @@ a:focus {
             a {
                 background-color: darken(@teal, 5%);
             }
+        }
+    }
+}
+
+.feat-dest-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+    grid-gap: 16px;
+    margin-bottom: 16px;
+
+    .right {
+        height: 100%;
+        margin-top: 0px;
+
+        .header {
+            color: @teal;
+            margin: 0px 0px 10px;
+        }
+        .body {
+            color: lighten(@white, 50%);
         }
     }
 }
