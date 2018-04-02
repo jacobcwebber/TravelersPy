@@ -1,17 +1,24 @@
 {% set title = title|default('Travelers | Explore More') -%}
 
 <!DOCTYPE html>
-<html>
+<html lang="en-us">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="travelers" content="Travelers">
+    <meta name="description" content="A web app to explore the world from your computer!">
+    <meta name="google" content="notranslate">
+    <meta http-equiv="x-dns-prefetch-control" content="off">
     <title>{{ title }}</title>
-    <link rel="shortcut icon" href="../static/images/favicon.ico" />
-    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    <base href="http://127.0.0.1:8000/">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="shortcut icon" href="../static/images/favicon.ico" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.6/css/all.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="../static/css/styles.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto" >
+    <link rel="stylesheet" href="../static/css/styles.min.css">
     {% block head %}{% endblock %}
   </head>
   <body>

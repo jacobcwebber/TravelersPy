@@ -6,12 +6,14 @@ TO-DO:
 
 Short term:
 - Add tag categories and give every tag a category
-- Convert Search to GET request so that I can redirect from other pages with search (search from clicking on a tag)
 - Clean up Search
 - Add images to Cloudinary
+- Add more stats to Profile page (Waterfalls visisted, cities visisted, etc.)
 - Update UpdateTime on change on picture/tags/etc. Not just dests table
-- Rewatch CSS Grid videos and make the Search page responsive
+- Make the Search page responsive
 - On Search, have normal query search without pre-fill, then Advanced Search by Filter with Location, Keyword, etc
+- Change form validation to go to HTML validation and get rid of WTForms
+- Add region to all countries in DB
 
 Long term:
 - Add "Trips" so users can make and name a Trip and add destinations they want to go on that trip to it

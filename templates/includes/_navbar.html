@@ -1,11 +1,11 @@
 {% set navigation_bar = [
   ('/destinations', 'destinations', 'Explore'),
-  ('/search', 'search', 'Search')
+  ('/search', 'search', 'Discover')
 ] -%}
 {% set active_page = active_page|default('index') -%}
 
 <nav class="navbar trav-nav navbar-toggleable-md">
-  <div class="container {%if active_page == 'home'%}extra-wide{% endif %}">
+  <div class="container {%if active_page == 'home'%}extra-wide-container{% endif %}">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
         <span class="sr-only">Toggle navigation</span>

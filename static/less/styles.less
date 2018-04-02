@@ -2,19 +2,18 @@
 //      VARIABLES      //
 /////////////////////////
 
-@navy: rgb(32, 41, 51);
-@lightnavy: rgb(51, 64, 85);
-@white: rgb(250, 250, 250);
-@black: rgb(39, 39, 39);
-@teal: rgb(70, 188, 194); 
-@limegreen: rgb(123, 255, 47);
-@yellow: rgb(255, 255, 81);  
+@navy: rgb(32,41,51);
+@lightnavy: rgb(51,64,85);
+@white: rgb(250,250,250);
+@black: rgb(39,39,39);
+@teal: rgb(70,188,194); 
+@limegreen: rgb(123,255,47);
+@yellow: rgb(255,255,81);  
 @brown: rgb(205,133,63);
 
 /////////////////////////
 //       GENERAL       //
 /////////////////////////
-
 body {
     font-family: Arial, Helvetica, sans-serif;
     background-color: @navy;
@@ -50,11 +49,12 @@ a:hover,
 a:focus {
     text-decoration: none;
 }
-.wide {
+.wide-container {
     width: 900px !important;
 }
-.extra-wide {
+.extra-wide-container {
     width: 1075px !important;
+    margin: 0px auto;
 }
 .container {
     width: 90%;
@@ -102,11 +102,11 @@ a:focus {
     }
     .navbar-collapse {
         border-top: 1px solid transparent;
-        box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+        box-shadow: inset 0px 1px 0px rgba(255,255,255,.1);
     }
     .navbar-fixed-top {
         top: 0;
-        border-width: 0 0 1px;
+        border-width: 0px 0px 1px;
     }
     .navbar-collapse.collapse {
         display: none!important;
@@ -218,9 +218,15 @@ a:focus {
     transition: all .2s ease-in-out;
     cursor: pointer;
 }
-.fa-search {
+.fa-search,
+.fa-cog,
+.fa-filter {
     color: @teal;
     cursor: pointer;
+}
+.loading-icon {
+    color: @teal;
+    font-size: 30px;
 }
 .exp-full::before {
     color: @limegreen;
@@ -250,6 +256,9 @@ a:focus {
 .fa-pencil-alt:hover {
     color: @brown;
     transform: scale(1.175);
+}
+.fa-x-lg {
+    font-size: 2.33em;
 }
 
 /////////////////////////////////
@@ -309,12 +318,13 @@ a:focus {
 
             .item-mid {
                 height: 162px;
+                display: -webkit-flex;
                 display: flex;
                 align-items: center;
                 justify-content: center;
 
                 .item-title {
-                    letter-spacing: 0.8px; 
+                    letter-spacing: .8px; 
                     color: @white;
                     margin: 0px 4px;
                     font-size: 19px;
@@ -345,56 +355,41 @@ a:focus {
 /////////////////////////////////
 
 .search {
-    margin: 0 auto 16px;
+    margin: 0px auto 16px;
+    display: grid;
+    grid-template-columns: 6fr 1fr;
+    grid-gap: 16px;
 
     .search-input {
         background-color: @navy;
         border-color: @teal;
         color: @teal;
-        cursor: text;
-    
         &::placeholder {
             color: @teal;
         }
-    
-        input {
-            background-color: transparent;
-            outline: none;
-            border-width: 0px;
-    
-            &::placeholder {
-                color: @teal;
-            }
-        }
-    
-        input:focus::-webkit-input-placeholder {
-            color: transparent;
-        }
     } 
 
-    .search-btn,
-    .search-btn:hover,
-    .search-btn:active,
-    .search-btn:focus {
-        background-color: @navy !important;
-        border-color: @teal !important;   
+    .search-btn {
+        background-color: @navy;
+        border-color: @teal;   
+        grid-column: 2;
+        grid-row: 1 / span 2;
+        &:hover {
+            background-color: darken(@navy, 1.5%);
+        }
     } 
 
     .dropdown-menu {
-        margin: 10px 0 0 -16px;
+        margin: 10px 0px 0px;
         min-width: 200px;
     
-        .active > a {
-            background-color: darken(@teal, 5%);
-    
-            &:hover,
-            &:focus {
-                background-color: darken(@teal, 5%); 
+        .active {
+            a {
+                background-color: darken(@teal, 5%);
             }
         }
-    }  
+    }
 }
-
 
 .no-results {
     color: @teal;
@@ -408,11 +403,13 @@ a:focus {
 ////////////////////////////////
 
 .circle-group {
+    display: -webkit-flex;
     display: flex; 
     flex-direction: row; 
     justify-content: space-around;
 
     .circle-with-text {
+        display: -webkit-flex;
         display: flex; 
         flex-direction: column; 
         text-align: center;
@@ -436,7 +433,7 @@ a:focus {
 }
 
 .pill-element {
-    background-color: rgba(51, 64, 85, 0.5);
+    background-color: rgba(51,64,85,.5);
     border-spacing: 5px;
     border-radius: 4px;
 }
@@ -452,7 +449,7 @@ a:focus {
 }
 .nav > li > a:focus, 
 .nav > li > a:hover {
-    background-color: rgba(51, 64, 85, 0.99);
+    background-color: rgba(51,64,85,.99);
     cursor: pointer; 
 }
 #map {
@@ -532,8 +529,8 @@ a:focus {
     &:focus {
         border-color: @teal;
         outline: 0;
-        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px fade(@teal, 60%);
-        box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px fade(@teal, 60%); 
+        -webkit-box-shadow: inset 0px 1px 1px rgba(0,0,0,.075), 0px 0px 8px fade(@teal, 60%);
+                box-shadow: inset 0px 1px 1px rgba(0,0,0,.075), 0px 0px 8px fade(@teal, 60%); 
     }
 
     &::placeholder {
@@ -557,3 +554,4 @@ a:focus {
 .signup-form {
     margin-bottom: 16px;
 }
+
