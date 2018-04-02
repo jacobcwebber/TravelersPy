@@ -282,32 +282,34 @@ def search():
             cur.execute('SELECT d.DestID, DestName, c.CountryName, ImgUrl, ContName '
                         'FROM destinations d JOIN dest_images i ON d.DestID = i.DestID '
                                             'JOIN countries c ON c.CountryID = d.CountryID '
-                                            'JOIN continents co ON co.ContID = c.ContID '
+                                            'JOIN regions r ON c.RegionID = r.RegionID '
+                                            'JOIN continents co ON co.ContID = r.ContID '
                                             'JOIN dest_tags dt ON dt.DestID = d.DestID '
-                                            'JOIN tags t on dt.TagID = t.TagID '
-                        'WHERE (c.CountryName = %s OR ContName = %s) AND t.TagName = %s '
-            , (location, location, keyword)) 
+                                            'JOIN tags t ON dt.TagID = t.TagID '
+                        'WHERE (c.CountryName = %s OR ContName = %s OR r.RegionName = %s) AND t.TagName = %s '
+            , (location, location, location, keyword)) 
         else:
             cur.execute('SELECT d.DestID, DestName, c.CountryName, ImgUrl, ContName '
                         'FROM destinations d JOIN dest_images i ON d.DestID = i.DestID '
                                             'JOIN countries c ON c.CountryID = d.CountryID '
-                                            'JOIN continents co ON co.ContID = c.ContID '
-                        'WHERE c.CountryName = %s or ContName = %s'
-            , (location, location))
+                                            'JOIN regions r ON c.RegionID = r.RegionID '
+                                            'JOIN continents co ON co.ContID = r.ContID '
+                        'WHERE (c.CountryName = %s or ContName = %s OR r.RegionName = %s)'
+            , (location, location, location))
     elif keyword:
         cur.execute('SELECT d.DestID, DestName, c.CountryName, ImgUrl, ContName '
                     'FROM destinations d JOIN dest_images i ON d.DestID = i.DestID '
                                         'JOIN countries c ON c.CountryID = d.CountryID '
-                                        'JOIN continents co ON co.ContID = c.ContID '
+                                        'JOIN regions r ON c.RegionID = r.RegionID '
+                                        'JOIN continents co ON co.ContID = r.ContID '
                                         'JOIN dest_tags dt ON dt.DestID = d.DestID '
                                         'JOIN tags t on dt.TagID = t.TagID '
                     'WHERE t.TagName = %s'
         , keyword)   
     else:
-        cur.execute('SELECT d.DestID, DestName, c.CountryName, ImgUrl, ContName '
+        cur.execute('SELECT d.DestID, DestName, c.CountryName, ImgUrl    '
                     'FROM destinations d JOIN dest_images i ON d.DestID = i.DestID '
                                         'JOIN countries c ON c.CountryID = d.CountryID '
-                                        'JOIN continents co ON co.ContID = c.ContID '
                     'ORDER BY RAND() '
                     'LIMIT 5 '
                 )
@@ -316,16 +318,13 @@ def search():
 
     # Add list of tags to the dictionaries for each destination
     for dest in destinations:
-        tagsList = []
         cur.execute('SELECT TagName '
                     'FROM vTags '
                     'WHERE DestName = %s'
                     , dest['DestName'])
         tags = cur.fetchall()
         
-        for tag in tags:
-            tagsList.append(tag['TagName'])
-    
+        tagsList = [tag['TagName'] for tag in tags]
         dest['Tags'] = tagsList
 
     cur.execute("SELECT DestID "
@@ -340,13 +339,8 @@ def search():
                 , session['user'])
     exp = cur.fetchall()
 
-    favorites = []
-    for dest in favs:
-        favorites.append(dest['DestID'])
-
-    explored = []
-    for dest in exp:
-        explored.append(dest['DestID'])
+    favorites = [dest['DestID'] for dest in favs]
+    explored = [dest['DestID'] for dest in exp]
 
     cur.execute('SELECT TagName '
                 'FROM tags')
@@ -360,22 +354,18 @@ def search():
                 'FROM continents')
     continents = cur.fetchall()
 
+    cur.execute('SELECT RegionName '
+                'FROM regions')
+    regions = cur.fetchall()
     cur.close()
 
-    searchList = []
-    for tag in tags:
-        searchList.append(tag['TagName'])
+    countriesList = [country['CountryName'] for country in countries]
+    continentsList = [continent['ContName'] for continent in continents]
+    regionsList = [region['RegionName'] for region in regions]
 
-    for country in countries:
-        searchList.append(country['CountryName'])
-
-    for continent in continents:
-        searchList.append(continent['ContName'])
-
-    print(location, file=sys.stderr)
+    locationsList = countriesList + list(set(continentsList).union(set(regionsList)))
     
-    
-    return render_template('search.html', location=location, keyword=keyword, destinations=destinations, explored=explored, favorites=favorites, searchList=searchList)
+    return render_template('search.html', location=location, keyword=keyword, destinations=destinations, explored=explored, favorites=favorites, countriesList=countriesList, continentsList=continentsList, regionsList=regionsList, locationsList=locationsList)
 
 @app.route('/logout')
 @is_logged_in

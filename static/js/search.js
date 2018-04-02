@@ -52,16 +52,24 @@ function advSearch() {
     });
 }
 
-$('#adv-search').tagsinput({
-    confirmKeys: [9, 13, 44],
-    trimValue: true,
-    typeahead: {
-        afterSelect: function() {this.$element.val(''); },
-        source: searchList
-    },
-    freeInput: true    
-});
+// $('#adv-search').tagsinput({
+//     confirmKeys: [9, 13, 44],
+//     trimValue: true,
+//     typeahead: {
+//         afterSelect: function() {this.$element.val(''); },
+//         source: searchList
+//     },
+//     freeInput: true    
+// });
 
 $('#search-filter-btn').click(function() {
     $('#filter-search').toggleClass('hidden');
+});
+
+
+$("#location").typeahead({
+    hint: false,
+    highlight: true,
+    minLength: 1,
+    source: locationsList
 });

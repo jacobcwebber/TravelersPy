@@ -14,7 +14,6 @@
 /////////////////////////
 //       GENERAL       //
 /////////////////////////
-
 body {
     font-family: Arial, Helvetica, sans-serif;
     background-color: @navy;
@@ -376,12 +375,12 @@ a:focus {
         grid-column: 2;
         grid-row: 1 / span 2;
         &:hover {
-            background-color: lighten(@navy, 5%);
+            background-color: darken(@navy, 1.5%);
         }
     } 
 
     .dropdown-menu {
-        margin: 10px 0px 0px -16px;
+        margin: 10px 0px 0px;
         min-width: 200px;
     
         .active {
@@ -555,3 +554,4 @@ a:focus {
 .signup-form {
     margin-bottom: 16px;
 }
+
