@@ -273,10 +273,10 @@ def profile():
 
 @app.route('/search')
 def search():
-    keyword = request.args.get('keywords')
     location = request.args.get('location')
-    cur = connection.cursor()
+    keywords = request.args.get('keywords')
 
+    cur = connection.cursor()
     if location:
         if keyword:
             cur.execute('SELECT d.DestID, DestName, c.CountryName, ImgUrl, ContName '

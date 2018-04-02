@@ -13,7 +13,7 @@
   <form action="/search" method="GET" autocomplete="off">
     <div class="search search-filters" id="basic-search">
       <input class="form-control input-lg search-input" id="location" type="text" name="location" autocomplete="off" placeholder="Search by location" {% if location %}value="{{ location }}"{% endif %}>
-      <input class="form-control input-lg search-input" id="keywords" type="text" name="keywords" autocomplete="off" placeholder="Filter by keywords" {% if keyword %}value="{{ keyword }}"{% endif %} data-input="tagsinput">
+      <input class="form-control input-lg search-input" id="keywords" type="text" name="keywords" autocomplete="off" {% if not keyword %}placeholder="Filter by keywords"{% endif %} {% if keyword %}value="{{ keyword }}"{% endif %} data-input="tagsinput">
       <button class="btn btn-lg search-btn" type="submit"><i class="fas fa-search fa-x-lg"></i></button>
     </div>
   </form>
