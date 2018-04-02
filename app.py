@@ -363,6 +363,28 @@ def search():
     
     return render_template('search.html', location=location, keyword=keyword, destinations=destinations, explored=explored, favorites=favorites, locationsList=locationsList, tagsList=tagsList)
 
+@app.route('/alter-featured-dest', methods=['POST'])
+def alter_featured_dest():
+    data = request.values
+
+    cur = connection.cursor()
+    cur.execute("SELECT DestName, CountryName, d.DestID, c.CountryID, d.Description, ImgUrl "
+                "FROM destinations d JOIN countries c ON d.CountryID = c.CountryID "
+                                    "JOIN dest_images i ON d.DestID = i.DestID "
+                                    "JOIN dest_locations l ON d.DestID = l.DestID "
+                "WHERE d.DestID = %s"
+                , data['id'])
+    destination = cur.fetchone()
+
+    cur.execute("SELECT TagName "
+                "FROM vTags "
+                "WHERE DestName  = %s"
+                , destination['DestName'])
+    tags = cur.fetchall()
+    cur.close()
+
+    return jsonify(destination, tags)
+
 @app.route('/logout')
 @is_logged_in
 def logout():
@@ -541,7 +563,7 @@ def destination(id):
 
     except:
         flash('Destination does not exist.', 'danger')
-        return redirect(url_for('destinations'))
+        return redirect(url_for('destinations')) 
 
 class DestinationForm(Form):
     cur = connection.cursor()

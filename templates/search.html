@@ -17,8 +17,17 @@
       <button class="btn btn-lg search-btn" type="submit"><i class="fas fa-search fa-x-lg"></i></button>
     </div>
   </form>
+  <!-- <button id="testButton" class="btn">Click this to show.</button> -->
   <div class="box">
     <div class="no-results {% if destinations|length != 0 %}hidden{% endif %}">No destinations found for your search.</div>
+      <div class="featured-dest item-group hidden">
+        <img id="feat-dest-img" src="" alt=""></img>   
+        <div>
+          <span class="teal" id="feat-dest-name">Featured Destination Name</span>
+          <span class="teal" id="feat-dest-desc">Featured Destination Description</span>
+          <span class="teal" id="feat-dest-tags">Featured Destination Tags</span>
+        </div>
+      </div>
       <div class="item-group five-wide">
         {% for destination in destinations %}
           <div id ="dest{{ destination.DestID }}" class='item' style="background-image: linear-gradient(rgba(51, 64, 85, 0.40), rgba(51, 64, 85, 0.40)), url({{ destination.ImgUrl }});">
@@ -34,7 +43,7 @@
                 <i id="{{ destination.DestID }}" class="far fa-star fa-lg" aria-hidden="true"></i> 
               {% endif %}
             </div>
-              <a href="/destination/{{ destination.DestID }}" class="item-mid">
+              <a id="{{ destination.DestID }}" class="item-mid">
                 <span class="item-title">{{ destination.DestName }}</span>
               </a>
                 <div class="item-footer">
