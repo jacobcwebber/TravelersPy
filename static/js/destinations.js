@@ -14,7 +14,7 @@ $('.fa-star').click(function(event) {
             id : $(this).attr('id'),
             action : action
         }
-    }).done(function() {
+    }).done(() => {
         if ($(this).hasClass('star-full')) {
             $('#toast').attr("text", "Removed from Favorites")
             toast.show();
@@ -23,7 +23,7 @@ $('.fa-star').click(function(event) {
             toast.show()
         }
         $(this).toggleClass('star-full');
-    }).fail(function(error) {
+    }).fail((error) => {
         console.log(error);
     });
 });
@@ -44,7 +44,7 @@ $('.fa-check').click(function(event) {
             id : $(this).attr('id'),
             action : action
         }
-    }).done(function() {
+    }).done(() => {
         if ($(this).hasClass('exp-full')) {
             $('#toast').attr("text", "Removed from Explored destinations")
             toast.show();
@@ -53,7 +53,7 @@ $('.fa-check').click(function(event) {
             toast.show()
         }
         $(this).toggleClass('exp-full');
-    }).fail(function(error) {
+    }).fail((error) => {
         console.log(error);
     });
 });

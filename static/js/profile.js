@@ -41,10 +41,10 @@ $('.pill-element').click(function(event) {
         data: {
             view: view
         }
-    }).done(function(response) {
+    }).done((response) => {
         clearMarkers();
         addMarkers(response);
-    }).fail(function(error) {
+    }).fail((error) => {
         console.log(error);
     });
 });

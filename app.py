@@ -274,7 +274,7 @@ def profile():
 @app.route('/search')
 def search():
     location = request.args.get('location')
-    keywords = request.args.get('keywords')
+    keyword = request.args.get('keywords')
 
     cur = connection.cursor()
     if location:
@@ -341,20 +341,16 @@ def search():
     favorites = [dest['DestID'] for dest in favs]
     explored = [dest['DestID'] for dest in exp]
 
-    cur.execute('SELECT TagName '
-                'FROM tags')
+    cur.execute('SELECT TagName FROM tags')
     tags = cur.fetchall()
 
-    cur.execute('SELECT CountryName '
-                'FROM countries')
+    cur.execute('SELECT CountryName FROM countries')
     countries = cur.fetchall()
 
-    cur.execute('SELECT ContName '
-                'FROM continents')
+    cur.execute('SELECT ContName FROM continents')
     continents = cur.fetchall()
 
-    cur.execute('SELECT RegionName '
-                'FROM regions')
+    cur.execute('SELECT RegionName FROM regions')
     regions = cur.fetchall()
     cur.close()
 

@@ -19,11 +19,11 @@ $('#keywords').tagsinput({
 });
 
 // Show or hide Placeholder depending on existence of tags
-$('#keywords').on('itemAdded', function(e) {
+$('#keywords').on('itemAdded', (e) => {
     $('.search-input input').attr('placeholder', '');
 });
 
-$('#keywords').on('itemRemoved', function(e) {
+$('#keywords').on('itemRemoved', (e) => {
     if ($('.label').length == 0) {
         $('.search-input input').attr('placeholder', 'Filter by keywords');
     }
