@@ -3,8 +3,9 @@ let firstBox = $('.box:first-of-type')
 let featDestWrapper = $('.feat-dest-wrapper');
 let featDestImg = $('#feat-dest-img');
 let featDestName = $('#feat-dest-name');
+let featCountryName = $('#feat-country-name');
 let featDestDesc = $('#feat-dest-desc');
-let featDestTags = $('feat-dest-tags');
+let featDestTags = $('#feat-dest-tags');
 
 // Typeahead setup for Location input box
 $('#location').typeahead({
@@ -46,12 +47,17 @@ $('.item-mid').click((e) => {
             id: id
         }
     }).done((response) => {
+        let tags = response[1];
         featDestImg.attr('src', response[0].ImgUrl);
         featDestName.text(response[0].DestName);
+        featCountryName.text(response[0].CountryName);
         featDestDesc.html(response[0].Description);
+        featDestTags.empty();
+        $.each(tags, (i) => { 
+            featDestTags.append(`<a href='/search?keywords=${tags[i].TagName}' class='label label-lg'>${tags[i].TagName} </a>`)
+        });
         firstBox.removeClass('hidden');
         $.smoothScroll();
-        //featDestTags.attr('src', response[0].ImgUrl)
     }).fail((error) => {
         console.log(error);
     });

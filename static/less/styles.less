@@ -179,6 +179,7 @@ a:focus {
     border: 1px solid @teal;
     border-radius: 1em;
     display: inline;
+    margin-right: 6px;
 
     &:hover {
         color: @teal !important;
@@ -425,17 +426,21 @@ a:focus {
     grid-gap: 16px;
 
     #feat-dest-img {
+        width: 500px;
         opacity: .75;
     }
 
     .right {
         height: 100%;
+        width: 500px;
         margin-top: 0px;
 
         .header {
             color: @teal;
+            font-weight: 700;
             margin: 0px 0px 10px;
         }
+
         .body {
             color: fadeout(@white, 10%);
         }
