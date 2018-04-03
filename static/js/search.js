@@ -1,4 +1,5 @@
 //Initializing variables
+let firstBox = $('.box:first-of-type')
 let featDestWrapper = $('.feat-dest-wrapper');
 let featDestImg = $('#feat-dest-img');
 let featDestName = $('#feat-dest-name');
@@ -48,7 +49,8 @@ $('.item-mid').click((e) => {
         featDestImg.attr('src', response[0].ImgUrl);
         featDestName.text(response[0].DestName);
         featDestDesc.html(response[0].Description);
-        featDestWrapper.removeClass('hidden');
+        firstBox.removeClass('hidden');
+        $.smoothScroll();
         //featDestTags.attr('src', response[0].ImgUrl)
     }).fail((error) => {
         console.log(error);

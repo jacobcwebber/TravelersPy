@@ -423,7 +423,10 @@ a:focus {
     grid-template-columns: 1fr 1fr;
     align-items: start;
     grid-gap: 16px;
-    margin-bottom: 16px;
+
+    #feat-dest-img {
+        opacity: .75;
+    }
 
     .right {
         height: 100%;
@@ -434,7 +437,7 @@ a:focus {
             margin: 0px 0px 10px;
         }
         .body {
-            color: lighten(@white, 50%);
+            color: fadeout(@white, 10%);
         }
     }
 }

@@ -17,17 +17,19 @@
       <button class="btn btn-lg search-btn" type="submit"><i class="fas fa-search fa-x-lg"></i></button>
     </div>
   </form>
+  <div class="box hidden">
+    <div class="feat-dest-wrapper item-group">
+      <img id="feat-dest-img" src="" alt="" width="500"></img>   
+      <div class="right">
+        <h3 class="header" style="font-weight: 700" id="feat-dest-name"></h3>
+        <span class="body" id="feat-dest-desc"></span>
+        <!-- <span class="teal" id="feat-dest-tags">Featured Destination Tags</span> -->
+        <hr>
+      </div>
+    </div>
+  </div>
   <div class="box">
     <div class="no-results {% if destinations|length != 0 %}hidden{% endif %}">No destinations found for your search.</div>
-      <div class="feat-dest-wrapper item-group hidden">
-        <img id="feat-dest-img" src="" alt="" width="500"></img>   
-        <div class="right">
-          <h3 class="header" style="font-weight: 700" id="feat-dest-name"></h3>
-          <span class="body" id="feat-dest-desc"></span>
-          <!-- <span class="teal" id="feat-dest-tags">Featured Destination Tags</span> -->
-          <hr>
-        </div>
-      </div>
       <div class="item-group five-wide">
         {% for destination in destinations %}
           <div id ="dest{{ destination.DestID }}" class='item' style="background-image: linear-gradient(rgba(51, 64, 85, 0.40), rgba(51, 64, 85, 0.40)), url({{ destination.ImgUrl }});">
@@ -65,7 +67,7 @@
 </script>
 <script src="/static/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.js"></script>
 <script src="/static/bower_components/bootstrap/dist/js/bootstrap3-typeahead.js"></script>
-<script src="/static/bower_components/fuse.js/dist/fuse.min.js"></script>
+<script src="/static/bower_components/jquery-smooth-scroll/jquery.smooth-scroll.min.js"></script>
 <script src="/static/js/search.js"></script>
 <script src="/static/js/destinations.js"></script>
 
