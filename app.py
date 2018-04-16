@@ -359,7 +359,7 @@ def search():
     regionsList = [region['RegionName'] for region in regions]
     tagsList = [tag['TagName'] for tag in tags]
 
-    locationsList = countriesList + list(set(continentsList).union(set(regionsList)))
+    locationsList = list(set(countriesList).union(set(list(set(continentsList).union(set(regionsList))))))
     
     return render_template('search.html', location=location, keyword=keyword, destinations=destinations, explored=explored, favorites=favorites, locationsList=locationsList, tagsList=tagsList)
 

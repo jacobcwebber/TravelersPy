@@ -17,7 +17,7 @@
       <button class="btn btn-lg search-btn" type="submit"><i class="fas fa-search fa-x-lg"></i></button>
     </div>
   </form>
-  <div class="box hidden">
+  <div class="box hide">
     <div class="feat-dest-wrapper item-group">
       <img id="feat-dest-img" src="" alt=""></img>   
       <div class="right">
@@ -28,12 +28,14 @@
         <span class="body" id="feat-dest-desc"></span>
         <hr>
         <div class="" id="feat-dest-tags"></div>
+        <!-- <span style="bottom: 0;">Read more</span> -->
       </div>
     </div>
   </div>
   <div class="box">
     <div class="no-results {% if destinations|length != 0 %}hidden{% endif %}">No destinations found for your search.</div>
-      <div class="item-group five-wide">
+    <span class="teal no-results loading">Loading...</span>
+      <div class="item-group five-wide hide">
         {% for destination in destinations %}
           <div id ="dest{{ destination.DestID }}" class='item' style="background-image: linear-gradient(rgba(51, 64, 85, 0.40), rgba(51, 64, 85, 0.40)), url({{ destination.ImgUrl }});">
             <div class="item-header">
