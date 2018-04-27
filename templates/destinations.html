@@ -39,7 +39,7 @@
                 </div>
             {% endfor %}
         </div>
-        <div class="footer-text">Explore all {{ count.Count }} destinations...</div>
+        <div class="footer-text">Explore all {{ "{:,}".format(count.Count) }} destinations...</div>
     </div>
     <div class="box">
         <div class="box-header-text">Most Popular</div>
