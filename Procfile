@@ -1,1 +1,1 @@
-web: gunicorn wonderlist.wsgi
+web: gunicorn wonderlist:app
