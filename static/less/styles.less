@@ -327,17 +327,24 @@ a:focus {
 
             .item-mid {
                 height: 162px;
-                display: -webkit-flex;
-                display: flex;
+                display: grid;
                 cursor: pointer;
                 align-items: center;
-                justify-content: center;
 
                 .item-title {
                     letter-spacing: .8px; 
                     color: @white;
                     margin: 0px 4px;
                     font-size: 19px;
+                    align-self: end;
+                }
+                .item-subtitle {
+                    letter-spacing: .8px; 
+                    color: @white;
+                    margin: 0px 4px;
+                    font-size: 15px;
+                    opacity: .95;
+                    align-self: start;
                 }
                 
             }
