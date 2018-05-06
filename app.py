@@ -807,4 +807,4 @@ def alter_favorite():
 
 if __name__ == '__main__':
     app.secret_key='supersecretkey'
-    app.run(debug=True, port=8000)
+    #app.run(debug=True, port=8000)

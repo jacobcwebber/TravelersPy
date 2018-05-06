@@ -10,6 +10,7 @@ Short term:
 - Update UpdateTime on change on picture/tags/etc. Not just dests table
 - Make the Search page responsive
 - Change form validation to go to HTML validation and get rid of WTForms
+- Add ClearDB Ignite for online MySQL database through Heroku
 
 Long term:
 - Add "Trips" so users can make and name a Trip and add destinations they want to go on that trip to it
