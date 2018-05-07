@@ -11,6 +11,7 @@ Short term:
 - Make the Search page responsive
 - Change form validation to go to HTML validation and get rid of WTForms
 - Add ClearDB Ignite for online MySQL database through Heroku
+- Add SECRET_KEY to environment variables for safety
 
 Long term:
 - Add "Trips" so users can make and name a Trip and add destinations they want to go on that trip to it
