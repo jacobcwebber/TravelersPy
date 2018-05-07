@@ -1,10 +1,10 @@
 from flask import Flask, request, render_template, url_for, logging, session, flash, redirect, Markup, jsonify
 from flask_sqlalchemy import SQLAlchemy
 import pymysql.cursors
-from passlib.hash import sha256_crypt #change this to flask encryption
-from wtforms import Form, StringField, TextAreaField, PasswordField, validators, SelectField, FileField, ValidationError, DecimalField #get rid of this
+from passlib.hash import sha256_crypt # TODO: change this to flask encryption
+from wtforms import Form, StringField, TextAreaField, PasswordField, validators, SelectField, FileField, ValidationError, DecimalField #TODO: get rid of this
 from functools import wraps
-import re
+import re #TODO: move to the one place I'm using this
 import sys
 import json
 import os
