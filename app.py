@@ -11,9 +11,9 @@ import os
 app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
+# db = SQLAlchemy(app)
 
-from models import *
+# from models import User
 
 connection = pymysql.connect(host='localhost',
                              user='Jacob',
@@ -812,5 +812,5 @@ def alter_favorite():
     return "success"
 
 if __name__ == '__main__':
-    app.secret_key='supersecretkey'
+    app.secret_key=os.environ['SECRET_KEY']
     app.run(debug=True, port=8000)
