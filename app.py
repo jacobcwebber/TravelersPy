@@ -13,7 +13,7 @@ app.config.from_object(os.environ['APP_SETTINGS'])
 
 connection = pymysql.connect(host='localhost',
                              user='Jacob',
-                             password='691748jw',
+                             password=os.environ['DB_KEY'],
                              db='travelers',
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
