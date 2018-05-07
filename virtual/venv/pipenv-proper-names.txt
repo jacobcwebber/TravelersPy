@@ -1,7 +1,0 @@
-Flask
-et_xmlfile
-Jinja2
-MarkupSafe
-PyMySQL
-Werkzeug
-WTForms
