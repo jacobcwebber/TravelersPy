@@ -16,12 +16,12 @@ db = SQLAlchemy(app)
 
 from models import *
 
-connection = pymysql.connect(host='localhost',
-                             user='Jacob',
-                             password='691748jw',
-                             db='travelers',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+# connection = pymysql.connect(host='localhost',
+#                              user='Jacob',
+#                              password='691748jw',
+#                              db='travelers',
+#                              charset='utf8mb4',
+#                              cursorclass=pymysql.cursors.DictCursor)
 
 def is_logged_in(f):
     @wraps(f)
@@ -403,8 +403,6 @@ def logout():
 #####################################################
 
 class CountryForm(Form):
-    cur = connection.cursor()
-
     name = StringField('Name', [validators.Length(min=1, max=300)])
     description = TextAreaField('Description')
 
@@ -573,17 +571,17 @@ def destination(id):
         return redirect(url_for('destinations')) 
 
 class DestinationForm(Form):
-    cur = connection.cursor()
+    # cur = connection.cursor()
 
-    cur.execute("SELECT CountryID, CountryName "
-                "FROM countries")
+    # cur.execute("SELECT CountryID, CountryName "
+    #             "FROM countries")
 
-    countries = cur.fetchall()
-    cur.close()
+    # countries = cur.fetchall()
+    # cur.close()
 
     countriesList = [(0, "")]
-    for country in countries:
-        countriesList.append((country['CountryID'], country['CountryName']))
+    # for country in countries:
+    #     countriesList.append((country['CountryID'], country['CountryName']))
 
     name = StringField('Name')
     countryId = SelectField('Country', choices=countriesList, coerce=int)
