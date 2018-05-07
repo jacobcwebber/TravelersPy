@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template, url_for, logging, session, flash, redirect, Markup, jsonify
+from flask_sqlalchemy import SQLAlchemy
 import pymysql.cursors
 from passlib.hash import sha256_crypt #change this to flask encryption
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators, SelectField, FileField, ValidationError, DecimalField #get rid of this
@@ -11,9 +12,9 @@ import os
 app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# db = SQLAlchemy(app)
+db = SQLAlchemy(app)
 
-# from models import User
+from models import User
 
 connection = pymysql.connect(host='localhost',
                              user='Jacob',

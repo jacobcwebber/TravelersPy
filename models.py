@@ -1,4 +1,5 @@
 from app import db
+from datetime import datetime
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -19,25 +20,25 @@ class User(db.Model):
     def __repr__(self):
         return '<User ID: {}>'.format(self.user_id)
 
-class Destination(db.Model):
+# class Destination(db.Model):
 
-class Country(db.Model):
+# class Country(db.Model):
 
-class Region(db.Model):
+# class Region(db.Model):
 
-class Continent(db.Model):
+# class Continent(db.Model):
 
-class Dest_Location(db.Model):
+# class Dest_Location(db.Model):
 
-class Dest_Image(db.Model):
+# class Dest_Image(db.Model):
 
-class Dest_Tags(db.Model):
+# class Dest_Tags(db.Model):
 
-class Explored(db.Model):
+# class Explored(db.Model):
 
-class Favorites(db.Model):
+# class Favorites(db.Model):
 
-class Tag(db.Model):
+# class Tag(db.Model):
 
 
 
