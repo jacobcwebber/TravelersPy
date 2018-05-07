@@ -10,7 +10,6 @@ import os
 
 app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
-print(os.environ['APP_SETTINGS'])
 
 connection = pymysql.connect(host='localhost',
                              user='Jacob',
