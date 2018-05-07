@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, url_for, logging, session, flash, redirect, Markup, jsonify
 import pymysql.cursors
-from passlib.hash import sha256_crypt
-from wtforms import Form, StringField, TextAreaField, PasswordField, validators, SelectField, FileField, ValidationError, DecimalField
+from passlib.hash import sha256_crypt #change this to flask encryption
+from wtforms import Form, StringField, TextAreaField, PasswordField, validators, SelectField, FileField, ValidationError, DecimalField #get rid of this
 from functools import wraps
 import re
 import sys
@@ -9,12 +9,12 @@ import json
 
 app = Flask(__name__)
 
-# connection = pymysql.connect(host='localhost',
-#                              user='Jacob',
-#                              password='691748jw',
-#                              db='travelers',
-#                              charset='utf8mb4',
-#                              cursorclass=pymysql.cursors.DictCursor)
+connection = pymysql.connect(host='localhost',
+                             user='Jacob',
+                             password='691748jw',
+                             db='travelers',
+                             charset='utf8mb4',
+                             cursorclass=pymysql.cursors.DictCursor)
 
 def is_logged_in(f):
     @wraps(f)
