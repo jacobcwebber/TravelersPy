@@ -18,7 +18,7 @@ from models import *
 
 connection = pymysql.connect(host='localhost',
                              user='Jacob',
-                             password=os.environ['DATABASE_PASSWORD'],
+                             password='691748jw',
                              db='travelers',
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
