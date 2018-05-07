@@ -9,12 +9,12 @@ import json
 
 app = Flask(__name__)
 
-connection = pymysql.connect(host='localhost',
-                             user='Jacob',
-                             password='691748jw',
-                             db='travelers',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+# connection = pymysql.connect(host='localhost',
+#                              user='Jacob',
+#                              password='691748jw',
+#                              db='travelers',
+#                              charset='utf8mb4',
+#                              cursorclass=pymysql.cursors.DictCursor)
 
 def is_logged_in(f):
     @wraps(f)
