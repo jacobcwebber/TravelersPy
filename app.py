@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template, url_for, logging, session, flash, redirect, Markup, jsonify
 from flask_sqlalchemy import SQLAlchemy
 import pymysql.cursors
+import psycopg2
 from passlib.hash import sha256_crypt # TODO: change this to flask encryption
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators, SelectField, FileField, ValidationError, DecimalField #TODO: get rid of this
 from functools import wraps
