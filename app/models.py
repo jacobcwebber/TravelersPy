@@ -9,7 +9,7 @@ class User(db.Model):
     email = db.Column(db.String(100), unique=True, nullable=False)
     password_hash = db.Column(db.String(100), nullable=False)
     is_admin = db.Column(db.Boolean, default=0)
-    time_created = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    time_created = db.Column(db.DateTime, index=True, default=datetime.utcnow, nullable=False)
 
     def __init__(self, user_id, email, password_hash, is_admin, time_created):
         self.user_id = user_id
@@ -72,7 +72,7 @@ class Destination(db.Model):
     country_id = db.Column(db.Integer, db.ForeignKey('countries.country_id', onupdate="CASCADE", ondelete="CASCADE"))
     dest_name = db.Column(db.String(100), unique=True, nullable=False)
     description = db.Column(db.Text)
-    update_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow())
+    update_date = db.Column(db.DateTime, index=True, default=datetime.utcnow, nullable=False, onupdate=datetime.utcnow)
 
     def __init__(self, dest_id, country_id, dest_name, description, update_date):
         self.dest_id = dest_id
@@ -97,7 +97,7 @@ class Dest_Location(db.Model):
         self.lng = lng
 
     def __repr__(self):
-        return '<Destination ID: {}, Coordinates: {}, {}>'.format(self.dest_id, self.lat, self.lng)
+        return '<Dest ID: {}, Coordinates: ({}, {})>'.format(self.dest_id, self.lat, self.lng)
 
 class Dest_Image(db.Model):
     __tablename__ = 'dest_images'
@@ -110,7 +110,7 @@ class Dest_Image(db.Model):
         self.img_url = img_url
 
     def __repr__(self):
-        return '<Destination ID: {}, Image URL: {}>'.format(self.dest_id, self.img_url)
+        return '<Dest ID: {}, Image URL: {}>'.format(self.dest_id, self.img_url)
         
 class Tag(db.Model):
     __tablename__ = 'tags'
@@ -137,7 +137,7 @@ class Dest_Tags(db.Model):
         self.tag_id = tag_id
 
     def __repr__(self):
-        return '<Destination ID: {}, Tag ID: {}>'.format(self.dest_id, self.tag_id)
+        return '<Dest ID: {}, Tag ID: {}>'.format(self.dest_id, self.tag_id)
 
 class Explored(db.Model):
     __tablename__ = 'explored'
@@ -163,7 +163,7 @@ class Favorites(db.Model):
         self.dest_id = dest_id
 
     def __repr__(self):
-        return '<User ID: {}, Favorite Dest ID: {}>'.format(self.user_id, self.dest_id)
+        return '<User ID: {}, Favorited Dest ID: {}>'.format(self.user_id, self.dest_id)
 
 
 

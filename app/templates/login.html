@@ -6,12 +6,20 @@
   <div class="panel-body">
     <form action="" method="POST">
       <div class="form-group">
-        
+        {{ form.username.label }} <br>
+        {{ form.username(size=32) }} <br>
+        {% for error in form.username.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
       </div>
       <div class="form-group">
-        <input placeholder = "password" type="password" name="password" class="form-control" value={{request.form.password}}>
+        {{ form.password.label }} <br>
+        {{ form.password(size=32) }} <br>
+        {% for error in form.password.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}      
       </div>
-      <center><button type="submit" class="btn btn-primary btn-lg">Login</button></center>
+      <button type="submit" class="btn btn-primary btn-lg">Login</button>
     </form>
   </div>
 </div>  

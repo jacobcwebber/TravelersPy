@@ -3,7 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 import pymysql.cursors
 import psycopg2
 from passlib.hash import sha256_crypt # TODO: change this to flask encryption
-from wtforms import Form, StringField, TextAreaField, PasswordField, validators, SelectField, FileField, ValidationError, DecimalField #TODO: get rid of this
 from functools import wraps
 import re #TODO: move to the one place I'm using this
 import sys
@@ -12,7 +11,6 @@ import os
 
 app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 from models import *
