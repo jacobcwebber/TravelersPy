@@ -17,13 +17,6 @@ db = SQLAlchemy(app)
 
 from models import *
 
-# connection = pymysql.connect(host='localhost',
-#                              user='Jacob',
-#                              password='691748jw',
-#                              db='travelers',
-#                              charset='utf8mb4',
-#                              cursorclass=pymysql.cursors.DictCursor)
-
 def is_logged_in(f):
     @wraps(f)
     def wrap(*args, **kwargs):
@@ -53,23 +46,8 @@ def not_found(error):
 #####          USER FUNCTIONALITY                ####
 #####################################################
 
-#Forms
-class RegisterForm(Form):
-    email = StringField('', [
-        validators.Email(message = "Please submit a valid email"),
-        validators.Length(min=4, max=50, message='Email must be 5 to 50 character long')
-        ], render_kw={"placeholder": "Email"})
-    firstName = StringField('', [
-        validators.InputRequired()
-    ], render_kw={"placeholder": "First name"})
-    lastName = StringField('', [
-        validators.InputRequired()
-    ], render_kw={"placeholder": "Last name"}) 
-    password = PasswordField('', [
-        validators.DataRequired(),
-    ], render_kw={"placeholder": "Password"})
-
 @app.route('/', methods=['POST', 'GET'])
+@app.route('/index', methods=['POST', 'GET'])
 def index():
     form = RegisterForm(request.form)
 
@@ -127,45 +105,6 @@ def index():
                 return render_template('login.html', error=error)
 
     return render_template('home.html', form=form)
-
-def login():
-    password_attempt = request.form['password']
-
-    cur = connection.cursor()
-
-    result = cur.execute("SELECT * "
-                            "FROM users "
-                            "WHERE Username = %s"
-                            , [username])
-    user = cur.fetchone()
-    cur.close()
-
-    if result > 0:
-        password = user['Password']
-        userId = user['UserID'] 
-        firstname = user['FirstName']
-
-        if sha256_crypt.verify(password_attempt, password):
-            
-            # set session variables
-            session['logged_in'] = True
-            session['user'] = userId
-
-            if user['IsAdmin'] == 1:
-                session['is_admin'] = True
-            else:
-                session['is_admin'] = False
-
-            return redirect(url_for('index'))
-
-        else:
-            error = 'Invalid login'
-            return render_template('login.html', error=error)
-        cur.close()
-
-    else:
-        error = "Username not found."
-        return render_template('login.html', error=error)
 
 @app.route('/change-map', methods=['POST'])
 def change_map():
@@ -403,10 +342,6 @@ def logout():
 #####             COUNTRIES PAGES                ####
 #####################################################
 
-class CountryForm(Form):
-    name = StringField('Name', [validators.Length(min=1, max=300)])
-    description = TextAreaField('Description')
-
 @app.route('/countries')
 @is_logged_in
 def countries():
@@ -570,32 +505,6 @@ def destination(id):
     except:
         flash('Destination does not exist.', 'danger')
         return redirect(url_for('destinations')) 
-
-class DestinationForm(Form):
-    # cur = connection.cursor()
-
-    # cur.execute("SELECT CountryID, CountryName "
-    #             "FROM countries")
-
-    # countries = cur.fetchall()
-    # cur.close()
-
-    countriesList = [(0, "")]
-    # for country in countries:
-    #     countriesList.append((country['CountryID'], country['CountryName']))
-
-    name = StringField('Name')
-    countryId = SelectField('Country', choices=countriesList, coerce=int)
-    category = SelectField('Category', choices=[
-        (0, ""),
-        (1, "Natural Site"),
-        (2, "Cultural Site"),
-        (3, "Activity")], coerce=int)
-    lat = DecimalField('Latitude', places=8, rounding=None)
-    lng = DecimalField('Longitude', places=8, rounding=None)
-    description = TextAreaField('Description')
-    imgUrl = StringField('Image Upload', [validators.URL(message="Not a valid url")])
-    tags = StringField('Tags')
 
 @app.route('/create-destination', methods=['POST', 'GET'])
 @is_logged_in
