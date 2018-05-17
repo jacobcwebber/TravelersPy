@@ -1,4 +1,5 @@
-from flask import render_template, redirect, url_for
+from flask import render_template, redirect, url_for, flash
+from flask_login import current_user, login_user, logout_user, login_required
 from app import app
 from app.forms import LoginForm, RegisterForm
 
@@ -66,44 +67,20 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
     form = LoginForm()
     if form.validate_on_submit():
-        return redirect('/')
+        user = User.query.filter_by(email=form.email.data).first()
+        if user is None or not user.check_password(form.password.data):
+            flash('Invalid username or password.')
+            return redirect(url_for('login'))
+        login_user(user, remember=form.remember_me.data)
+        return redirect(url_for('index'))
+    return render_template('login.html', form=form)
 
-    password_attempt = form.password
-
-    cur = connection.cursor()
-
-    result = cur.execute("SELECT * "
-                            "FROM users "
-                            "WHERE Username = %s"
-                            , [username])
-    user = cur.fetchone()
-    cur.close()
-
-    if result > 0:
-        password = user['Password']
-        userId = user['UserID'] 
-        firstname = user['FirstName']
-
-        if sha256_crypt.verify(password_attempt, password):
-            
-            # set session variables
-            session['logged_in'] = True
-            session['user'] = userId
-
-            if user['IsAdmin'] == 1:
-                session['is_admin'] = True
-            else:
-                session['is_admin'] = False
-
-            return redirect(url_for('index'))
-
-        else:
-            error = 'Invalid login'
-            return render_template('login.html', error=error)
-        cur.close()
-
-    else:
-        error = "Username not found."
-        return render_template('login.html', error=error)
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('index'))

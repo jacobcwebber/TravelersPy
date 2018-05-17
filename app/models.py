@@ -1,10 +1,12 @@
 from app import db
 from datetime import datetime
+from flask_login import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     __tablename__ = 'users'
 
-    user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), unique=True)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password_hash = db.Column(db.String(100), nullable=False)
@@ -21,10 +23,20 @@ class User(db.Model):
     def __repr__(self):
         return '<User ID: {}>'.format(self.user_id)
 
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+@login.user_loader
+def load_user(id):
+    return User.query.get(int(user_id))
+
 class Continent(db.Model):
     __tablename__ = 'continents'
 
-    cont_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    cont_id = db.Column(db.Integer, primary_key=True)
     cont_name = db.Column(db.String(100), unique=True, nullable=False)
     regions = db.relationship('Region', backref='continent', lazy='dynamic')
 
@@ -38,7 +50,7 @@ class Continent(db.Model):
 class Region(db.Model):
     __tablename__ = 'regions'
 
-    region_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    region_id = db.Column(db.Integer, primary_key=True)
     cont_id = db.Column(db.Integer, db.ForeignKey('continents.cont_id', onupdate="CASCADE", ondelete="CASCADE"))
     region_name = db.Column(db.String(100), unique=True, nullable=False)
 
@@ -53,7 +65,7 @@ class Region(db.Model):
 class Country(db.Model):
     __tablename__ = 'countries'
 
-    country_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    country_id = db.Column(db.Integer, primary_key=True)
     region_id = db.Column(db.Integer, db.ForeignKey('regions.region_id', onupdate="CASCADE", ondelete="CASCADE"))
     country_name = db.Column(db.String(100), unique=True, nullable=False)
 
@@ -68,7 +80,7 @@ class Country(db.Model):
 class Destination(db.Model):
     __tablename__ = 'destinations'
 
-    dest_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    dest_id = db.Column(db.Integer, primary_key=True)
     country_id = db.Column(db.Integer, db.ForeignKey('countries.country_id', onupdate="CASCADE", ondelete="CASCADE"))
     dest_name = db.Column(db.String(100), unique=True, nullable=False)
     description = db.Column(db.Text)
@@ -115,7 +127,7 @@ class Dest_Image(db.Model):
 class Tag(db.Model):
     __tablename__ = 'tags'
 
-    tag_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    tag_id = db.Column(db.Integer, primary_key=True)
     tag_name = db.Column(db.String(255), nullable=False)
 
     def __init__(self, tag_id, tag_name):

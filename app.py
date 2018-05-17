@@ -2,9 +2,7 @@ from flask import Flask, request, render_template, url_for, logging, session, fl
 from flask_sqlalchemy import SQLAlchemy
 import pymysql.cursors
 import psycopg2
-from passlib.hash import sha256_crypt # TODO: change this to flask encryption
 from functools import wraps
-import re #TODO: move to the one place I'm using this
 import sys
 import json
 import os
@@ -14,16 +12,6 @@ app.config.from_object(os.environ['APP_SETTINGS'])
 db = SQLAlchemy(app)
 
 from models import *
-
-def is_logged_in(f):
-    @wraps(f)
-    def wrap(*args, **kwargs):
-        if 'logged_in' in session:
-            return f(*args, **kwargs)
-        else:
-            flash ('Unauthorized, please login.', 'danger')
-            return redirect(url_for('login'))
-    return wrap
 
 def is_admin(f):
     @wraps(f)

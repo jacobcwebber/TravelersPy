@@ -13,6 +13,7 @@ class RegisterForm(FlaskForm):
     first_name = StringField('', validators=[InputRequired()], render_kw={"placeholder": "First name"})
     last_name = StringField('', validators=[InputRequired()], render_kw={"placeholder": "Last name"}) 
     password = PasswordField('', validators=[InputRequired()], render_kw={"placeholder": "Password"})
+    submit = SubmitField('Register')
 
 class CountryForm(FlaskForm):
     name = StringField('Name', validators=[InputRequired()])
@@ -26,3 +27,4 @@ class DestinationForm(FlaskForm):
     description = TextAreaField('Description')
     imgUrl = StringField('Image Upload', validators=[InputRequired()])
     tags = StringField('Tags', validators=[InputRequired(message="At least one tag required.")])
+    submit  = SubmitField('Create Destination')
