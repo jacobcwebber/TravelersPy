@@ -7,12 +7,6 @@ import sys
 import json
 import os
 
-app = Flask(__name__)
-app.config.from_object(os.environ['APP_SETTINGS'])
-db = SQLAlchemy(app)
-
-from models import *
-
 def is_admin(f):
     @wraps(f)
     def wrap(*args, **kwargs):
@@ -22,11 +16,6 @@ def is_admin(f):
             flash ('Unauthorized. Requires administrator access.', 'danger')
             return redirect(url_for('index'))
     return
-
-@app.errorhandler(404)
-def not_found(error):
-    return render_template('error.html'), 404
-
 
 #####################################################
 #####          USER FUNCTIONALITY                ####
@@ -68,7 +57,6 @@ def change_map():
     return jsonify(locationsList)
 
 @app.route('/favorites')
-@is_logged_in
 def favorites():
     cur = connection.cursor()
     cur.execute('SELECT d.DestID, DestName, ImgUrl '
@@ -81,7 +69,6 @@ def favorites():
     return render_template('favorites.html', favorites=favorites)
 
 @app.route('/explored')
-@is_logged_in
 def explored(): 
     cur = connection.cursor()
     cur.execute('SELECT d.DestID, DestName, ImgUrl '
@@ -94,7 +81,6 @@ def explored():
     return render_template('explored.html', explored=explored)
 
 @app.route('/profile')
-@is_logged_in
 def profile():
     cur = connection.cursor()
     cur.execute("SELECT FirstName "
@@ -263,7 +249,6 @@ def alter_featured_dest():
 #####################################################
 
 @app.route('/countries')
-@is_logged_in
 def countries():
     cur = connection.cursor()
     result = cur.execute("SELECT c.CountryName, count(d.DestName) AS DestCount, c.CountryID "
@@ -277,7 +262,6 @@ def countries():
     return render_template('countries.html', countries=countries)
 
 @app.route('/country/<string:id>')
-@is_logged_in
 def country(id):
     cur = connection.cursor()
 
@@ -306,7 +290,6 @@ def country(id):
 
 
 @app.route('/edit-country/<string:id>', methods=['POST', 'GET'])
-@is_logged_in
 def edit_country(id):
     cur = connection.cursor()
     cur.execute("SELECT CountryName, Description "
@@ -344,7 +327,6 @@ def edit_country(id):
 #####################################################
 
 @app.route('/destinations')
-@is_logged_in
 def destinations():
     cur = connection.cursor()
     cur.execute("SELECT d.DestID, DestName, ImgUrl "
@@ -388,7 +370,6 @@ def destinations():
     return render_template('destinations.html', count=count, favorites=favorites, explored=explored, recent=recent, popular=popular)
 
 @app.route('/destination/<string:id>', methods=['POST', 'GET'])
-@is_logged_in
 def destination(id):
     try:
         cur = connection.cursor()
@@ -414,7 +395,6 @@ def destination(id):
         return redirect(url_for('destinations')) 
 
 @app.route('/create-destination', methods=['POST', 'GET'])
-@is_logged_in
 def create_destination():
     form = DestinationForm(request.form)
     if request.method == 'POST' and form.validate():
@@ -486,7 +466,6 @@ def create_destination():
     return render_template('create_destination.html', form=form, tags=tagsList)
 
 @app.route('/edit_destination/<string:id>', methods=['POST', 'GET'])
-@is_logged_in
 def edit_destination(id):
     cur = connection.cursor()
 
