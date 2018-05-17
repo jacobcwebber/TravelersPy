@@ -4,6 +4,29 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from hashlib import md5
 
+@login.user_loader
+def load_user(id):
+    return User.query.get(int(user_id))
+
+## Association tables
+
+explored = db.Table('explored',
+    db.Column('user_id', db.Integer, db.ForeignKey('users.user_id'), nullable=False),
+    db.Column('dest_id', db.Integer, db.ForeignKey('destinations.dest_id'), nullable=False)
+)
+
+favorites = db.Table('favorites',
+    db.Column('user_id', db.Integer, db.ForeignKey('users.user_id'), nullable=False),
+    db.Column('dest_id', db.Integer, db.ForeignKey('destinations.dest_id'), nullable=False)
+)
+
+dest_tags = db.Table('dest_tags',
+    db.Column('dest_id', db.Integer, db.ForeignKey('destinations.dest_id'), nullable=False),
+    db.Column('tag_id', db.Integer, db.ForeignKey('tags.tag_id'), nullable=False)
+)
+
+## Model tables
+
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
 
@@ -15,11 +38,19 @@ class User(UserMixin, db.Model):
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     is_admin = db.Column(db.Boolean, default=0)
     time_created = db.Column(db.DateTime, index=True, default=datetime.utcnow, nullable=False)
+    explored_dests = db.relationship(
+        'Destination', secondary=explored,
+        backref=db.backref('users', lazy='dynamic'))
+    favorited_dests = db.relationship(
+        'Destination', secondary=favorites,
+        backref=db.backref('users', lazy='dynamic') )
 
-    def __init__(self, user_id, email, password_hash, is_admin, time_created):
+    def __init__(self, user_id, email, password_hash, about, last_seen, is_admin, time_created):
         self.user_id = user_id
         self.email = email
         self.password_hash = password_hash
+        self.about = about
+        self.last_seen = last_seen
         self.is_admin = is_admin
         self.time_created = time_created
 
@@ -35,11 +66,7 @@ class User(UserMixin, db.Model):
     def avatar(self, size):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
         return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, size)
-
-@login.user_loader
-def load_user(id):
-    return User.query.get(int(user_id))
-
+        
 class Continent(db.Model):
     __tablename__ = 'continents'
 
@@ -58,7 +85,7 @@ class Region(db.Model):
     __tablename__ = 'regions'
 
     region_id = db.Column(db.Integer, primary_key=True)
-    cont_id = db.Column(db.Integer, db.ForeignKey('continents.cont_id', onupdate="CASCADE", ondelete="CASCADE"))
+    cont_id = db.Column(db.Integer, db.ForeignKey('continents.cont_id', onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
     region_name = db.Column(db.String(100), unique=True, nullable=False)
 
     def __init__(self, region_id, cont_id, region_name):
@@ -92,6 +119,8 @@ class Destination(db.Model):
     dest_name = db.Column(db.String(100), unique=True, nullable=False)
     description = db.Column(db.Text)
     update_date = db.Column(db.DateTime, index=True, default=datetime.utcnow, nullable=False, onupdate=datetime.utcnow)
+    tags = db.relationship('Tag', secondary='dest_tags',
+        backref=db.backref('destinations', lazy='dynamic'))
 
     def __init__(self, dest_id, country_id, dest_name, description, update_date):
         self.dest_id = dest_id
@@ -143,46 +172,6 @@ class Tag(db.Model):
 
     def __repr__(self):
         return '<{}>'.format(self.tag_name)
-
-
-class Dest_Tag(db.Model):
-    __tablename__ = 'dest_tags'
-
-    dest_id = db.Column(db.Integer, db.ForeignKey('destinations.dest_id', onupdate="CASCADE", ondelete="CASCADE"), primary_key=True)
-    tag_id = db.Column(db.Integer, db.ForeignKey('tags.tag_id', onupdate="CASCADE", ondelete="CASCADE"), primary_key=True)
-
-    def __init__(self, dest_id, tag_id):
-        self.dest_id = dest_id
-        self.tag_id = tag_id
-
-    def __repr__(self):
-        return '<Dest ID: {}, Tag ID: {}>'.format(self.dest_id, self.tag_id)
-
-class Explored(db.Model):
-    __tablename__ = 'explored'
-
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id', onupdate="CASCADE", ondelete="CASCADE"), primary_key=True)
-    dest_id = db.Column(db.Integer, db.ForeignKey('destinations.dest_id', onupdate="CASCADE", ondelete="CASCADE"), primary_key=True)
-
-    def __init__(self, user_id, dest_id):
-        self.user_id = user_id
-        self.dest_id = dest_id
-
-    def __repr__(self):
-        return '<User ID: {}, Explored Dest ID: {}>'.format(self.user_id, self.dest_id)
-
-class Favorite(db.Model):
-    __tablename__ = 'favorites'
-
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id', onupdate="CASCADE", ondelete="CASCADE"), primary_key=True)
-    dest_id = db.Column(db.Integer, db.ForeignKey('destinations.dest_id', onupdate="CASCADE", ondelete="CASCADE"), primary_key=True)
-
-    def __init__(self, user_id, dest_id):
-        self.user_id = user_id
-        self.dest_id = dest_id
-
-    def __repr__(self):
-        return '<User ID: {}, Favorited Dest ID: {}>'.format(self.user_id, self.dest_id)
 
 
 
