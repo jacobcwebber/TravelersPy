@@ -32,66 +32,6 @@ def not_found(error):
 #####          USER FUNCTIONALITY                ####
 #####################################################
 
-@app.route('/', methods=['POST', 'GET'])
-@app.route('/index', methods=['POST', 'GET'])
-def index():
-    form = RegisterForm(request.form)
-
-    if request.method == 'POST':
-        if request.form['submit'] == "Create account":
-            email = form.email.data
-            first = form.firstName.data
-            last = form.lastName.data
-            password = sha256_crypt.encrypt(str(form.password.data))
-
-            cur = connection.cursor()
-            cur.execute("INSERT INTO users(FirstName, LastName, Password, Email) "
-                        "VALUES (%s, %s, %s, %s, %s)"
-                        , (first, last, password, email))
-
-            connection.commit()
-            cur.close()
-
-            flash('Congratulations! You are now registered.', 'success')
-
-            return redirect(url_for('login'))
-        elif request.form['submit'] == "Login":
-            email = request.form['email']
-            password_attempt = request.form['password']
-
-            cur = connection.cursor()
-            result = cur.execute("SELECT * "
-                                "FROM users "
-                                "WHERE Email = %s"
-                                , [email])
-            user = cur.fetchone()
-            cur.close()
-
-            if result > 0:
-                password = user['Password']
-                userId = user['UserID'] 
-                firstname = user['FirstName']
-                isAdmin = user['IsAdmin']
-
-                if sha256_crypt.verify(password_attempt, password):
-                    
-                    session['user'] = userId
-                    session['logged_in'] = True
-                    session['is_admin'] = isAdmin
-
-                    return redirect(url_for('destinations'))
-
-                else:
-                    error = 'Invalid login. Please try again.'
-                    return render_template('login.html', error=error)
-                cur.close()
-
-            else:
-                error = "User not found."
-                return render_template('login.html', error=error)
-
-    return render_template('home.html', form=form)
-
 @app.route('/change-map', methods=['POST'])
 def change_map():
     view = request.form['view']
@@ -318,12 +258,6 @@ def alter_featured_dest():
 
     return jsonify(destination, tags)
 
-@app.route('/logout')
-@is_logged_in
-def logout():
-    session.clear()
-    return redirect(url_for('index'))
-
 #####################################################
 #####             COUNTRIES PAGES                ####
 #####################################################
@@ -452,19 +386,6 @@ def destinations():
     count = cur.fetchone()
 
     return render_template('destinations.html', count=count, favorites=favorites, explored=explored, recent=recent, popular=popular)
-
-@app.route('/destinations-admin')
-@is_logged_in
-def destinations_admin():
-    cur = connection.cursor()
-    cur.execute("SELECT * "
-                "FROM destinations d JOIN countries c ON d.CountryID = c.CountryID "
-                "ORDER BY d.DestName")
-
-    destinations = cur.fetchall()
-    cur.close() 
-
-    return render_template('destinations_admin.html', destinations=destinations)
 
 @app.route('/destination/<string:id>', methods=['POST', 'GET'])
 @is_logged_in

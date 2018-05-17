@@ -1,7 +1,8 @@
-from app import db
+from app import db, login
 from datetime import datetime
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+from hashlib import md5
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -10,6 +11,8 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), unique=True)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password_hash = db.Column(db.String(100), nullable=False)
+    about = db.Column(db.String(140))
+    last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     is_admin = db.Column(db.Boolean, default=0)
     time_created = db.Column(db.DateTime, index=True, default=datetime.utcnow, nullable=False)
 
@@ -28,6 +31,10 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+    def avatar(self, size):
+        digest = md5(self.email.lower().encode('utf-8')).hexdigest()
+        return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, size)
 
 @login.user_loader
 def load_user(id):
@@ -138,7 +145,7 @@ class Tag(db.Model):
         return '<{}>'.format(self.tag_name)
 
 
-class Dest_Tags(db.Model):
+class Dest_Tag(db.Model):
     __tablename__ = 'dest_tags'
 
     dest_id = db.Column(db.Integer, db.ForeignKey('destinations.dest_id', onupdate="CASCADE", ondelete="CASCADE"), primary_key=True)
@@ -164,7 +171,7 @@ class Explored(db.Model):
     def __repr__(self):
         return '<User ID: {}, Explored Dest ID: {}>'.format(self.user_id, self.dest_id)
 
-class Favorites(db.Model):
+class Favorite(db.Model):
     __tablename__ = 'favorites'
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id', onupdate="CASCADE", ondelete="CASCADE"), primary_key=True)

@@ -13,7 +13,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" {% if session.logged_in %} href="{{ url_for('destinations') }}" {% else %} href="{{ url_for('index') }}"" {% endif %}>
+      <a class="navbar-brand" {% if session.logged_in %} href="{{ url_for('destinations') }}" {% else %} href="{{ url_for('index') }}" {% endif %}>
         <img class="icon" src="/static/images/favicon.ico"></img>
         <span class="logo">Wanderlist</span>
       </a>
@@ -40,7 +40,7 @@
           </li>
           {% endif %}
           <li{% if "profile" == active_page %} class="active" {% endif %}>
-            <a class="nav-item" href="{{ url_for('profile') }}">
+            <a class="nav-item" href="{{ url_for('user', user_id=current_user.user_id) }}">
               <section>Profile</section>
             </a>
           </li>
