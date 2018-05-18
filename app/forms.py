@@ -7,15 +7,14 @@ class LoginForm(FlaskForm):
     email = StringField('Email', validators=[InputRequired()])
     password = PasswordField('Password', validators=[InputRequired()])
     remember_me = BooleanField('Remember Me')
-    submit = SubmitField('Sign In')
+    login = SubmitField('Sign In')
 
 class RegistrationForm(FlaskForm):
-    email = StringField('Email', validators=[InputRequired()])
-    first_name = StringField('First Name', validators=[InputRequired(), Email()])
+    email = StringField('Email', validators=[InputRequired(), Email()])
+    first_name = StringField('First Name', validators=[InputRequired()])
     last_name = StringField('Last Name', validators=[InputRequired()]) 
     password = PasswordField('Password', validators=[InputRequired()])
-    password_repeat = PasswordField('Repeat Password', validators=[InputRequired(), EqualTo('password')])
-    submit = SubmitField('Register')
+    register = SubmitField('Register')
 
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()

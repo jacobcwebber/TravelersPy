@@ -2,6 +2,7 @@
   ('/destinations', 'destinations', 'Explore'),
   ('/search', 'search', 'Discover')
 ] -%}
+{% from "includes/_formhelpers.html" import render_field %}
 {% set active_page = active_page|default('index') -%}
 
 <nav class="navbar trav-nav navbar-toggleable-md">
@@ -46,11 +47,12 @@
           </li>
         </ul>
         {% else %}
-        <form method="POST" action="" class="form-inline login-form">
-            <input class="form-control input-sm trav-input" name="email"  type="text" placeholder="Email">
-            <input class="form-control input-sm trav-input" name="password" type="password" placeholder="Password">
-            <input type="submit" name="submit" class="btn btn-sm btn-teal" value="Login">
-          </form>
+        <form action="" method="POST" class="form-inline login-form">
+          {{login_form.hidden_tag()}}
+          {{render_field(login_form.email, class_="form-control input-sm trav-input", placeholder="Email")}}
+          {{render_field(login_form.password, class_="form-control input-sm trav-input", placeholder="Password")}}
+          {{render_field(login_form.login, class_="btn btn-sm btn-teal")}}
+        </form>
         {% endif %}
     </div>
   </div>
