@@ -11,7 +11,7 @@ import sys
 @app.route('/index', methods=['GET', 'POST'])
 def index():
     if current_user.is_authenticated:
-        return redirect(url_to('destinations'))
+        return redirect(url_for('home'))
     login_form = LoginForm()
     registration_form = RegistrationForm()
 
@@ -40,7 +40,7 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('home'))
     login_form = LoginForm()
 
     if login_form.validate_on_submit() and login_form.login.data:
@@ -61,48 +61,88 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-@app.before_request
-def before_request():
-    if current_user.is_authenticated:
-        current_user.last_seen = datetime.utcnow()
-        db.session.commit()
-
-@app.route('/user/<user_id>')
+@app.route('/home')
 @login_required
-def user(user_id):
-    user = User.query.filter_by(user_id=user_id).first_or_404()
+def home():
+    recent = Destination.query.first()
+    print(recent.img_url, file=sys.stderr)
+    # cur = connection.cursor()
+    # cur.execute("SELECT d.DestID, DestName, ImgUrl "
+    #             "FROM destinations d JOIN dest_images i on d.destID = i.DestID "
+    #             "ORDER BY d.UpdateDate DESC")
+    # recent = cur.fetchall()
+
+    # cur.execute("SELECT d.DestID, d.DestName, i.ImgUrl, count(f.DestID) AS Favorites "
+    #             "FROM destinations d JOIN dest_images i on d.destID = i.DestID "
+    #                                 "JOIN favorites f on d.destID = f.DestID "
+    #             "GROUP BY f.DestID "
+    #             "ORDER BY Favorites DESC")
+    # popular = cur.fetchall()
+
+    # cur.execute("SELECT DestID "
+    #             "FROM favorites "
+    #             "WHERE UserID = %s"
+    #             , session['user'])
+    # favs = cur.fetchall()
+
+    # cur.execute("SELECT DestID "
+    #             "FROM explored "
+    #             "WHERE UserID = %s"
+    #             , session['user'])
+    # exp = cur.fetchall()
+    # cur.close()
+
+    # favorites = []
+    # for dest in favs:
+    #     favorites.append(dest['DestID'])
+
+    # explored = []
+    # for dest in exp:
+    #     explored.append(dest['DestID'])
+
+    # cur = connection.cursor()
+    # cur.execute("SELECT COUNT(*) AS Count "
+    #             "FROM Destinations")
+    # count = cur.fetchone()
+
+    return render_template('home.html', recent=recent)
+
+@app.route('/user/<id>')
+@login_required
+def user(id):
+    user = User.query.filter_by(id=id).first_or_404()
     favorites = user.favorited_dests.all()
     explored = user.explored_dests.all()
 
-    cur.execute("SELECT c.CountryID "
-                "FROM explored e JOIN destinations d ON e.DestID = d.DestID JOIN countries c ON d.CountryID = c.CountryID "
-                "WHERE e.UserID = %s "
-                "GROUP BY c.CountryID"
-                , session['user'])
-    countries = cur.fetchall()
+    # cur.execute("SELECT c.CountryID "
+    #             "FROM explored e JOIN destinations d ON e.DestID = d.DestID JOIN countries c ON d.CountryID = c.CountryID "
+    #             "WHERE e.UserID = %s "
+    #             "GROUP BY c.CountryID"
+    #             , session['user'])
+    # countries = cur.fetchall()
 
-    cur.execute("SELECT d.DestID "
-                "FROM explored e JOIN destinations d ON e.DestID = d.DestID "
-                                "JOIN dest_tags dt ON  dt.DestID = d.DestID "
-                                "JOIN tags t ON t.TagID = dt.TagID "
-                "WHERE e.UserID = %s AND t.TagName = 'UNESCO'"
-                , session['user'])
-    unesco = cur.fetchall()
+    # cur.execute("SELECT d.DestID "
+    #             "FROM explored e JOIN destinations d ON e.DestID = d.DestID "
+    #                             "JOIN dest_tags dt ON  dt.DestID = d.DestID "
+    #                             "JOIN tags t ON t.TagID = dt.TagID "
+    #             "WHERE e.UserID = %s AND t.TagName = 'UNESCO'"
+    #             , session['user'])
+    # unesco = cur.fetchall()
 
-    cur.execute("SELECT l.Lat, l.Lng, d.DestName "
-                "FROM dest_locations l JOIN destinations d on l.DestID = d.DestID")
-    locations = cur.fetchall()
-    cur.close()
+    # cur.execute("SELECT l.Lat, l.Lng, d.DestName "
+    #             "FROM dest_locations l JOIN destinations d on l.DestID = d.DestID")
+    # locations = cur.fetchall()
+    # cur.close()
     
-    locationsList = []
-    for location in locations:
-        locationsList.append([float(location['Lat']), float(location['Lng']), location['DestName']])
+    # locationsList = []
+    # for location in locations:
+    #     locationsList.append([float(location['Lat']), float(location['Lng']), location['DestName']])
 
-    counts = [len(explored), len(favorites), len(countries), len(unesco)]
+    counts = [25, 100, 30, 15]
     captions = ['Explored', 'Favorites', 'Countries Visited', 'UNESCO Sites Visited']
 
 
-    return render_template('user.html', user=user)
+    return render_template('user.html', user=user, counts=counts, captions=captions)
 
 
 

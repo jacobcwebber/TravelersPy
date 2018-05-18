@@ -14,7 +14,7 @@
     <div class="box">
         <div class="box-header-text">Recently Added</div>
         <div class="item-group three-wide">
-            {% for destination in recent[:3] %}
+            <!-- {% for destination in recent[:3] %}
                 <div class='item' style="background-image: linear-gradient(rgba(51, 64, 85, 0.40), rgba(51, 64, 85, 0.40)), url({{ destination.ImgUrl }});">
                     <div class="item-header">
                         {% if destination.DestID in explored %}
@@ -37,14 +37,14 @@
                         </a>
                     </div>
                 </div>
-            {% endfor %}
+            {% endfor %} -->
         </div>
         <div class="footer-text">Explore all {{ "{:,}".format(count.Count) }} destinations...</div>
     </div>
     <div class="box">
         <div class="box-header-text">Most Popular</div>
         <div class="item-group three-wide">
-            {% for destination in popular[:3] %}
+            <!-- {% for destination in popular[:3] %}
                 <div class='item' style="background-image: linear-gradient(rgba(51, 64, 85, 0.40), rgba(51, 64, 85, 0.40)), url({{ destination.ImgUrl }});">
                     <div class="item-header">
                         {% if destination.DestID in explored %}
@@ -67,7 +67,7 @@
                         </a>
                     </div>
                 </div>
-            {% endfor %}
+            {% endfor %} -->
         </div>
     </div>
 </div>

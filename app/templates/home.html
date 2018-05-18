@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+{% set active_page = "destinations" %}
+{% set title = "Travelers | Explore" %}
+
+
+{% block head %}
+<link rel = 'import' href = '../static/bower_components/polymer/polymer.html'>
+<link rel = 'import' href = '../static/bower_components/polymer/polymer.html'>
+<link rel = "import" href = "../static/bower_components/paper-toast/paper-toast.html">
+{% endblock %}
+
+{% block body %}
+<div class="box-group">
+    <div class="box">
+        <div class="box-header-text">Recently Added</div>
+        <div class="item-group three-wide">
+        </div>
+    </div>
+    <div class="box">
+        <div class="box-header-text">Most Popular</div>
+        <div class="item-group three-wide">
+        </div>
+    </div>
+</div>
+<paper-toast id="toast"></paper-toast>
+
+<script src="/static/js/destinations.js"></script>
+{% endblock %}

@@ -1,6 +1,7 @@
 from app import db, login
 from datetime import datetime
 from flask_login import UserMixin
+from sqlalchemy.orm import backref
 from werkzeug.security import generate_password_hash, check_password_hash
 from hashlib import md5
 
@@ -22,6 +23,54 @@ dest_tags = db.Table('dest_tags',
 )
 
 ## Model tables
+        
+class Continent(db.Model):
+    __tablename__ = 'continents'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), unique=True)
+    regions = db.relationship('Region', backref='continent', lazy='dynamic')
+
+    def __repr__(self):
+        return '<{}>'.format(self.name)
+
+class Region(db.Model):
+    __tablename__ = 'regions'
+
+    id = db.Column(db.Integer, primary_key=True)
+    cont_id = db.Column(db.Integer, db.ForeignKey('continents.id', onupdate="CASCADE", ondelete="CASCADE"))
+    name = db.Column(db.String(100), unique=True)
+    countries = db.relationship('Country', backref='region', lazy='dynamic')
+
+    def __repr__(self):
+        return '<{}>'.format(self.name)
+
+class Country(db.Model):
+    __tablename__ = 'countries'
+
+    id = db.Column(db.Integer, primary_key=True)
+    region_id = db.Column(db.Integer, db.ForeignKey('regions.id', onupdate="CASCADE", ondelete="CASCADE"))
+    name = db.Column(db.String(100), unique=True)
+    destinations = db.relationship('Destination', backref='country', lazy='dynamic')
+
+    def __repr__(self):
+        return '<{}>'.format(self.name)
+
+class Destination(db.Model):
+    __tablename__ = 'destinations'
+
+    id = db.Column(db.Integer, primary_key=True)
+    country_id = db.Column(db.Integer, db.ForeignKey('countries.id', onupdate="CASCADE", ondelete="CASCADE"))
+    name = db.Column(db.String(100), unique=True)
+    description = db.Column(db.Text)
+    update_date = db.Column(db.DateTime, index=True, default=datetime.utcnow, onupdate=datetime.utcnow)
+    img_url = db.relationship('Dest_Image', backref=backref("destination", uselist=False))
+    tags = db.relationship('Tag', secondary='dest_tags',
+        backref=db.backref('destinations', lazy='dynamic'),
+        lazy='dynamic')
+
+    def __repr__(self):
+        return '<{}>'.format(self.name)
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -32,7 +81,6 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), unique=True)
     password_hash = db.Column(db.String(128))
     about = db.Column(db.String(140))
-    last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     is_admin = db.Column(db.Boolean, default=0)
     time_created = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     explored_dests = db.relationship(
@@ -80,53 +128,6 @@ class User(UserMixin, db.Model):
     def has_favorited(self, dest):    
         return self.favorited_dests.filter(
             favorites.c.dest_id == dest.id).count() > 0
-        
-class Continent(db.Model):
-    __tablename__ = 'continents'
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), unique=True)
-    regions = db.relationship('Region', backref='continent', lazy='dynamic')
-
-    def __repr__(self):
-        return '<{}>'.format(self.name)
-
-class Region(db.Model):
-    __tablename__ = 'regions'
-
-    id = db.Column(db.Integer, primary_key=True)
-    cont_id = db.Column(db.Integer, db.ForeignKey('continents.id', onupdate="CASCADE", ondelete="CASCADE"))
-    name = db.Column(db.String(100), unique=True)
-    countries = db.relationship('Country', backref='region', lazy='dynamic')
-
-    def __repr__(self):
-        return '<{}>'.format(self.name)
-
-class Country(db.Model):
-    __tablename__ = 'countries'
-
-    id = db.Column(db.Integer, primary_key=True)
-    region_id = db.Column(db.Integer, db.ForeignKey('regions.id', onupdate="CASCADE", ondelete="CASCADE"))
-    name = db.Column(db.String(100), unique=True)
-    destinations = db.relationship('Destination', backref='country', lazy='dynamic')
-
-    def __repr__(self):
-        return '<{}>'.format(self.name)
-
-class Destination(db.Model):
-    __tablename__ = 'destinations'
-
-    id = db.Column(db.Integer, primary_key=True)
-    country_id = db.Column(db.Integer, db.ForeignKey('countries.id', onupdate="CASCADE", ondelete="CASCADE"))
-    name = db.Column(db.String(100), unique=True)
-    description = db.Column(db.Text)
-    update_date = db.Column(db.DateTime, index=True, default=datetime.utcnow, onupdate=datetime.utcnow)
-    tags = db.relationship('Tag', secondary='dest_tags',
-        backref=db.backref('destinations', lazy='dynamic'),
-        lazy='dynamic')
-
-    def __repr__(self):
-        return '<{}>'.format(self.name)    
 
 class Dest_Location(db.Model):
     __tablename__ = 'dest_locations'
