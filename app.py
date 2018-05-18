@@ -605,7 +605,3 @@ def alter_favorite():
     connection.commit()
     cur.close()
     return "success"
-
-if __name__ == '__main__':
-    app.secret_key=os.environ['SECRET_KEY']
-    app.run(debug=True, port=8000)
