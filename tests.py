@@ -1,7 +1,7 @@
+import os
 import unittest
 from app import app, db
-from app.models import User, Destination
-import os
+from app.models import User, Destination, Country, Region, Continent
 
 class UserModelCase(unittest.TestCase):
     def setUp(self):
@@ -14,16 +14,43 @@ class UserModelCase(unittest.TestCase):
         db.drop_all()
 
     def test_password_hashing(self):
-        u = User(username='mackenzie')
-        u.set_password('password')
-        self.assertFalse(u.check_password('passw0rd'))
-        self.assertTrue(u.check_password('password'))
+        user = User(username='mackenzie')
+        user.set_password('password')
+        self.assertFalse(user.check_password('passw0rd'))
+        self.assertTrue(user.check_password('password'))
 
     def test_avatar(self):
-        u = User(username='john', email='john@example.com')
-        self.assertEqual(u.avatar(128), ('https://www.gravatar.com/avatar/'
-                                         'd4c74594d841139328695756648b6bd6'
+        user = User(username='jacob', email='jacob@example.com')
+        self.assertEqual(user.avatar(128), ('https://www.gravatar.com/avatar/'
+                                         '7a140783d558a1814a38a3bf7ed5f204'
                                          '?d=identicon&s=128'))
+    
+    def test_explored_and_favorites(self):
+        cont = Continent(name='Asia', id=1)
+        region = Region(name='Southeast Asia', id=1, cont_id=1)
+        country = Country(name='Myanmar', id=1, region_id=1)
+        dest = Destination(name='Bagan', id=1, country_id=1)
+        user = User(username='jacob')
+
+        db.session.add_all([cont, region, country, dest, user])
+        db.session.commit()
+
+        self.assertEqual(user.explored_dests.all(), [])
+        self.assertEqual(user.favorited_dests.all(), [])
+
+        user.add_explored(dest)
+        user.add_favorite(dest)
+        db.session.commit()
+        self.assertTrue(user.has_explored(dest))
+        self.assertTrue(user.has_favorited(dest))
+        self.assertEqual(user.explored_dests.first().name, 'Bagan')
+        self.assertEqual(user.favorited_dests.first().name, 'Bagan')
+        self.assertEqual(dest.explored_users.first().username, 'jacob')
+        self.assertEqual(dest.favorited_users.first().username, 'jacob')
+
+        user.remove_explored(dest)
+        user.remove_favorite(dest)
+        db.session.commit()
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
