@@ -14,13 +14,13 @@ class UserModelCase(unittest.TestCase):
         db.drop_all()
 
     def test_password_hashing(self):
-        user = User(username='mackenzie')
+        user = User(email='mackenzie@example.com')
         user.set_password('password')
         self.assertFalse(user.check_password('passw0rd'))
         self.assertTrue(user.check_password('password'))
 
     def test_avatar(self):
-        user = User(username='jacob', email='jacob@example.com')
+        user = User(email='jacob@example.com')
         self.assertEqual(user.avatar(128), ('https://www.gravatar.com/avatar/'
                                          '7a140783d558a1814a38a3bf7ed5f204'
                                          '?d=identicon&s=128'))
@@ -30,7 +30,7 @@ class UserModelCase(unittest.TestCase):
         region = Region(name='Southeast Asia', id=1, cont_id=1)
         country = Country(name='Myanmar', id=1, region_id=1)
         dest = Destination(name='Bagan', id=1, country_id=1)
-        user = User(username='jacob')
+        user = User(email='jacob@example.com')
 
         db.session.add_all([cont, region, country, dest, user])
         db.session.commit()
@@ -45,8 +45,8 @@ class UserModelCase(unittest.TestCase):
         self.assertTrue(user.has_favorited(dest))
         self.assertEqual(user.explored_dests.first().name, 'Bagan')
         self.assertEqual(user.favorited_dests.first().name, 'Bagan')
-        self.assertEqual(dest.explored_users.first().username, 'jacob')
-        self.assertEqual(dest.favorited_users.first().username, 'jacob')
+        self.assertEqual(dest.explored_users.first().email, 'jacob@example.com')
+        self.assertEqual(dest.favorited_users.first().email, 'jacob@example.com')
 
         user.remove_explored(dest)
         user.remove_favorite(dest)

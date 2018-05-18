@@ -33,11 +33,11 @@
       {{ registration_form.hidden_tag() }}
       <div class="form-group">
         <div class="inline-input-group">
-          {{render_field(registration_form.first_name, class_="form-control input-lg signup-form")}}
-          {{render_field(registration_form.last_name, class_="form-control input-lg signup-form")}}
+          {{render_field(registration_form.first_name, class_="form-control input-lg signup-form", placeholder="First Name")}}
+          {{render_field(registration_form.last_name, class_="form-control input-lg signup-form", placeholder="Last Name")}}
         </div>
-        {{render_field(registration_form.email, class_="form-control input-lg signup-form")}}                
-        {{render_field(registration_form.password, class_="form-control input-lg signup-form")}}
+        {{render_field(registration_form.email, class_="form-control input-lg signup-form", placeholder="Email Name")}}                
+        {{render_field(registration_form.password, class_="form-control input-lg signup-form", placeholder="Password")}}
       </div>
       <input type="submit" name="submit" class="btn btn-teal btn-lg" value="Create account">
     </form>

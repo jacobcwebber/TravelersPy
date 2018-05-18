@@ -27,7 +27,8 @@ class User(UserMixin, db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), unique=True)
+    first_name = db.Column(db.String(64))
+    last_name = db.Column(db.String(64))
     email = db.Column(db.String(120), unique=True)
     password_hash = db.Column(db.String(128))
     about = db.Column(db.String(140))
@@ -44,7 +45,7 @@ class User(UserMixin, db.Model):
         lazy='dynamic')
 
     def __repr__(self):
-        return '<ID: {}, Username: {}>'.format(self.id, self.username)
+        return '<ID: {}, Name: {} {}>'.format(self.id, self.first_name, self.last_name)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
