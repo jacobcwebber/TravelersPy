@@ -1,9 +1,4 @@
-{% set navigation_bar = [
-  ('/destinations', 'destinations', 'Explore'),
-  ('/search', 'search', 'Discover')
-] -%}
 {% from "includes/_formhelpers.html" import render_field %}
-{% set active_page = active_page|default('index') -%}
 
 <nav class="navbar trav-nav navbar-toggleable-md">
   <div class="container {%if active_page == 'home'%}extra-wide-container{% endif %}">
@@ -21,25 +16,26 @@
     </div>
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-        {% if session.logged_in %}
-          {% for href, id, caption in navigation_bar %}
-            <li{% if id == active_page %} class="active" {% endif %}>
-              <a class="nav-item" href="{{ href|e }}">
-                <section class="nav-text">{{ caption|e }}</section>
-              </a>
-            </li>
-          {% endfor %}
+        {% if current_user.is_authenticated %}
+          <li{% if 'destinations' == active_page %} class="active" {% endif %}>
+            <a class="nav-item" href="{{ url_for('home') }}">
+              <section class="nav-text">Home</section>
+            </a>
+          </li>
+          <li{% if 'search' == active_page %} class="active" {% endif %}>
+            <a class="nav-item" href="{{ url_for('search') }}">
+              <section class="nav-text">Explore</section>
+            </a>
+          </li>
         {% endif %}
       </ul>
       <ul class="nav navbar-nav navbar-right">
         {% if current_user.is_authenticated %}
-          <!-- {% if session.is_admin %}
           <li{% if "new_destination" == active_page %} class="active" {% endif %}>
             <a class="nav-item" href="{{ url_for('create_destination') }}">
               <section>New Destination</section>  
             </a>
           </li>
-          {% endif %} -->
           <li{% if "profile" == active_page %} class="active" {% endif %}>
             <a class="nav-item" href="{{ url_for('user', id=current_user.id) }}">
               <section>Profile</section>

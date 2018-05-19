@@ -25,6 +25,15 @@ class EditProfileForm(FlaskForm):
     about = TextAreaField('About me', validators=[Length(min=0, max=140)])
     submit = SubmitField('Submit')
 
+class ResetPasswordRequestForm(FlaskForm):
+    email = StringField('Email', validators=[InputRequired(), Email()])
+    submit = SubmitField('Request Password Reset')
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('New Password', validators=[InputRequired()])
+    password_repeat = PasswordField('Repeat Password', validators=[InputRequired(), EqualTo('password')])
+    submit = SubmitField('Request Password Reset')
+
 class CountryForm(FlaskForm):
     name = StringField('Name', validators=[InputRequired()])
     description = TextAreaField('Description')

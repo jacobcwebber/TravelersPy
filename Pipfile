@@ -34,6 +34,8 @@ Mako = "==1.0.7"
 SQLAlchemy = "==1.2.7"
 flask-wtf = "*"
 flask-login = "*"
+flask-mail = "*"
+pyjwt = "*"
 
 [dev-packages]
 

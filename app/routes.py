@@ -3,10 +3,10 @@ from flask_login import current_user, login_user, logout_user, login_required
 from sqlalchemy import desc, func
 from werkzeug.urls import url_parse
 from app import app, db
-from app.forms import LoginForm, RegistrationForm
+from app.forms import LoginForm, RegistrationForm, ResetPasswordRequestForm, ResetPasswordForm
 from app.models import User,  Destination, Country, Dest_Location, Dest_Image, Tag, favorites
+from app.email import send_password_reset_email
 from datetime import datetime
-import sys
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -54,7 +54,38 @@ def login():
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
         return redirect(next_page)
-    return render_template('login.html', login_form=login_form)
+    return render_template('login.html', title="Wanderlist | Login", login_form=login_form)
+
+@app.route('/reset_password_request', methods=['GET', 'POST'])
+def reset_password_request():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = ResetPasswordRequestForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user:
+            send_password_reset_email(user)
+        flash('Check your email for the instructions to reset your password')
+        return redirect(url_for('login'))
+    return render_template('reset_password_request.html',
+                           title='Reset Password', form=form)
+
+@app.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    if current_user.is_authenticated():
+        return redirect(url_for('index'))
+    user = User.verify_reset_password_token(token)
+    if not user:
+        return redirect(url_for('index'))
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        user.set_password(form.password.data)
+        db.session.commit()
+        flash('Your password has been reset.')
+        return redirect(url_for('login'))
+    return render_template('reset_password.html', form=form)
+
+
 
 @app.route('/logout')
 @login_required
@@ -90,9 +121,10 @@ def home():
 @login_required
 def user(id):
     user = User.query.filter_by(id=id).first_or_404()
+
     favorites = user.favorited_dests.all()
     explored = user.explored_dests.all()
-
+    countries = Countries.query.join(Destination).join()
     # cur.execute("SELECT c.CountryID "
     #             "FROM explored e JOIN destinations d ON e.DestID = d.DestID JOIN countries c ON d.CountryID = c.CountryID "
     #             "WHERE e.UserID = %s "
@@ -122,6 +154,171 @@ def user(id):
 
 
     return render_template('user.html', user=user, counts=counts, captions=captions)
+
+
+@app.route('/search')
+def search():
+    location = request.args.get('location')
+    keyword = request.args.get('keywords')
+
+    # cur = connection.cursor()
+    # if location:
+    #     if keyword:
+    #         cur.execute('SELECT d.DestID, DestName, c.CountryName, ImgUrl, ContName '
+    #                     'FROM destinations d JOIN dest_images i ON d.DestID = i.DestID '
+    #                                         'JOIN countries c ON c.CountryID = d.CountryID '
+    #                                         'JOIN regions r ON c.RegionID = r.RegionID '
+    #                                         'JOIN continents co ON co.ContID = r.ContID '
+    #                                         'JOIN dest_tags dt ON dt.DestID = d.DestID '
+    #                                         'JOIN tags t ON dt.TagID = t.TagID '
+    #                     'WHERE (c.CountryName = %s OR ContName = %s OR r.RegionName = %s) AND t.TagName = %s '
+    #         , (location, location, location, keyword)) 
+    #     else:
+    #         cur.execute('SELECT d.DestID, DestName, c.CountryName, ImgUrl, ContName '
+    #                     'FROM destinations d JOIN dest_images i ON d.DestID = i.DestID '
+    #                                         'JOIN countries c ON c.CountryID = d.CountryID '
+    #                                         'JOIN regions r ON c.RegionID = r.RegionID '
+    #                                         'JOIN continents co ON co.ContID = r.ContID '
+    #                     'WHERE (c.CountryName = %s or ContName = %s OR r.RegionName = %s)'
+    #         , (location, location, location))
+    # elif keyword:
+    #     cur.execute('SELECT d.DestID, DestName, c.CountryName, ImgUrl, ContName '
+    #                 'FROM destinations d JOIN dest_images i ON d.DestID = i.DestID '
+    #                                     'JOIN countries c ON c.CountryID = d.CountryID '
+    #                                     'JOIN regions r ON c.RegionID = r.RegionID '
+    #                                     'JOIN continents co ON co.ContID = r.ContID '
+    #                                     'JOIN dest_tags dt ON dt.DestID = d.DestID '
+    #                                     'JOIN tags t on dt.TagID = t.TagID '
+    #                 'WHERE t.TagName = %s'
+    #     , keyword)   
+    # else:
+    #     cur.execute('SELECT d.DestID, DestName, c.CountryName, ImgUrl    '
+    #                 'FROM destinations d JOIN dest_images i ON d.DestID = i.DestID '
+    #                                     'JOIN countries c ON c.CountryID = d.CountryID '
+    #                 'ORDER BY RAND() '
+    #                 'LIMIT 5 '
+    #             )
+    # destinations = cur.fetchall()
+
+    # # Add list of tags to the dictionaries for each destination
+    # for dest in destinations:
+    #     cur.execute('SELECT TagName '
+    #                 'FROM vTags '
+    #                 'WHERE DestName = %s'
+    #                 , dest['DestName'])
+    #     tags = cur.fetchall()
+
+    #     tagsList = [tag['TagName'] for tag in tags]
+    #     dest['Tags'] = tagsList
+
+    # cur.execute("SELECT DestID "
+    #             "FROM favorites "
+    #             "WHERE UserID = %s"
+    #             , session['user'])
+    # favs = cur.fetchall()
+
+    # cur.execute("SELECT DestID "
+    #             "FROM explored "
+    #             "WHERE UserID = %s"
+    #             , session['user'])
+    # exp = cur.fetchall()
+
+    # favorites = [dest['DestID'] for dest in favs]
+    # explored = [dest['DestID'] for dest in exp]
+
+    # cur.execute('SELECT TagName FROM tags')
+    # tags = cur.fetchall()
+
+    # cur.execute('SELECT CountryName FROM countries')
+    # countries = cur.fetchall()
+
+    # cur.execute('SELECT ContName FROM continents')
+    # continents = cur.fetchall()
+
+    # cur.execute('SELECT RegionName FROM regions')
+    # regions = cur.fetchall()
+    # cur.close()
+
+    # countriesList = [country['CountryName'] for country in countries]
+    # continentsList = [continent['ContName'] for continent in continents]
+    # regionsList = [region['RegionName'] for region in regions]
+    # tagsList = [tag['TagName'] for tag in tags]
+
+    # locationsList = list(set(countriesList).union(set(list(set(continentsList).union(set(regionsList))))))
+    
+    return render_template('search.html')
+
+
+@app.route('/create-destination', methods=['POST', 'GET'])
+def create_destination():
+    # form = DestinationForm(request.form)
+    # if request.method == 'POST' and form.validate():
+    #     name = form.name.data
+    #     countryId = form.countryId.data
+    #     category = form.category.data
+    #     description = form.description.data
+    #     imgUrl = form.imgUrl.data
+    #     tags = form.tags.data
+    #     lat = form.lat.data
+    #     lng = form.lng.data
+
+    #     cur = connection.cursor()
+
+    #     cur.execute("INSERT INTO destinations(DestName, CountryID, Category, Description) "
+    #                 " VALUES (%s, %s, %s, %s)"
+    #                 , (name, countryId, category, description))
+
+    #     connection.commit()
+    #     cur.close()
+
+    #     cur = connection.cursor()
+
+    #     cur.execute("SELECT DestID "
+    #                 "FROM destinations "
+    #                 "WHERE DestName = %s"
+    #                 , [name])
+    #     id = cur.fetchone()
+
+    #     cur.execute("INSERT INTO dest_images "
+    #                 " VALUES (%s, %s)",
+    #                 (id['DestID'], imgUrl))
+    #     connection.commit()
+
+    #     cur.execute("INSERT INTO dest_locations "
+    #                 " VALUES (%s, %s, %s)",
+    #                 (id['DestID'], lat, lng))
+    #     connection.commit()
+    #     cur.close()
+
+    #     ##TODO: figure out why this if statement isn't working... error is thrown if no tags input
+    #     if tags != None:
+    #         for tag in tags.split(','):
+    #             cur = connection.cursor()
+
+    #             cur.execute("SELECT TagID "
+    #                         "FROM Tags "
+    #                         "WHERE TagName = %s"
+    #                         , [tag])
+    #             tagId = cur.fetchone()
+                
+    #             cur.execute("INSERT INTO dest_tags "
+    #                         "VALUES (%s, %s)"
+    #                         , (id['DestID'], tagId['TagID']))
+    #             connection.commit()
+    #             cur.close()
+
+    #     return redirect(url_for('destinations'))
+            
+    # cur = connection.cursor()
+    # cur.execute("SELECT TagName FROM tags")
+    # tags = cur.fetchall()
+    # cur.close()
+
+    # tagsList = []
+    # for tag in tags:
+    #     tagsList.append(tag['TagName'])
+
+    return render_template('create_destination.html', form=form, tags=tagsList)
 
 @app.route('/alter-explored', methods=['POST'])
 def alter_explored():

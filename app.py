@@ -565,27 +565,6 @@ def edit_destination(id):
 
     return render_template('edit_destination.html', form=form, allTags=allTags, myTags=myTags)
 
-
-@app.route('/alter-explored', methods=['POST'])
-def alter_explored():
-    id = request.form['id']
-    action = request.form['action']
-    
-    cur = connection.cursor()
-
-    if action == "add":
-        cur.execute("INSERT INTO explored "
-                    "VALUES (%s, %s)"
-                    , (session['user'], id))
-    elif action == "remove":
-        cur.execute("DELETE FROM explored "
-                    "WHERE UserID = %s AND DestID = %s"
-                    , (session['user'], id))  
-
-    connection.commit()
-    cur.close()
-    return "success"
-
 @app.route('/alter-favorite', methods=['POST'])
 def alter_favorite():
     id = request.form['id']
