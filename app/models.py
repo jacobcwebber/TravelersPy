@@ -71,8 +71,8 @@ class Destination(db.Model):
         backref=db.backref('destinations', lazy='dynamic'),
         lazy='dynamic')
 
-    def __repr__(self):
-        return '<{}>'.format(self.name)
+    # def __repr__(self):
+    #     return '<{}>'.format(self.name)
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'

@@ -36,6 +36,7 @@ flask-wtf = "*"
 flask-login = "*"
 flask-mail = "*"
 pyjwt = "*"
+flask-moment = "*"
 
 [dev-packages]
 

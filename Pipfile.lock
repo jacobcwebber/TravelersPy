@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "6f61e652f10dcb59ed17409ba34147eb967853f304e59ca84463197104878369"
+            "sha256": "f0af8f55fce40210d7f3af2170f6e291411e3cbec580ba76a6f7a9dc55a77d42"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -81,6 +81,14 @@
             ],
             "index": "pypi",
             "version": "==2.1.1"
+        },
+        "flask-moment": {
+            "hashes": [
+                "sha256:71a601fcd5be4742227251641cb706c109680b54c5fb25c5d2ed96e576ec3b4d",
+                "sha256:af7ccd599d85e751ff1f7661904daa51df9950e9bc9bd4ccf174bd38ccbc401f"
+            ],
+            "index": "pypi",
+            "version": "==0.6.0"
         },
         "flask-script": {
             "hashes": [
@@ -221,11 +229,11 @@
         },
         "pyjwt": {
             "hashes": [
-                "sha256:bca523ef95586d3a8a5be2da766fe6f82754acba27689c984e28e77a12174593",
-                "sha256:dacba5786fe3bf1a0ae8673874e29f9ac497860955c501289c63b15d3daae63a"
+                "sha256:c365c2c92063bdc609a9ef328958a910e249ffcad953895914b87e645412cf81",
+                "sha256:d527c3330d83d7278a0a8ef570b7c9c39fbf2c0c1edbe564a1a8a02d5352322b"
             ],
             "index": "pypi",
-            "version": "==1.6.1"
+            "version": "==1.6.3"
         },
         "pymysql": {
             "hashes": [

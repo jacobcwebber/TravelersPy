@@ -1,12 +1,15 @@
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import current_user, login_user, logout_user, login_required
-from sqlalchemy import desc, func
+from sqlalchemy import desc, func, text
 from werkzeug.urls import url_parse
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, ResetPasswordRequestForm, ResetPasswordForm
 from app.models import User,  Destination, Country, Dest_Location, Dest_Image, Tag, favorites
 from app.email import send_password_reset_email
+from app.tools import execute
 from datetime import datetime
+
+import sys
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -85,8 +88,6 @@ def reset_password(token):
         return redirect(url_for('login'))
     return render_template('reset_password.html', form=form)
 
-
-
 @app.route('/logout')
 @login_required
 def logout():
@@ -96,26 +97,21 @@ def logout():
 @app.route('/home')
 @login_required
 def home():
-    recent = Destination.query.join(Dest_Image)\
-                        .add_columns(Destination.id, Destination.name, Destination.update_date, Dest_Image.img_url)\
-                        .order_by(desc(Destination.update_date))\
-                        .all()
-    # popular = Destination.query.join(Dest_Image).join(favorites)\
-    #                     .add_columns(Destination.id, Destination.name, Destination.update_date, Dest_Image.img_url)\
-    #                     .group_by(favorites.dest_id)\
-    #                     .order_by(desc(Destination.update_date))\
-    #                     .all()
-    explored = current_user.explored_dests.all()
-    favs = current_user.favorited_dests.all()
-    count = Destination.query.count()
-    # cur.execute("SELECT d.DestID, d.DestName, i.ImgUrl, count(f.DestID) AS Favorites "
-    #             "FROM destinations d JOIN dest_images i on d.destID = i.DestID "
-    #                                 "JOIN favorites f on d.destID = f.DestID "
-    #             "GROUP BY f.DestID "
-    #             "ORDER BY Favorites DESC")
-    # popular = cur.fetchall()
+    recent_query = text('SELECT d.id, d.name, d.update_date, i.img_url '
+                        'FROM destinations d JOIN dest_images i on d.id = i.dest_id '
+                        'ORDER BY d.update_date DESC')
+    popular_query = text('SELECT d.id, d.name, i.img_url, count(f.dest_id) as favorites '
+                        'FROM destinations d JOIN dest_images i ON d.id = i.dest_id '
+                                            'JOIN favorites f ON d.id = f.dest_id '
+                        'GROUP BY d.id, i.img_url '
+                        'ORDER BY favorites DESC')
+    recent = execute(recent_query)
+    popular = execute(popular_query)
+    explored = [dest.id for dest in current_user.explored_dests.all()]
+    favorites = [dest.id for dest in current_user.favorited_dests.all()]
+    dest_count = Destination.query.count()
 
-    return render_template('home.html', recent=recent, explored=explored, favs=favs, count=count)
+    return render_template('home.html', recent=recent, popular=popular, explored=explored, favorites=favorites, dest_count=dest_count)
 
 @app.route('/user/<id>')
 @login_required
