@@ -1,9 +1,10 @@
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import current_user, login_user, logout_user, login_required
+from sqlalchemy import desc, func
 from werkzeug.urls import url_parse
 from app import app, db
 from app.forms import LoginForm, RegistrationForm
-from app.models import User,  Destination, Country, Dest_Location, Tag
+from app.models import User,  Destination, Country, Dest_Location, Dest_Image, Tag, favorites
 from datetime import datetime
 import sys
 
@@ -64,14 +65,18 @@ def logout():
 @app.route('/home')
 @login_required
 def home():
-    recent = Destination.query.first()
-    print(recent.img_url, file=sys.stderr)
-    # cur = connection.cursor()
-    # cur.execute("SELECT d.DestID, DestName, ImgUrl "
-    #             "FROM destinations d JOIN dest_images i on d.destID = i.DestID "
-    #             "ORDER BY d.UpdateDate DESC")
-    # recent = cur.fetchall()
-
+    recent = Destination.query.join(Dest_Image)\
+                        .add_columns(Destination.id, Destination.name, Destination.update_date, Dest_Image.img_url)\
+                        .order_by(desc(Destination.update_date))\
+                        .all()
+    # popular = Destination.query.join(Dest_Image).join(favorites)\
+    #                     .add_columns(Destination.id, Destination.name, Destination.update_date, Dest_Image.img_url)\
+    #                     .group_by(favorites.dest_id)\
+    #                     .order_by(desc(Destination.update_date))\
+    #                     .all()
+    explored = current_user.explored_dests.all()
+    favs = current_user.favorited_dests.all()
+    count = Destination.query.count()
     # cur.execute("SELECT d.DestID, d.DestName, i.ImgUrl, count(f.DestID) AS Favorites "
     #             "FROM destinations d JOIN dest_images i on d.destID = i.DestID "
     #                                 "JOIN favorites f on d.destID = f.DestID "
@@ -79,33 +84,7 @@ def home():
     #             "ORDER BY Favorites DESC")
     # popular = cur.fetchall()
 
-    # cur.execute("SELECT DestID "
-    #             "FROM favorites "
-    #             "WHERE UserID = %s"
-    #             , session['user'])
-    # favs = cur.fetchall()
-
-    # cur.execute("SELECT DestID "
-    #             "FROM explored "
-    #             "WHERE UserID = %s"
-    #             , session['user'])
-    # exp = cur.fetchall()
-    # cur.close()
-
-    # favorites = []
-    # for dest in favs:
-    #     favorites.append(dest['DestID'])
-
-    # explored = []
-    # for dest in exp:
-    #     explored.append(dest['DestID'])
-
-    # cur = connection.cursor()
-    # cur.execute("SELECT COUNT(*) AS Count "
-    #             "FROM Destinations")
-    # count = cur.fetchone()
-
-    return render_template('home.html', recent=recent)
+    return render_template('home.html', recent=recent, explored=explored, favs=favs, count=count)
 
 @app.route('/user/<id>')
 @login_required
@@ -143,6 +122,32 @@ def user(id):
 
 
     return render_template('user.html', user=user, counts=counts, captions=captions)
+
+@app.route('/alter-explored', methods=['POST'])
+def alter_explored():
+    dest = Destination.query.get(request.form['id'])
+    action = request.form['action']
+    
+    if action == "add":
+        current_user.add_explored(dest)
+    elif action == "remove":
+        current_user.remove_explored(dest)
+    db.session.commit()
+
+    return "success"
+
+@app.route('/alter-favorite', methods=['POST'])
+def alter_favorite():
+    dest = Destination.query.get(request.form['id'])
+    action = request.form['action']
+    
+    if action == "add":
+        current_user.add_favorite(dest)
+    elif action == "remove":
+        current_user.remove_favorite(dest)
+    db.session.commit()
+
+    return "success"
 
 
 
