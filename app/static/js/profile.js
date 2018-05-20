@@ -7,17 +7,17 @@ function initMap() {
         zoom: 2,
         mapTypeId: 'hybrid'
     });
-
+    console.log(locations[0].name)
     addMarkers(locations);
 }
 
 function addMarkers(locations) {
     for (i=0; i<locations.length; i++) {
-        var pos = new google.maps.LatLng(locations[i][0], locations[i][1])
+        var pos = new google.maps.LatLng(locations[i].lat, locations[i].lng)
         var marker = new google.maps.Marker({
             position: pos,
             map: map,
-            title: locations[i][2]
+            title: locations[i].name
         });
         markers.push(marker)
     }

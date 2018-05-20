@@ -138,21 +138,39 @@ def user(id):
     #             , session['user'])
     # unesco = cur.fetchall()
 
-    # cur.execute("SELECT l.Lat, l.Lng, d.DestName "
-    #             "FROM dest_locations l JOIN destinations d on l.DestID = d.DestID")
-    # locations = cur.fetchall()
-    # cur.close()
+    query = text('SELECT l.lat, l.lng, d.name '
+                 'FROM dest_locations l JOIN destinations d on l.dest_id = d.id ')
+    locations = execute(query)    
     
-    # locationsList = []
-    # for location in locations:
-    #     locationsList.append([float(location['Lat']), float(location['Lng']), location['DestName']])
-
     counts = [len(explored), len(favorites), 30, 15]
     captions = ['Explored', 'Favorites', 'Countries Visited', 'UNESCO Sites Visited']
 
 
-    return render_template('user.html', title=user.full_name(), user=user, counts=counts, captions=captions)
+    return render_template('user.html', title=user.full_name(), user=user, locations=locations, counts=counts, captions=captions)
 
+@app.route('/change-map', methods=['POST'])
+@login_required
+def change_map():
+    view = request.form['view']
+    base = 'SELECT l.lat, l.lng, d.name '\
+           'FROM dest_locations l JOIN destinations d on l.dest_id = d.id '
+    if view == "favorites":
+        where = "WHERE l.dest_id IN "\
+                    "(SELECT f.dest_id "\
+                    "FROM favorites f "\
+                    "WHERE f.user_id = {})"\
+                    .format(current_user.id)
+    elif view == "explored":
+        where = "WHERE l.dest_id IN "\
+                    "(SELECT e.dest_id "\
+                    "FROM explored e "\
+                    "WHERE e.user_id = {})"\
+                    .format(current_user.id)
+
+    query = text(base + where if where else None)
+    locations = execute(query)
+
+    return jsonify(locations)
 
 @app.route('/search')
 @login_required

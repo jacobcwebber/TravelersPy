@@ -68,64 +68,9 @@ def favorites():
     
     return render_template('favorites.html', favorites=favorites)
 
-@app.route('/explored')
-def explored(): 
-    cur = connection.cursor()
-    cur.execute('SELECT d.DestID, DestName, ImgUrl '
-                'FROM explored e JOIN destinations d ON e.DestID = d.DestID '
-                                'JOIN dest_images i ON d.DestID = i.DestID '
-                'WHERE e.UserID = %s'
-                , session['user'])
-    explored = cur.fetchall()
-
-    return render_template('explored.html', explored=explored)
-
 #####################################################
 #####            DESTINATIONS PAGES              ####
 #####################################################
-
-@app.route('/destinations')
-def destinations():
-    cur = connection.cursor()
-    cur.execute("SELECT d.DestID, DestName, ImgUrl "
-                "FROM destinations d JOIN dest_images i on d.destID = i.DestID "
-                "ORDER BY d.UpdateDate DESC")
-    recent = cur.fetchall()
-
-    cur.execute("SELECT d.DestID, d.DestName, i.ImgUrl, count(f.DestID) AS Favorites "
-                "FROM destinations d JOIN dest_images i on d.destID = i.DestID "
-                                    "JOIN favorites f on d.destID = f.DestID "
-                "GROUP BY f.DestID "
-                "ORDER BY Favorites DESC")
-    popular = cur.fetchall()
-
-    cur.execute("SELECT DestID "
-                "FROM favorites "
-                "WHERE UserID = %s"
-                , session['user'])
-    favs = cur.fetchall()
-
-    cur.execute("SELECT DestID "
-                "FROM explored "
-                "WHERE UserID = %s"
-                , session['user'])
-    exp = cur.fetchall()
-    cur.close()
-
-    favorites = []
-    for dest in favs:
-        favorites.append(dest['DestID'])
-
-    explored = []
-    for dest in exp:
-        explored.append(dest['DestID'])
-
-    cur = connection.cursor()
-    cur.execute("SELECT COUNT(*) AS Count "
-                "FROM Destinations")
-    count = cur.fetchone()
-
-    return render_template('destinations.html', count=count, favorites=favorites, explored=explored, recent=recent, popular=popular)
 
 @app.route('/destination/<string:id>', methods=['POST', 'GET'])
 def destination(id):
@@ -252,22 +197,3 @@ def edit_destination(id):
 
     return render_template('edit_destination.html', form=form, allTags=allTags, myTags=myTags)
 
-@app.route('/alter-favorite', methods=['POST'])
-def alter_favorite():
-    id = request.form['id']
-    action = request.form['action']
-    
-    cur = connection.cursor()
-
-    if action == "add":
-        cur.execute("INSERT INTO favorites "
-                    "VALUES (%s, %s)"
-                    , (session['user'], id))
-    elif action == "remove":
-        cur.execute("DELETE FROM favorites "
-                    "WHERE UserID = %s AND DestID = %s"
-                    , (session['user'], id))  
-
-    connection.commit()
-    cur.close()
-    return "success"
