@@ -28,35 +28,34 @@
         <span class="body" id="feat-dest-desc"></span>
         <hr>
         <div class="" id="feat-dest-tags"></div>
-        <!-- <span style="bottom: 0;">Read more</span> -->
       </div>
     </div>
   </div>
   <div class="box">
-    <div class="no-results {% if destinations|length != 0 %}hidden{% endif %}">No destinations found for your search.</div>
+    <div class="no-results {% if dests|length != 0 %}hidden{% endif %}">No destinations found for your search.</div>
     <span class="teal no-results loading">Loading...</span>
       <div class="item-group five-wide hide">
-        {% for destination in destinations %}
-          <div id ="dest{{ destination.DestID }}" class='item' style="background-image: linear-gradient(rgba(51, 64, 85, 0.40), rgba(51, 64, 85, 0.40)), url({{ destination.ImgUrl }});">
+        {% for dest in dests %}
+          <div id ="dest{{ dest.id }}" class='item' style="background-image: linear-gradient(rgba(51, 64, 85, 0.40), rgba(51, 64, 85, 0.40)), url({{ dest.img_url }});">
             <div class="item-header">
-              {% if destination.DestID in explored %}
-                <i id="{{ destination.DestID }}" class="fas fa-check fa-lg exp-full" aria-hidden="true"></i> 
+              {% if dest.id in explored %}
+                <i id="{{ dest.id }}" class="fas fa-check fa-lg exp-full" aria-hidden="true"></i> 
               {% else %}
-                <i id="{{ destination.DestID }}" class="fas fa-check fa-lg" aria-hidden="true"></i> 
+                <i id="{{ dest.id }}" class="fas fa-check fa-lg" aria-hidden="true"></i> 
               {% endif %}
-              {% if destination.DestID in favorites %}
-                <i id="{{ destination.DestID }}" class="fas fa-star fa-lg star-full" aria-hidden="true"></i> 
+              {% if dest.id in favorites %}
+                <i id="{{ dest.id }}" class="fas fa-star fa-lg star-full" aria-hidden="true"></i> 
               {% else %}
-                <i id="{{ destination.DestID }}" class="far fa-star fa-lg" aria-hidden="true"></i> 
+                <i id="{{ dest.id }}" class="far fa-star fa-lg" aria-hidden="true"></i> 
               {% endif %}
             </div>
             <div>
-              <a id="{{ destination.DestID }}" class="item-mid">
-                <span class="item-title">{{ destination.DestName }}</span>
+              <a id="{{ dest.id }}" class="item-mid">
+                <span class="item-title">{{ dest.name }}</span>
               </a>
             </div>
             <div class="item-footer">
-              <a href="/edit_destination/{{ destination.DestID }}">
+              <a href="/edit_destination/{{ dest.id }}">
                 <span class="fas fa-pencil-alt fa-lg" aria-hidden="true"></span>                             
               </a>
             </div>
@@ -69,8 +68,8 @@
 <paper-toast id="toast"></paper-toast>
 
 <script>
-  var locationsList = {{ locationsList | safe }};
-  var tagsList = {{ tagsList | safe }};
+  var locationsList = {{ locations | safe }};
+  var tagsList = {{ tags | safe }};
 </script>
 <script src="/static/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.js"></script>
 <script src="/static/bower_components/bootstrap/dist/js/bootstrap3-typeahead.js"></script>

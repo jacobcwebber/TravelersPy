@@ -4,7 +4,7 @@ from sqlalchemy import desc, func, text
 from werkzeug.urls import url_parse
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, ResetPasswordRequestForm, ResetPasswordForm
-from app.models import User,  Destination, Country, Dest_Location, Dest_Image, Tag, favorites
+from app.models import User,  Destination, Country, Region, Continent, Dest_Location, Dest_Image, Tag
 from app.email import send_password_reset_email
 from app.tools import execute
 from datetime import datetime
@@ -120,7 +120,8 @@ def user(id):
 
     favorites = user.favorited_dests.all()
     explored = user.explored_dests.all()
-    countries = Countries.query.join(Destination).join()
+    dests = Destination.query.all()
+    print(dests, file=sys.stderr)
     # cur.execute("SELECT c.CountryID "
     #             "FROM explored e JOIN destinations d ON e.DestID = d.DestID JOIN countries c ON d.CountryID = c.CountryID "
     #             "WHERE e.UserID = %s "
@@ -149,7 +150,7 @@ def user(id):
     captions = ['Explored', 'Favorites', 'Countries Visited', 'UNESCO Sites Visited']
 
 
-    return render_template('user.html', user=user, counts=counts, captions=captions)
+    return render_template('user.html', title=user.first_name + ' ' + user.last_name, user=user, counts=counts, captions=captions)
 
 
 @app.route('/search')
@@ -157,92 +158,43 @@ def search():
     location = request.args.get('location')
     keyword = request.args.get('keywords')
 
-    # cur = connection.cursor()
-    # if location:
-    #     if keyword:
-    #         cur.execute('SELECT d.DestID, DestName, c.CountryName, ImgUrl, ContName '
-    #                     'FROM destinations d JOIN dest_images i ON d.DestID = i.DestID '
-    #                                         'JOIN countries c ON c.CountryID = d.CountryID '
-    #                                         'JOIN regions r ON c.RegionID = r.RegionID '
-    #                                         'JOIN continents co ON co.ContID = r.ContID '
-    #                                         'JOIN dest_tags dt ON dt.DestID = d.DestID '
-    #                                         'JOIN tags t ON dt.TagID = t.TagID '
-    #                     'WHERE (c.CountryName = %s OR ContName = %s OR r.RegionName = %s) AND t.TagName = %s '
-    #         , (location, location, location, keyword)) 
-    #     else:
-    #         cur.execute('SELECT d.DestID, DestName, c.CountryName, ImgUrl, ContName '
-    #                     'FROM destinations d JOIN dest_images i ON d.DestID = i.DestID '
-    #                                         'JOIN countries c ON c.CountryID = d.CountryID '
-    #                                         'JOIN regions r ON c.RegionID = r.RegionID '
-    #                                         'JOIN continents co ON co.ContID = r.ContID '
-    #                     'WHERE (c.CountryName = %s or ContName = %s OR r.RegionName = %s)'
-    #         , (location, location, location))
-    # elif keyword:
-    #     cur.execute('SELECT d.DestID, DestName, c.CountryName, ImgUrl, ContName '
-    #                 'FROM destinations d JOIN dest_images i ON d.DestID = i.DestID '
-    #                                     'JOIN countries c ON c.CountryID = d.CountryID '
-    #                                     'JOIN regions r ON c.RegionID = r.RegionID '
-    #                                     'JOIN continents co ON co.ContID = r.ContID '
-    #                                     'JOIN dest_tags dt ON dt.DestID = d.DestID '
-    #                                     'JOIN tags t on dt.TagID = t.TagID '
-    #                 'WHERE t.TagName = %s'
-    #     , keyword)   
-    # else:
-    #     cur.execute('SELECT d.DestID, DestName, c.CountryName, ImgUrl    '
-    #                 'FROM destinations d JOIN dest_images i ON d.DestID = i.DestID '
-    #                                     'JOIN countries c ON c.CountryID = d.CountryID '
-    #                 'ORDER BY RAND() '
-    #                 'LIMIT 5 '
-    #             )
-    # destinations = cur.fetchall()
+    base = 'SELECT d.id, d.name as name, c.name as country, i.img_url, co.name as cont '\
+           'FROM destinations d JOIN dest_images i ON d.id = i.dest_id '\
+                               'JOIN countries c ON d.country_id = c.id '\
+                               'JOIN regions r ON c.region_id = r.id '\
+                               'JOIN continents co ON r.cont_id = co.id '\
+                               'JOIN dest_tags dt ON dt.dest_id = d.id '\
+                               'JOIN tags t ON dt.tag_id = t.id '
 
-    # # Add list of tags to the dictionaries for each destination
-    # for dest in destinations:
-    #     cur.execute('SELECT TagName '
-    #                 'FROM vTags '
-    #                 'WHERE DestName = %s'
-    #                 , dest['DestName'])
-    #     tags = cur.fetchall()
+    if location:
+        if keyword:
+            where = 'WHERE (c.CountryName = {} OR ContName = {} OR r.RegionName = {}) AND t.TagName = {}'\
+                    .format(location, location, location, keyword)
+        else:
+            where = 'WHERE (c.CountryName ={} or ContName = {} OR r.RegionName = {})'\
+            .format(location, location, location)
+    elif keyword:
+        where = 'WHERE t.TagName = {}'.format(keyword)
+    else:
+        where = 'ORDER BY random() LIMIT 5 '
+    query = text(base + where)
+    dests = execute(query)
 
-    #     tagsList = [tag['TagName'] for tag in tags]
-    #     dest['Tags'] = tagsList
+    for dest in dests:
+        d = Destination.query.get(dest['id'])
+        dest['Tags'] = [tag.name for tag in d.tags.all()]
 
-    # cur.execute("SELECT DestID "
-    #             "FROM favorites "
-    #             "WHERE UserID = %s"
-    #             , session['user'])
-    # favs = cur.fetchall()
+    explored = [dest.id for dest in current_user.explored_dests.all()]
+    favorites = [dest.id for dest in current_user.favorited_dests.all()]
 
-    # cur.execute("SELECT DestID "
-    #             "FROM explored "
-    #             "WHERE UserID = %s"
-    #             , session['user'])
-    # exp = cur.fetchall()
+    countries = [country.name for country in Country.query.all()]
+    continents = [continent.name for continent in Continent.query.all()]
+    regions = [region.name for region in Region.query.all()]
+    locations = list(set(countries).union(set(list(set(continents).union(set(regions))))))
 
-    # favorites = [dest['DestID'] for dest in favs]
-    # explored = [dest['DestID'] for dest in exp]
+    tags = [tag.name for tag in Tag.query.all()]
 
-    # cur.execute('SELECT TagName FROM tags')
-    # tags = cur.fetchall()
-
-    # cur.execute('SELECT CountryName FROM countries')
-    # countries = cur.fetchall()
-
-    # cur.execute('SELECT ContName FROM continents')
-    # continents = cur.fetchall()
-
-    # cur.execute('SELECT RegionName FROM regions')
-    # regions = cur.fetchall()
-    # cur.close()
-
-    # countriesList = [country['CountryName'] for country in countries]
-    # continentsList = [continent['ContName'] for continent in continents]
-    # regionsList = [region['RegionName'] for region in regions]
-    # tagsList = [tag['TagName'] for tag in tags]
-
-    # locationsList = list(set(countriesList).union(set(list(set(continentsList).union(set(regionsList))))))
-    
-    return render_template('search.html')
+    return render_template('search.html', dests=dests, locations=locations, tags=tags, explored=explored, favorites=favorites)    
 
 
 @app.route('/create-destination', methods=['POST', 'GET'])
