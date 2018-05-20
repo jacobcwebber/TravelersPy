@@ -98,6 +98,9 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return '<ID: {}, Name: {} {}>'.format(self.id, self.first_name, self.last_name)
 
+    def full_name(self):
+        return '{} {}'.format(self.first_name, self.last_name)
+        
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
@@ -106,7 +109,7 @@ class User(UserMixin, db.Model):
 
     def avatar(self, size):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
-        return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, size)
+        return 'https://www.gravatar.com/avatar/{}?&s={}'.format(digest, size)
 
     def get_reset_password_token(self, expires_in=600):
         return jwt.encode(
@@ -130,12 +133,7 @@ class User(UserMixin, db.Model):
         if self.has_explored(dest):
             self.explored_dests.remove(dest)
 
-    def has_explored(self, dest, tag=None):
-        # if tag not None:
-        #     return.explored_dests.filter(
-        #         explored.c.dest_id == dest.id)\
-        #         .
-        #     )
+    def has_explored(self, dest):
         return self.explored_dests.filter(
             explored.c.dest_id == dest.id).count() > 0
 
@@ -150,6 +148,9 @@ class User(UserMixin, db.Model):
     def has_favorited(self, dest):    
         return self.favorited_dests.filter(
             favorites.c.dest_id == dest.id).count() > 0
+
+    # def get_by_tag(self, tag):
+    #     return self.explored_dests
 
 class Dest_Location(db.Model):
     __tablename__ = 'dest_locations'

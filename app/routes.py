@@ -8,7 +8,6 @@ from app.models import User,  Destination, Country, Region, Continent, Dest_Loca
 from app.email import send_password_reset_email
 from app.tools import execute
 from datetime import datetime
-
 import sys
 
 @app.route('/', methods=['GET', 'POST'])
@@ -62,7 +61,7 @@ def login():
 @app.route('/reset_password_request', methods=['GET', 'POST'])
 def reset_password_request():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('home'))
     form = ResetPasswordRequestForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
@@ -76,7 +75,7 @@ def reset_password_request():
 @app.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
     if current_user.is_authenticated():
-        return redirect(url_for('index'))
+        return redirect(url_for('home'))
     user = User.verify_reset_password_token(token)
     if not user:
         return redirect(url_for('index'))
@@ -122,6 +121,8 @@ def user(id):
     explored = [dest.id for dest in user.explored_dests.all()]
     dests = Destination.query.all()
 
+    # print([dest.tags.filter('UNESCO'.in_(dest.tags.all())) for dest in user.explored_dests.all()], file=sys.stderr)  
+
     # cur.execute("SELECT c.CountryID "
     #             "FROM explored e JOIN destinations d ON e.DestID = d.DestID JOIN countries c ON d.CountryID = c.CountryID "
     #             "WHERE e.UserID = %s "
@@ -150,7 +151,7 @@ def user(id):
     captions = ['Explored', 'Favorites', 'Countries Visited', 'UNESCO Sites Visited']
 
 
-    return render_template('user.html', title=user.first_name + ' ' + user.last_name, user=user, counts=counts, captions=captions)
+    return render_template('user.html', title=user.full_name(), user=user, counts=counts, captions=captions)
 
 
 @app.route('/search')

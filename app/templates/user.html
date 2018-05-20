@@ -7,38 +7,45 @@
 
 {% block body %}
 <div class="box-group wide-container">
-    <div class="box">
-        <img src="{{ user.avatar(128) }}" alt="">
-        {% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}
-    </div>    
-    <div class="box">
-    <div class="box-header-text">Your Summary</div>
-        <div class="circle-group">
-            {% for n in range(0,4) %}
-            <div class="circle-with-text">
-                <div class="circle">
-                    <a href="{{ links[n] }}">
-                        <p class="stat-number">{{ counts[n] }}</p>
-                    </a>
-                </div>
-                <div class="standard-text">{{ captions[n] }}</div>
-            </div>
-            {% endfor %}
+  <div class="box">
+    <div class="profile-container">
+      <div class="pro-pic-container">
+        <img src="{{ user.avatar(128) }}" alt="" class="pro-pic">
+      </div>
+      <div class="title">{{ user.full_name() }}</div>
+      <div class="about">
+        {% if user.about %}<p>{{ user.about }}</p>{% endif %}
+      </div>
+    </div>
+  </div>    
+  <div class="box">
+  <div class="box-header-text">Summary</div>
+    <div class="circle-group">
+      {% for n in range(0,4) %}
+      <div class="circle-with-text">
+        <div class="circle">
+          <a href="{{ links[n] }}">
+            <p class="stat-number">{{ counts[n] }}</p>
+          </a>
         </div>
+        <div class="standard-text">{{ captions[n] }}</div>
+      </div>
+      {% endfor %}
     </div>
-    <div class="box">
-        <ul class="nav nav-pills nav-justified">
-            <li id="all" class="pill-element active"><a>All Destinations</a></li>
-            <li id="favorites" class="pill-element"><a>Favorited Destinations</a></li>
-            <li id="explored" class="pill-element"><a>Explored Destinations</a></li>
-        </ul>
-        <div id="map"></div>
-    </div>
-    <div class="box">
-        <div class="box-header-text">Account</div>
-        <div class="standard-text">Questions about Travelers or your account? Email the creator at <a class="link">jacobcwebber@gmail.com</a></div>
-        <div id="logout"><a class="standard-text link" href="/logout">Logout</a></div>
-    </div>
+  </div>
+  <div class="box">
+    <ul class="nav nav-pills nav-justified">
+      <li id="all" class="pill-element active"><a>All Destinations</a></li>
+      <li id="favorites" class="pill-element"><a>Favorited Destinations</a></li>
+      <li id="explored" class="pill-element"><a>Explored Destinations</a></li>
+    </ul>
+    <div id="map"></div>
+  </div>
+  <div class="box">
+    <div class="box-header-text">Account</div>
+    <div class="standard-text">Questions about Travelers or your account? Email the creator at <a class="link">jacobcwebber@gmail.com</a></div>
+    <div id="logout"><a class="standard-text link" href="/logout">Logout</a></div>
+  </div>
 </div>
 
 <script type="text/javascript" src="../static/js/profile.js"></script>
