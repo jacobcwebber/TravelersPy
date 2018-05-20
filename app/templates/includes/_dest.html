@@ -1,0 +1,24 @@
+<div id ="dest{{ dest.id }}" class='item' style="background-image: linear-gradient(rgba(51, 64, 85, 0.40), rgba(51, 64, 85, 0.40)), url({{ dest.img_url }});">
+  <div class="item-header">
+    {% if dest.id in explored %}
+      <i id="{{ dest.id }}" class="fas fa-check fa-lg exp-full" aria-hidden="true"></i> 
+    {% else %}
+      <i id="{{ dest.id }}" class="fas fa-check fa-lg" aria-hidden="true"></i> 
+    {% endif %}
+    {% if dest.id in favorites %}
+      <i id="{{ dest.id }}" class="fas fa-star fa-lg star-full" aria-hidden="true"></i> 
+    {% else %}
+      <i id="{{ dest.id }}" class="far fa-star fa-lg" aria-hidden="true"></i> 
+    {% endif %}
+  </div>
+  <div>
+    <a id="{{ dest.id }}" class="item-mid">
+      <span class="item-title">{{ dest.name }}</span>
+    </a>
+  </div>
+  <div class="item-footer">
+    <a href="/edit_destination/{{ dest.id }}">
+      <span class="fas fa-pencil-alt fa-lg" aria-hidden="true"></span>                             
+    </a>
+  </div>
+</div>

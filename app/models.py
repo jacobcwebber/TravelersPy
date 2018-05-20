@@ -65,18 +65,15 @@ class Destination(db.Model):
     country_id = db.Column(db.Integer, db.ForeignKey('countries.id', onupdate="CASCADE", ondelete="CASCADE"))
     name = db.Column(db.String(100), unique=True)
     description = db.Column(db.Text)
-    update_date = db.Column(db.DateTime, index=True, default=datetime.utcnow, onupdate=datetime.utcnow)
-    img_url = db.relationship('Dest_Image', backref=backref("destination", uselist=False))
+    update_date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    dest_location = db.relationship('Dest_Location', backref=backref("destination", uselist=False))
+    dest_img = db.relationship('Dest_Image', backref=backref("destination", uselist=False))
     tags = db.relationship('Tag', secondary='dest_tags',
         backref=db.backref('destinations', lazy='dynamic'),
         lazy='dynamic')
 
     def __repr__(self):
         return '<{}>'.format(self.name)
-
-    # def get_tags(self, dest):
-    #     return self.tags.filter(
-    #         explored.c.dest_id == dest.id).count() > 0
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -168,7 +165,7 @@ class Dest_Image(db.Model):
     __tablename__ = 'dest_images'
 
     dest_id = db.Column(db.Integer, db.ForeignKey('destinations.id', onupdate="CASCADE", ondelete="CASCADE"), primary_key=True)
-    img_url = db.Column(db.String(255), primary_key=True)
+    img_url = db.Column(db.String(255))
 
     def __repr__(self):
         return '<Dest ID: {}, Image URL: {}>'.format(self.dest_id, self.img_url)

@@ -40,10 +40,10 @@ class CountryForm(FlaskForm):
 
 class DestinationForm(FlaskForm):
     name = StringField('Name', validators=[InputRequired()])
-    countryId = SelectField('Country', choices=['USA', 'Canada'], coerce=int, validators=[InputRequired()])
+    country_id = SelectField('Country', choices=None, coerce=int, validators=[InputRequired()])
     lat = DecimalField('Latitude', places=8, rounding=None, validators=[InputRequired()])
     lng = DecimalField('Longitude', places=8, rounding=None, validators=[InputRequired()])
     description = TextAreaField('Description')
-    imgUrl = StringField('Image Upload', validators=[InputRequired()])
+    img_url = StringField('Image Upload', validators=[InputRequired()])
     tags = StringField('Tags', validators=[InputRequired(message="At least one tag required.")])
     submit  = SubmitField('Create Destination')

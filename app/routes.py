@@ -3,7 +3,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from sqlalchemy import desc, func, text
 from werkzeug.urls import url_parse
 from app import app, db
-from app.forms import LoginForm, RegistrationForm, ResetPasswordRequestForm, ResetPasswordForm
+from app.forms import LoginForm, RegistrationForm, ResetPasswordRequestForm, ResetPasswordForm, DestinationForm
 from app.models import User,  Destination, Country, Region, Continent, Dest_Location, Dest_Image, Tag
 from app.email import send_password_reset_email
 from app.tools import execute
@@ -154,6 +154,7 @@ def user(id):
 
 
 @app.route('/search')
+@login_required
 def search():
     location = request.args.get('location')
     keyword = request.args.get('keywords')
@@ -199,6 +200,7 @@ def search():
                             favorites=favorites, keyword=keyword, location=location)    
 
 @app.route('/alter-featured-dest', methods=['POST'])
+@login_required
 def alter_featured_dest():
     id = request.form['id']
 
@@ -212,6 +214,7 @@ def alter_featured_dest():
     return jsonify(dest, tags)
 
 @app.route('/create-destination', methods=['POST', 'GET'])
+@login_required
 def create_destination():
     # form = DestinationForm(request.form)
     # if request.method == 'POST' and form.validate():
@@ -281,6 +284,58 @@ def create_destination():
     #     tagsList.append(tag['TagName'])
 
     return render_template('create_destination.html', form=form, tags=tagsList)
+
+@app.route('/edit_destination/<string:id>', methods=['POST', 'GET'])
+@login_required
+def edit_destination(id):
+    form = DestinationForm()
+    dest = Destination.query.get(id) 
+
+    if form.validate_on_submit():
+        dest_img = Dest_Image.query.get(id)
+        dest_location = Dest_Location.query.get(id)
+
+        dest.name = form.name.data
+        dest.description = form.description.data
+        dest.country_id = form.country_id.data
+        dest_img.img_url = form.img_url.data
+        dest_location.lat = form.lat.data
+        dest_location.lng = form.lng.data
+
+        # tags = form.tags.data
+        # # TEST NEXT LINE BEFORE UNCOMMENTING -- DON'T WANT TO DELETE EVERYTHING
+        # # tags = Dest_Tags.query.filter_by(dest_id=id).delete()
+
+        # for tag in tags.split(','):
+        #     cur = connection.cursor()
+
+        #     cur.execute("SELECT TagID "
+        #                 "FROM Tags "
+        #                 "WHERE TagName = %s"
+        #                 , [tag])
+        #     tagId = cur.fetchone()
+            
+        #     cur.execute("INSERT INTO dest_tags "
+        #                 "VALUES (%s, %s)"
+        #                 , (id, tagId['TagID']))
+        #     connection.commit()
+        #     cur.close()
+        
+        return redirect(url_for('destinations'))
+
+    elif request.method == 'GET':
+        dest_tags = ','.join([tag.name for tag in Destination.query.get(id).tags.all()])
+        tags = [tag.name for tag in Tag.query.all()]
+        dest_image = Dest_Image.query.get(id)
+
+        form.name.data = dest.name
+        form.country_id.data = dest.country_id
+        form.tags.data = ','.join([tag.name for tag in dest.tags.all()])
+        form.description.data = dest.description
+        form.img_url.data = dest_image.img_url
+   
+
+    return render_template('edit_destination.html', form=form, tags=tags, dest_tags=dest_tags)
 
 @app.route('/alter-explored', methods=['POST'])
 def alter_explored():
