@@ -52,18 +52,18 @@ $('.item-mid').click(e => {
     }
   })
     .done(response => {
-      featDestImg.attr('src', response[0].ImgUrl);
-      featDestName.text(response[0].DestName);
-      featCountryName.text(response[0].CountryName);
-      featDestDesc.html(response[0].Description);
+      featDestImg.attr('src', response[0][0].img_url);
+      featDestName.text(response[0][0].dest_name);
+      featCountryName.text(response[0][0].country_name);
+      featDestDesc.html(response[0][0].description);
       featDestTags.empty();
-
+      console.log(response)
       let tags = response[1];
       $.each(tags, i => {
         featDestTags.append(
           `<a href='/search?keywords=${
-            tags[i].TagName
-          }' class='label label-lg'>${tags[i].TagName} </a>`
+            tags[i]
+          }' class='label label-lg'>${tags[i]} </a>`
         );
       });
       featBox.removeClass('hide');

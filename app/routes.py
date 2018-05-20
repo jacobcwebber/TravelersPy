@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
 from sqlalchemy import desc, func, text
 from werkzeug.urls import url_parse
@@ -200,26 +200,17 @@ def search():
 
 @app.route('/alter-featured-dest', methods=['POST'])
 def alter_featured_dest():
-    data = request.values
+    id = request.form['id']
 
-    cur = connection.cursor()
-    cur.execute("SELECT DestName, CountryName, d.DestID, c.CountryID, d.Description, ImgUrl "
-                "FROM destinations d JOIN countries c ON d.CountryID = c.CountryID "
-                                    "JOIN dest_images i ON d.DestID = i.DestID "
-                                    "JOIN dest_locations l ON d.DestID = l.DestID "
-                "WHERE d.DestID = %s"
-                , data['id'])
-    destination = cur.fetchone()
+    query = "SELECT d.name as dest_name, c.name as country_name, d.id, c.id, d.description, i.img_url "\
+            "FROM destinations d JOIN countries c ON d.country_id = c.id "\
+                                "JOIN dest_images i ON d.id = i.dest_id "\
+            "WHERE d.id = {}".format(id)
+    dest = execute(query)
+    tags = [tag.name for tag in Destination.query.get(id).tags.all()]
 
-    cur.execute("SELECT TagName "
-                "FROM vTags "
-                "WHERE DestName  = %s"
-                , destination['DestName'])
-    tags = cur.fetchall()
-    cur.close()
+    return jsonify(dest, tags)
 
-    return jsonify(destination, tags)
-    
 @app.route('/create-destination', methods=['POST', 'GET'])
 def create_destination():
     # form = DestinationForm(request.form)
