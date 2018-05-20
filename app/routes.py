@@ -118,10 +118,10 @@ def home():
 def user(id):
     user = User.query.filter_by(id=id).first_or_404()
 
-    favorites = user.favorited_dests.all()
-    explored = user.explored_dests.all()
+    favorites = [dest.id for dest in user.favorited_dests.all()]
+    explored = [dest.id for dest in user.explored_dests.all()]
     dests = Destination.query.all()
-    print(dests, file=sys.stderr)
+
     # cur.execute("SELECT c.CountryID "
     #             "FROM explored e JOIN destinations d ON e.DestID = d.DestID JOIN countries c ON d.CountryID = c.CountryID "
     #             "WHERE e.UserID = %s "
@@ -146,7 +146,7 @@ def user(id):
     # for location in locations:
     #     locationsList.append([float(location['Lat']), float(location['Lng']), location['DestName']])
 
-    counts = [25, 100, 30, 15]
+    counts = [len(explored), len(favorites), 30, 15]
     captions = ['Explored', 'Favorites', 'Countries Visited', 'UNESCO Sites Visited']
 
 
@@ -158,25 +158,26 @@ def search():
     location = request.args.get('location')
     keyword = request.args.get('keywords')
 
-    base = 'SELECT DISTINCT d.id, d.name as name, c.name as country, i.img_url, co.name as cont '\
+    base = 'SELECT d.id, d.name as name, c.name as country, i.img_url, co.name as cont '\
            'FROM destinations d JOIN dest_images i ON d.id = i.dest_id '\
                                'JOIN countries c ON d.country_id = c.id '\
                                'JOIN regions r ON c.region_id = r.id '\
-                               'JOIN continents co ON r.cont_id = co.id '\
-                               'JOIN dest_tags dt ON dt.dest_id = d.id '\
-                               'JOIN tags t ON dt.tag_id = t.id '
-
+                               'JOIN continents co ON r.cont_id = co.id '
     if location:
         if keyword:
-            where = "WHERE (c.name = '{}' OR co.name = '{}' OR r.name = '{}') AND t.name = '{}'"\
+            where = "JOIN dest_tags dt ON dt.dest_id = d.id "\
+                    "JOIN tags t ON dt.tag_id = t.id "\
+                    "WHERE (c.name = '{}' OR co.name = '{}' OR r.name = '{}') AND t.name = '{}'"\
                     .format(location, location, location, keyword)
         else:
             where = "WHERE (c.name = '{}' or co.name = '{}' OR r.name = '{}')"\
                     .format(location, location, location)
     elif keyword:
-        where = "WHERE t.name = '{}'".format(keyword)
+        where = "JOIN dest_tags dt ON dt.dest_id = d.id "\
+                "JOIN tags t ON dt.tag_id = t.id "\
+                "WHERE t.name = '{}'".format(keyword)
     else:
-        where = 'ORDER BY random() LIMIT 5 '
+        where = 'ORDER BY random() LIMIT 5'
     query = text(base + where)
     dests = execute(query)
 
@@ -197,7 +198,28 @@ def search():
     return render_template('search.html', dests=dests, locations=locations, tags=tags, explored=explored, 
                             favorites=favorites, keyword=keyword, location=location)    
 
+@app.route('/alter-featured-dest', methods=['POST'])
+def alter_featured_dest():
+    data = request.values
 
+    cur = connection.cursor()
+    cur.execute("SELECT DestName, CountryName, d.DestID, c.CountryID, d.Description, ImgUrl "
+                "FROM destinations d JOIN countries c ON d.CountryID = c.CountryID "
+                                    "JOIN dest_images i ON d.DestID = i.DestID "
+                                    "JOIN dest_locations l ON d.DestID = l.DestID "
+                "WHERE d.DestID = %s"
+                , data['id'])
+    destination = cur.fetchone()
+
+    cur.execute("SELECT TagName "
+                "FROM vTags "
+                "WHERE DestName  = %s"
+                , destination['DestName'])
+    tags = cur.fetchall()
+    cur.close()
+
+    return jsonify(destination, tags)
+    
 @app.route('/create-destination', methods=['POST', 'GET'])
 def create_destination():
     # form = DestinationForm(request.form)
