@@ -141,16 +141,17 @@ def user(id):
     query = text('SELECT l.lat, l.lng, d.name '
                  'FROM dest_locations l JOIN destinations d on l.dest_id = d.id ')
     locations = execute(query)    
-    
+
     counts = [len(explored), len(favorites), 30, 15]
     captions = ['Explored', 'Favorites', 'Countries Visited', 'UNESCO Sites Visited']
 
 
-    return render_template('user.html', title=user.full_name(), user=user, locations=locations, counts=counts, captions=captions)
+    return render_template('user.html', title=user.full_name() + ' | Wanderlist', 
+                            user=user, locations=locations, counts=counts, captions=captions)
 
 @app.route('/change-map', methods=['POST'])
 @login_required
-def change_map():
+def change_map(where=None):
     view = request.form['view']
     base = 'SELECT l.lat, l.lng, d.name '\
            'FROM dest_locations l JOIN destinations d on l.dest_id = d.id '
@@ -166,8 +167,7 @@ def change_map():
                     "FROM explored e "\
                     "WHERE e.user_id = {})"\
                     .format(current_user.id)
-
-    query = text(base + where if where else None)
+    query = text(base + (where if where else ''))
     locations = execute(query)
 
     return jsonify(locations)
