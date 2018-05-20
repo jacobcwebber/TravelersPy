@@ -158,7 +158,7 @@ def search():
     location = request.args.get('location')
     keyword = request.args.get('keywords')
 
-    base = 'SELECT d.id, d.name as name, c.name as country, i.img_url, co.name as cont '\
+    base = 'SELECT DISTINCT d.id, d.name as name, c.name as country, i.img_url, co.name as cont '\
            'FROM destinations d JOIN dest_images i ON d.id = i.dest_id '\
                                'JOIN countries c ON d.country_id = c.id '\
                                'JOIN regions r ON c.region_id = r.id '\
@@ -168,13 +168,13 @@ def search():
 
     if location:
         if keyword:
-            where = 'WHERE (c.CountryName = {} OR ContName = {} OR r.RegionName = {}) AND t.TagName = {}'\
+            where = "WHERE (c.name = '{}' OR co.name = '{}' OR r.name = '{}') AND t.name = '{}'"\
                     .format(location, location, location, keyword)
         else:
-            where = 'WHERE (c.CountryName ={} or ContName = {} OR r.RegionName = {})'\
-            .format(location, location, location)
+            where = "WHERE (c.name = '{}' or co.name = '{}' OR r.name = '{}')"\
+                    .format(location, location, location)
     elif keyword:
-        where = 'WHERE t.TagName = {}'.format(keyword)
+        where = "WHERE t.name = '{}'".format(keyword)
     else:
         where = 'ORDER BY random() LIMIT 5 '
     query = text(base + where)
@@ -194,7 +194,8 @@ def search():
 
     tags = [tag.name for tag in Tag.query.all()]
 
-    return render_template('search.html', dests=dests, locations=locations, tags=tags, explored=explored, favorites=favorites)    
+    return render_template('search.html', dests=dests, locations=locations, tags=tags, explored=explored, 
+                            favorites=favorites, keyword=keyword, location=location)    
 
 
 @app.route('/create-destination', methods=['POST', 'GET'])
