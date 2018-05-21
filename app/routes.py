@@ -293,6 +293,7 @@ def edit_destination(id):
     return render_template('edit_destination.html', form=form, tags=tags)
 
 @app.route('/alter-explored', methods=['POST'])
+@login_required
 def alter_explored():
     dest = Destination.query.get(request.form['id'])
     action = request.form['action']
@@ -306,6 +307,7 @@ def alter_explored():
     return "success"
 
 @app.route('/alter-favorite', methods=['POST'])
+@login_required
 def alter_favorite():
     dest = Destination.query.get(request.form['id'])
     action = request.form['action']

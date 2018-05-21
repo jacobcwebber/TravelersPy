@@ -16,9 +16,11 @@
       <span class="item-title">{{ dest.name }}</span>
     </a>
   </div>
+  {% if current_user.id == 1 %}
   <div class="item-footer">
     <a href="/edit-destination/{{ dest.id }}">
       <span class="fas fa-pencil-alt fa-lg" aria-hidden="true"></span>                             
     </a>
   </div>
+  {%endif %}
 </div>
