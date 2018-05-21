@@ -60,9 +60,7 @@ $('.item-mid').click(e => {
       let tags = response[1];
       $.each(tags, i => {
         featDestTags.append(
-          `<a href='/search?keywords=${
-            tags[i]
-          }' class='label label-lg'>${tags[i]} </a>`
+          `<a href='/search?keywords=${tags[i]}' class='label label-lg'>${tags[i]}</a> `
         );
       });
       featBox.removeClass('hide');
