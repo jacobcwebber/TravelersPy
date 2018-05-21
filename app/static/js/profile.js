@@ -7,7 +7,6 @@ function initMap() {
         zoom: 2,
         mapTypeId: 'hybrid'
     });
-    console.log(locations[0].name)
     addMarkers(locations);
 }
 
