@@ -6,10 +6,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-    <meta name="travelers" content="Travelers">
-    <meta name="description" content="A web app to explore the world from your computer!">
+    <meta name="wanderlist" content="Wanderlist">
+    <meta name="description" content="Explore the world from your computer!">
     <meta name="google" content="notranslate">
-    <meta http-equiv="x-dns-prefetch-control" content="off">
     <title>{{ title }}</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -18,9 +17,6 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto" >
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.min.css') }}">
-    <script src="../static/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.js"></script>
-    <script src="../static/bower_components/bootstrap/dist/js/bootstrap3-typeahead.js"></script>
-    <script src="../static/bower_components/jquery-smooth-scroll/jquery.smooth-scroll.min.js"></script>
     {% block head %}{% endblock %}
   </head>
   <body>
@@ -37,7 +33,6 @@
       {% endwith %}
       {% block body %}{% endblock %}
     </div>
-    {% block scripts %}
-    {% endblock %}
+    {% block scripts %}{% endblock %}
   </body>
 </html>
