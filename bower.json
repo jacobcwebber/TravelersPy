@@ -1,0 +1,25 @@
+{
+  "name": "Wanderlist",
+  "homepage": "https://github.com/jacobcwebber/Wanderlist",
+  "authors": [
+    "Jacob <jacobcwebber@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/static/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.1.0",
+    "jquery-smooth-scroll": "^2.2.0",
+    "bootstrap-tagsinput": "^0.8.0",
+    "paper-toast": "PolymerElements/paper-toast#^2.0.0"
+  }
+}

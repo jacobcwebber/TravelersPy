@@ -1,0 +1,22 @@
+{
+  "name": "wanderlist",
+  "version": "1.0.0",
+  "description": "A website with curated travel destinations from across the world that allows users to organize and prioritize their own travel goals and wants.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jacobcwebber/Wanderlist.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jacobcwebber/Wanderlist/issues"
+  },
+  "homepage": "https://github.com/jacobcwebber/Wanderlist#readme",
+  "devDependencies": {
+    "bower": "^1.8.4"
+  }
+}
