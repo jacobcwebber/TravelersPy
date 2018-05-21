@@ -215,8 +215,8 @@ def search():
 
     tags = [tag.name for tag in Tag.query.all()]
 
-    return render_template('search.html', dests=dests, locations=locations, tags=tags, explored=explored, 
-                            favorites=favorites, keyword=keyword, location=location)    
+    return render_template('search.html', title="Explore | Wanderlist",dests=dests, locations=locations, tags=tags,  
+                            explored=explored, favorites=favorites, keyword=keyword, location=location)    
 
 @app.route('/alter-featured-dest', methods=['POST'])
 @login_required
@@ -235,82 +235,32 @@ def alter_featured_dest():
 @app.route('/create-destination', methods=['POST', 'GET'])
 @login_required
 def create_destination():
-    # form = DestinationForm(request.form)
-    # if request.method == 'POST' and form.validate():
-    #     name = form.name.data
-    #     countryId = form.countryId.data
-    #     category = form.category.data
-    #     description = form.description.data
-    #     imgUrl = form.imgUrl.data
-    #     tags = form.tags.data
-    #     lat = form.lat.data
-    #     lng = form.lng.data
+    form = DestinationForm()
 
-    #     cur = connection.cursor()
+    if request.method == 'POST':
+        dest = Destination(name=form.name.data, country_id=form.country_id.data, description=form.description.data)
+        dest_img = Dest_image(dest_id=dest.id, img_url=form.img_url.data)
+        dest_location = Dest_Location(dest_id=dest.id, lat=form.lat.data, lng=form.lng.data)
 
-    #     cur.execute("INSERT INTO destinations(DestName, CountryID, Category, Description) "
-    #                 " VALUES (%s, %s, %s, %s)"
-    #                 , (name, countryId, category, description))
+        tags = form.tags.data
+        for tag_name in tags.split(','):
+            tag = Tag.query.filter_by(name=tag_name).first()
+            dest.add_tag(tag)
+        db.session.commit()
+        
+        return redirect(url_for('home'))
+    tags = [tag.name for tag in Tag.query.all()]
+    form.country_id.choices = [(0, '')] + ([(country.id, country.name) for country in Country.query.all()])
 
-    #     connection.commit()
-    #     cur.close()
+    return render_template('create_destination.html', form=form, tags=tags)
 
-    #     cur = connection.cursor()
-
-    #     cur.execute("SELECT DestID "
-    #                 "FROM destinations "
-    #                 "WHERE DestName = %s"
-    #                 , [name])
-    #     id = cur.fetchone()
-
-    #     cur.execute("INSERT INTO dest_images "
-    #                 " VALUES (%s, %s)",
-    #                 (id['DestID'], imgUrl))
-    #     connection.commit()
-
-    #     cur.execute("INSERT INTO dest_locations "
-    #                 " VALUES (%s, %s, %s)",
-    #                 (id['DestID'], lat, lng))
-    #     connection.commit()
-    #     cur.close()
-
-    #     ##TODO: figure out why this if statement isn't working... error is thrown if no tags input
-    #     if tags != None:
-    #         for tag in tags.split(','):
-    #             cur = connection.cursor()
-
-    #             cur.execute("SELECT TagID "
-    #                         "FROM Tags "
-    #                         "WHERE TagName = %s"
-    #                         , [tag])
-    #             tagId = cur.fetchone()
-                
-    #             cur.execute("INSERT INTO dest_tags "
-    #                         "VALUES (%s, %s)"
-    #                         , (id['DestID'], tagId['TagID']))
-    #             connection.commit()
-    #             cur.close()
-
-    #     return redirect(url_for('destinations'))
-            
-    # cur = connection.cursor()
-    # cur.execute("SELECT TagName FROM tags")
-    # tags = cur.fetchall()
-    # cur.close()
-
-    # tagsList = []
-    # for tag in tags:
-    #     tagsList.append(tag['TagName'])
-
-    return render_template('create_destination.html', form=form, tags=tagsList)
-
-@app.route('/edit_destination/<string:id>', methods=['POST', 'GET'])
+@app.route('/edit-destination/<string:id>', methods=['POST', 'GET'])
 @login_required
 def edit_destination(id):
     form = DestinationForm()
     dest = Destination.query.get(id) 
 
-    if form.validate_on_submit():
+    if request.method == 'POST':
         dest_img = Dest_Image.query.get(id)
         dest_location = Dest_Location.query.get(id)
 
@@ -320,41 +270,27 @@ def edit_destination(id):
         dest_img.img_url = form.img_url.data
         dest_location.lat = form.lat.data
         dest_location.lng = form.lng.data
+        tags = form.tags.data
 
-        # tags = form.tags.data
-        # # TEST NEXT LINE BEFORE UNCOMMENTING -- DON'T WANT TO DELETE EVERYTHING
-        # # tags = Dest_Tags.query.filter_by(dest_id=id).delete()
+        dest.tags = []
+        for tag_name in tags.split(','):
+            tag = Tag.query.filter_by(name=tag_name).first()
+            dest.add_tag(tag)
+        db.session.commit()   
 
-        # for tag in tags.split(','):
-        #     cur = connection.cursor()
+        return redirect(url_for('home'))
 
-        #     cur.execute("SELECT TagID "
-        #                 "FROM Tags "
-        #                 "WHERE TagName = %s"
-        #                 , [tag])
-        #     tagId = cur.fetchone()
-            
-        #     cur.execute("INSERT INTO dest_tags "
-        #                 "VALUES (%s, %s)"
-        #                 , (id, tagId['TagID']))
-        #     connection.commit()
-        #     cur.close()
-        
-        return redirect(url_for('destinations'))
+    tags = [tag.name for tag in Tag.query.all()]
+    countries = [(country.id, country.name) for country in Country.query.all()]
+    dest_image = Dest_Image.query.get(id)
 
-    elif request.method == 'GET':
-        dest_tags = ','.join([tag.name for tag in Destination.query.get(id).tags.all()])
-        tags = [tag.name for tag in Tag.query.all()]
-        dest_image = Dest_Image.query.get(id)
+    form.name.data = dest.name
+    form.country_id.data = dest.country_id
+    form.tags.data = ','.join([tag.name for tag in dest.tags.all()])
+    form.description.data = dest.description
+    form.img_url.data = dest_image.img_url
 
-        form.name.data = dest.name
-        form.country_id.data = dest.country_id
-        form.tags.data = ','.join([tag.name for tag in dest.tags.all()])
-        form.description.data = dest.description
-        form.img_url.data = dest_image.img_url
-   
-
-    return render_template('edit_destination.html', form=form, tags=tags, dest_tags=dest_tags)
+    return render_template('edit_destination.html', form=form, tags=tags)
 
 @app.route('/alter-explored', methods=['POST'])
 def alter_explored():

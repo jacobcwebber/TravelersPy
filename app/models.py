@@ -65,7 +65,7 @@ class Destination(db.Model):
     country_id = db.Column(db.Integer, db.ForeignKey('countries.id', onupdate="CASCADE", ondelete="CASCADE"))
     name = db.Column(db.String(100), unique=True)
     description = db.Column(db.Text)
-    update_date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    update_date = db.Column(db.DateTime, index=True, default=datetime.utcnow, onupdate=datetime.utcnow)
     dest_location = db.relationship('Dest_Location', backref=backref("destination", uselist=False))
     dest_img = db.relationship('Dest_Image', backref=backref("destination", uselist=False))
     tags = db.relationship('Tag', secondary='dest_tags',
@@ -74,6 +74,18 @@ class Destination(db.Model):
 
     def __repr__(self):
         return '<{}>'.format(self.name)
+
+    def add_tag(self, tag):
+        if not self.has_tag(tag):
+            self.tags.append(tag)
+    
+    def remove_tag(self, tag):
+        if self.has_tag(tag):
+            self.tags.remove(tag)
+
+    def has_tag(self, tag):
+        return self.tags.filter(
+            dest_tags.c.tag_id == tag.id).count() > 0
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -100,7 +112,7 @@ class User(UserMixin, db.Model):
 
     def full_name(self):
         return '{} {}'.format(self.first_name, self.last_name)
-        
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
@@ -109,7 +121,7 @@ class User(UserMixin, db.Model):
 
     def avatar(self, size):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
-        return 'https://www.gravatar.com/avatar/{}?&s={}'.format(digest, size)
+        return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, size)
 
     def get_reset_password_token(self, expires_in=600):
         return jwt.encode(

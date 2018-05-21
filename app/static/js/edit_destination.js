@@ -1,9 +1,6 @@
 var currentTab = 0;
 showTab(currentTab);
 
-// Initiates tag form with existing tags
-$('#tags').val(myTags);
-
 function showTab(n) {
     var x = document.getElementsByClassName("tab");
     x[n].style.display = "block";
@@ -38,7 +35,7 @@ $('#tags').tagsinput({
     typeahead: {
       afterSelect: function(val) {this.$element.val(""); },
       showHintOnFocus: true,
-      source: allTags
+      source: tags
     },
     freeInput: false
 });

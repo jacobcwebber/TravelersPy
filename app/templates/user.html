@@ -15,6 +15,8 @@
       <div class="title">{{ user.full_name() }}</div>
       <div class="about">
         {% if user.about %}<p>{{ user.about }}</p>{% endif %}
+        {% if not user.about and current_user.id == user.id %}<p>Write something about yourself!</p>{% endif %}
+        {% if not user.about and current_user.id != user.id %}<p>{{ user.first_name }} has not written an About Me.</p>{% endif %}
       </div>
     </div>
   </div>    
@@ -41,11 +43,13 @@
     </ul>
     <div id="map"></div>
   </div>
+  {% if user.id == current_user.id %}
   <div class="box">
     <div class="box-header-text">Account</div>
     <div class="standard-text">Questions about Travelers or your account? Email the creator at <a class="link">jacobcwebber@gmail.com</a></div>
     <div id="logout"><a class="standard-text link" href="/logout">Logout</a></div>
   </div>
+  {% endif %}
 </div>
 
 <script type="text/javascript" src="../static/js/profile.js"></script>
