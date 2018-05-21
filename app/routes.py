@@ -239,7 +239,7 @@ def create_destination():
 
     if request.method == 'POST':
         dest = Destination(name=form.name.data, country_id=form.country_id.data, description=form.description.data)
-        dest_img = Dest_image(dest_id=dest.id, img_url=form.img_url.data)
+        dest_img = Dest_Image(dest_id=dest.id, img_url=form.img_url.data)
         dest_location = Dest_Location(dest_id=dest.id, lat=form.lat.data, lng=form.lng.data)
 
         tags = form.tags.data
@@ -270,9 +270,9 @@ def edit_destination(id):
         dest_img.img_url = form.img_url.data
         dest_location.lat = form.lat.data
         dest_location.lng = form.lng.data
-        tags = form.tags.data
 
         dest.tags = []
+        tags = form.tags.data
         for tag_name in tags.split(','):
             tag = Tag.query.filter_by(name=tag_name).first()
             dest.add_tag(tag)

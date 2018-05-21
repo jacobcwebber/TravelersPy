@@ -49,8 +49,8 @@ function initMap() {
   }
 
 // Changes map viewport and adds pins when country input is changed
-$('#countryId').change(function initMap() {
-    var address = $('#dest-name').val() + ', ' + $('#countryId').find(":selected").text();
+$('#country_id').change(function initMap() {
+    var address = $('#dest-name').val() + ', ' + $('#country_id').find(":selected").text();
     var geocoder = new google.maps.Geocoder();
     geocoder.geocode({ 'address': address }, function(results, status) {
         if (status == google.maps.GeocoderStatus.OK) {

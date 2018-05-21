@@ -76,16 +76,10 @@ class Destination(db.Model):
         return '<{}>'.format(self.name)
 
     def add_tag(self, tag):
-        if not self.has_tag(tag):
-            self.tags.append(tag)
+        self.tags.append(tag)
     
     def remove_tag(self, tag):
-        if self.has_tag(tag):
-            self.tags.remove(tag)
-
-    def has_tag(self, tag):
-        return self.tags.filter(
-            dest_tags.c.tag_id == tag.id).count() > 0
+        self.tags.remove(tag)
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
