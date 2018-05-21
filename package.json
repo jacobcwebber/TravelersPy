@@ -4,6 +4,7 @@
   "description": "A website with curated travel destinations from across the world that allows users to organize and prioritize their own travel goals and wants.",
   "main": "index.js",
   "scripts": {
+    "postinstall": "./node_modules/bower/bin/bower install",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
