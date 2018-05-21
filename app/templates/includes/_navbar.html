@@ -31,11 +31,13 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         {% if current_user.is_authenticated %}
+          {% if current_user.id == 1 %}
           <li{% if "new_destination" == active_page %} class="active" {% endif %}>
             <a class="nav-item" href="{{ url_for('create_destination') }}">
               <section>New Destination</section>  
             </a>
           </li>
+          {% endif %}
           <li{% if "profile" == active_page %} class="active" {% endif %}>
             <a class="nav-item" href="{{ url_for('user', id=current_user.id) }}">
               <section>Profile</section>
