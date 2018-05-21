@@ -246,6 +246,7 @@ def create_destination():
         for tag_name in tags.split(','):
             tag = Tag.query.filter_by(name=tag_name).first()
             dest.add_tag(tag)
+        db.session.commit([dest, dest_img, dest_location])
         db.session.commit()
         
         return redirect(url_for('home'))
