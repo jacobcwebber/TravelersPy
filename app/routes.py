@@ -6,7 +6,7 @@ from app import app, db
 from app.forms import LoginForm, RegistrationForm, ResetPasswordRequestForm, ResetPasswordForm, DestinationForm
 from app.models import User,  Destination, Country, Region, Continent, Dest_Location, Dest_Image, Tag
 from app.email import send_password_reset_email
-from app.tools import execute
+from app.tools import execute, get_dests_by_tag
 from datetime import datetime
 import sys
 
@@ -120,30 +120,15 @@ def user(id):
     favorites = [dest.id for dest in user.favorited_dests.all()]
     explored = [dest.id for dest in user.explored_dests.all()]
     dests = Destination.query.all()
+    unesco = get_dests_by_tag("UNESCO")
 
-    # print([dest.tags.filter('UNESCO'.in_(dest.tags.all())) for dest in user.explored_dests.all()], file=sys.stderr)  
-
-    # cur.execute("SELECT c.CountryID "
-    #             "FROM explored e JOIN destinations d ON e.DestID = d.DestID JOIN countries c ON d.CountryID = c.CountryID "
-    #             "WHERE e.UserID = %s "
-    #             "GROUP BY c.CountryID"
-    #             , session['user'])
-    # countries = cur.fetchall()
-
-    # cur.execute("SELECT d.DestID "
-    #             "FROM explored e JOIN destinations d ON e.DestID = d.DestID "
-    #                             "JOIN dest_tags dt ON  dt.DestID = d.DestID "
-    #                             "JOIN tags t ON t.TagID = dt.TagID "
-    #             "WHERE e.UserID = %s AND t.TagName = 'UNESCO'"
-    #             , session['user'])
-    # unesco = cur.fetchall()
-
+    #TODO: this query is easy enough for ORM -- change it
     query = text('SELECT l.lat, l.lng, d.name '
                  'FROM dest_locations l JOIN destinations d on l.dest_id = d.id ')
     locations = execute(query)    
 
-    counts = [len(explored), len(favorites), 30, 15]
-    captions = ['Explored', 'Favorites', 'Countries Visited', 'UNESCO Sites Visited']
+    counts = [len(explored), len(favorites), len(unesco)]
+    captions = ['Explored', 'Favorites', 'UNESCO Sites Visited']
 
 
     return render_template('user.html', title=user.full_name() + ' | Wanderlist', 
