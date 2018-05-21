@@ -53,12 +53,16 @@
 </div>
 
 <paper-toast id="toast"></paper-toast>
+{% endblock %}
 
+{% block scripts%}
 <script>
-  var locationsList = {{ locations | safe }};
-  var tagsList = {{ tags | safe }};
+  var locations = {{ locations | safe }};
+  var tags = {{ tags | safe }};
 </script>
+<script src="../static/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.js"></script>
+<script src="../static/bower_components/bootstrap/dist/js/bootstrap3-typeahead.js"></script>
+<script src="../static/bower_components/jquery-smooth-scroll/jquery.smooth-scroll.min.js"></script>
 <script src="../static/js/search.js"></script>
 <script src="../static/js/destinations.js"></script>
-
 {% endblock %}

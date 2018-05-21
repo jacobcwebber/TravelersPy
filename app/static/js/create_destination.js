@@ -35,7 +35,7 @@ $('#tags').tagsinput({
     typeahead: {
       afterSelect: function(val) {this.$element.val(""); },
       showHintOnFocus: true,
-      source: tagsSource
+      source: tags
     },
     freeInput: false
 });

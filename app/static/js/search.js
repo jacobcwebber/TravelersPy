@@ -14,7 +14,7 @@ $('#location').typeahead({
   hint: false,
   highlight: true,
   minLength: 1,
-  source: locationsList
+  source: locations
 });
 
 //Typeahead with Tagsinput setup for Keywords input box
@@ -26,7 +26,7 @@ $('#keywords').tagsinput({
     afterSelect: function() {
       this.$element.val('');
     },
-    source: tagsList
+    source: tags
   },
   freeInput: false
 });
@@ -57,7 +57,6 @@ $('.item-mid').click(e => {
       featCountryName.text(response[0][0].country_name);
       featDestDesc.html(response[0][0].description);
       featDestTags.empty();
-      console.log(response)
       let tags = response[1];
       $.each(tags, i => {
         featDestTags.append(
