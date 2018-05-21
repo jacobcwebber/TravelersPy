@@ -18,18 +18,18 @@ $('#location').typeahead({
 });
 
 //Typeahead with Tagsinput setup for Keywords input box
-$('#keywords').tagsinput({
-  confirmKeys: [9, 13, 44],
-  trimValue: true,
-  maxTags: 5,
-  typeahead: {
-    afterSelect: function() {
-      this.$element.val('');
-    },
-    source: tags
-  },
-  freeInput: false
-});
+// $('#keywords').tagsinput({
+//   confirmKeys: [9, 13, 44],
+//   trimValue: true,
+//   maxTags: 5,
+//   typeahead: {
+//     afterSelect: function() {
+//       this.$element.val('');
+//     },
+//     source: tags
+//   },
+//   freeInput: false
+// });
 
 // Show or hide Placeholder depending on existence of tags
 $('#keywords').on('itemAdded', () => {
