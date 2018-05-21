@@ -120,7 +120,7 @@ def user(id):
     favorites = [dest.id for dest in user.favorited_dests.all()]
     explored = [dest.id for dest in user.explored_dests.all()]
     dests = Destination.query.all()
-    unesco = get_dests_by_tag("UNESCO")
+    unesco = get_dests_by_tag(id=id, tag="UNESCO")
 
     #TODO: this query is easy enough for ORM -- change it
     query = text('SELECT l.lat, l.lng, d.name '
