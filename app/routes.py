@@ -6,7 +6,7 @@ from app import app, db
 from app.forms import LoginForm, RegistrationForm, ResetPasswordRequestForm, ResetPasswordForm, DestinationForm
 from app.models import User,  Destination, Country, Region, Continent, Dest_Location, Dest_Image, Tag
 from app.email import send_password_reset_email
-from app.tools import execute, get_dests_by_tag
+from app.tools import execute
 from datetime import datetime
 import sys
 
@@ -116,6 +116,15 @@ def home():
 @login_required
 def user(id):
     user = User.query.filter_by(id=id).first_or_404()
+
+    def get_dests_by_tag(id, tag):
+        query = text("SELECT d.id "
+                    "FROM explored e JOIN destinations d ON e.dest_id = d.id "
+                                    "JOIN dest_tags dt ON  dt.dest_id = d.id "
+                                    "JOIN tags t ON dt.tag_id = t.id "
+                    "WHERE e.user_id = {} AND t.name = '{}'".format(id, tag))
+        results = execute(query)
+        return results
 
     favorites = [dest.id for dest in user.favorited_dests.all()]
     explored = [dest.id for dest in user.explored_dests.all()]
