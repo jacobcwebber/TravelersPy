@@ -24,7 +24,7 @@
       </div>
       <div class="tab" style="display: none;">
         <div class="form-group">
-          {{ render_field(form.tags, id="tags", class="form-control", type="text", **{'data-role':'tagsinput'})}}
+          {{ render_field(form.tags, id="tags", class="form-control", type="text")}}
         </div>
         <div class="form-group">
             {{ render_field(form.description, class_="form-control", id="editor") }}
@@ -51,8 +51,7 @@
 <script>var tags = {{ tags | safe }};</script>
 <script src="//cdn.ckeditor.com/4.6.2/basic/ckeditor.js"></script>
 <script type="text/javascript">CKEDITOR.replace('editor')</script>
-<script src="../static/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
-<script src="../static/bower_components/bootstrap/dist/js/bootstrap3-typeahead.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABEVdEk2zQBeCHstcUpXQUkSxPhtmTv0Q&callback=initMap"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.min.js"></script>
 <script src="/static/js/create_destination.js"></script>

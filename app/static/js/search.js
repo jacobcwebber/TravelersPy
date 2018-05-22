@@ -9,7 +9,6 @@ let featDestTags = $('#feat-dest-tags');
 
 let resultsBox = $('box:last-of-type');
 
-// Typeahead setup for Location input box
 $('#location').typeahead({
   hint: false,
   highlight: true,
@@ -17,7 +16,6 @@ $('#location').typeahead({
   source: locations
 });
 
-// Typeahead with Tagsinput setup for Keywords input box
 $('#keywords').typeahead({
   hint: false,
   highlight: true,

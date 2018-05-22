@@ -276,7 +276,7 @@ def edit_destination(id):
         return redirect(url_for('home'))
 
     tags = [tag.name for tag in Tag.query.all()]
-    countries = [(country.id, country.name) for country in Country.query.all()]
+    form.country_id.choices = [(0, '')] + ([(country.id, country.name) for country in Country.query.all()])
     dest_image = Dest_Image.query.get(id)
 
     form.name.data = dest.name

@@ -28,16 +28,9 @@ function nextPrev(n) {
 }
 
 // Creates tags input and the autocomplete
-$('#tags').tagsinput({
+$('#tags').typeahead({
     confirmKeys: [13, 44, 9],
-    maxTags: 10,
-    trimValue: true,
-    typeahead: {
-      afterSelect: function(val) {this.$element.val(""); },
-      showHintOnFocus: true,
-      source: tags
-    },
-    freeInput: false
+    source: tags
 });
 
 function initMap() {

@@ -20,8 +20,7 @@
               id="keywords" name="keywords" 
               autocomplete="off" 
               {% if not keyword %}placeholder="Filter by keywords"{% endif %} 
-              {% if keyword %}value="{{ keyword }}"{% endif %} 
-              data-input="tagsinput">
+              {% if keyword %}value="{{ keyword }}"{% endif %} >
       <button class="btn btn-lg search-btn" type="submit">
         <i class="fas fa-search fa-x-lg"></i>
       </button>
@@ -60,7 +59,7 @@
   var locations = {{ locations | safe }};
   var tags = {{ tags | safe }};
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-smooth-scroll/2.2.0/jquery.smooth-scroll.min.js"></script>
 <script src="../static/js/search.js"></script>
 <script src="../static/js/destinations.js"></script>
