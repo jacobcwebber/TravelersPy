@@ -17,19 +17,13 @@ $('#location').typeahead({
   source: locations
 });
 
-//Typeahead with Tagsinput setup for Keywords input box
-// $('#keywords').tagsinput({
-//   confirmKeys: [9, 13, 44],
-//   trimValue: true,
-//   maxTags: 5,
-//   typeahead: {
-//     afterSelect: function() {
-//       this.$element.val('');
-//     },
-//     source: tags
-//   },
-//   freeInput: false
-// });
+// Typeahead with Tagsinput setup for Keywords input box
+$('#keywords').typeahead({
+  hint: false,
+  highlight: true,
+  minLength: 1,
+  source: tags
+})
 
 // Show or hide Placeholder depending on existence of tags
 $('#keywords').on('itemAdded', () => {

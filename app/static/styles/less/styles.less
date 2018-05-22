@@ -177,6 +177,7 @@ a:focus {
     border-radius: 1em;
     display: inline-block;
     margin: 0 2px 6px 0;
+    background-color: @navy !important;
 
     &:hover {
         color: @teal !important;
@@ -374,7 +375,8 @@ a:focus {
     grid-template-columns: 6fr 1fr;
     grid-gap: 16px;
 
-    .search-input {
+    .search-input,
+    .bootstrap-tagsinput input{
         background-color: @navy;
         border-color: @teal;
         color: @teal;
