@@ -1,7 +1,6 @@
 from flask import render_template, redirect, url_for, flash, request, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
 from sqlalchemy import desc, func, text
-from werkzeug.urls import url_parse
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, ResetPasswordRequestForm, ResetPasswordForm, DestinationForm
 from app.models import User,  Destination, Country, Region, Continent, Dest_Location, Dest_Image, Tag
@@ -34,7 +33,7 @@ def index():
             return redirect(url_for('login'))
         login_user(user, remember=login_form.remember_me.data)
         next_page = request.args.get('next')
-        if not next_page or url_parse(next_page).netloc != '':
+        if not next_page or is_safe_url(next_page):
             next_page = url_for('index')
         return redirect(next_page)
 
@@ -53,7 +52,7 @@ def login():
             return redirect(url_for('login'))
         login_user(user, remember=login_form.remember_me.data)
         next_page = request.args.get('next')
-        if not next_page or url_parse(next_page).netloc != '':
+        if not next_page or is_safe_url(next_page):
             next_page = url_for('index')
         return redirect(next_page)
     return render_template('login.html', title="Wanderlist | Login", login_form=login_form)
@@ -69,8 +68,7 @@ def reset_password_request():
             send_password_reset_email(user)
         flash('Check your email for the instructions to reset your password')
         return redirect(url_for('login'))
-    return render_template('reset_password_request.html',
-                           title='Reset Password', form=form)
+    return render_template('reset_password_request.html', title='Reset Password', form=form)
 
 @app.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
@@ -233,14 +231,17 @@ def create_destination():
 
     if request.method == 'POST':
         dest = Destination(name=form.name.data, country_id=form.country_id.data, description=form.description.data)
-        dest_img = Dest_Image(dest_id=dest.id, img_url=form.img_url.data)
-        dest_location = Dest_Location(dest_id=dest.id, lat=form.lat.data, lng=form.lng.data)
-
         tags = form.tags.data
         for tag_name in tags.split(','):
             tag = Tag.query.filter_by(name=tag_name).first()
             dest.add_tag(tag)
-        db.session.commit([dest, dest_img, dest_location])
+        db.session.add(dest)
+        db.session.commit()
+
+        dest_img = Dest_Image(dest_id=dest.id, img_url=form.img_url.data)
+        dest_location = Dest_Location(dest_id=dest.id, lat=form.lat.data, lng=form.lng.data)
+
+        db.session.add_all([dest_img, dest_location])
         db.session.commit()
         
         return redirect(url_for('home'))

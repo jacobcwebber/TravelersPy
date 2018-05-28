@@ -7,25 +7,21 @@ from sqlalchemy.orm import backref
 from werkzeug.security import generate_password_hash, check_password_hash
 from hashlib import md5
 
-## Association tables
-
 explored = db.Table('explored',
-    db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
-    db.Column('dest_id', db.Integer, db.ForeignKey('destinations.id'))
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id', onupdate="CASCADE", ondelete="CASCADE")),
+    db.Column('dest_id', db.Integer, db.ForeignKey('destinations.id', onupdate="CASCADE", ondelete="CASCADE"))
 )
 
 favorites = db.Table('favorites',
-    db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
-    db.Column('dest_id', db.Integer, db.ForeignKey('destinations.id'))
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id', onupdate="CASCADE", ondelete="CASCADE")),
+    db.Column('dest_id', db.Integer, db.ForeignKey('destinations.id', onupdate="CASCADE", ondelete="CASCADE"))
 )
 
 dest_tags = db.Table('dest_tags',
-    db.Column('dest_id', db.Integer, db.ForeignKey('destinations.id')),
-    db.Column('tag_id', db.Integer, db.ForeignKey('tags.id'))
+    db.Column('dest_id', db.Integer, db.ForeignKey('destinations.id', onupdate="CASCADE", ondelete="CASCADE")),
+    db.Column('tag_id', db.Integer, db.ForeignKey('tags.id', onupdate="CASCADE", ondelete="CASCADE"))
 )
-
-## Model tables
-        
+       
 class Continent(db.Model):
     __tablename__ = 'continents'
 
@@ -154,9 +150,6 @@ class User(UserMixin, db.Model):
     def has_favorited(self, dest):    
         return self.favorited_dests.filter(
             favorites.c.dest_id == dest.id).count() > 0
-
-    # def get_by_tag(self, tag):
-    #     return self.explored_dests
 
 class Dest_Location(db.Model):
     __tablename__ = 'dest_locations'
