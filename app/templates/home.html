@@ -17,7 +17,9 @@
       {% include 'includes/_dest.html' %}
     {% endfor %}
     </div>
-    <a href="{{ url_for('search') }}" class="footer-text">Explore all {{ "{:,}".format(dest_count) }} destinations...</a>
+    <div class="box-footer">
+      <a href="{{ url_for('search') }}" class="footer-text">Explore all {{ "{:,}".format(dest_count) }} destinations...</a>
+    </div>
   </div>
   <div class="box">
     <div class="box-header-text">Most Popular</div>

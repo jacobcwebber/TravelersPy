@@ -43,11 +43,11 @@
   <div class="box">
     <div class="no-results {% if dests|length != 0 %}hidden{% endif %}">No destinations found for your search.</div>
     <span class="teal no-results loading">Loading...</span>
-      <div class="item-group five-wide hide">
-        {% for dest in dests %}
-          {% include 'includes/_dest.html' %}
-        {% endfor %}
-      </div>
+    <div class="item-group five-wide hide">
+      {% for dest in dests %}
+        {% include 'includes/_dest.html' %}
+      {% endfor %}
+    </div>
   </div>
 </div>
 

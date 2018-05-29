@@ -157,12 +157,6 @@ a:focus {
     float:left; 
     padding-right: 8px;
 }
-.large-header {
-    color: @teal;
-    letter-spacing: 1px; 
-    font-size: 48px; 
-    font-family: 'Roboto', sans-serif;
-}
 .header-container {
     padding-bottom: 6px;
     text-align: center;
@@ -278,6 +272,14 @@ a:focus {
     margin-bottom: 16px;
     overflow: hidden;
 
+    .large-header {
+        text-align: center;
+        color: @teal;
+        letter-spacing: 1px; 
+        font-size: 48px; 
+        font-family: 'Roboto', sans-serif;
+    }
+
     .label {
         transition: all .3s ease-in-out;       
         &:hover {
@@ -357,12 +359,15 @@ a:focus {
             }
         }
     }
-
-    .footer-text {
-        color: @teal;
-        margin-top: 6px;
-        font-size: 16px;
+    .box-footer {
+        margin-top: 4px;
+        
+        .footer-text {
+            color: @teal;
+            font-size: 16px;
+        }
     }
+
 }
 
 /////////////////////////////////

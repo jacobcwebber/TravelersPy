@@ -5,7 +5,7 @@ from app import app, db
 from app.forms import LoginForm, RegistrationForm, ResetPasswordRequestForm, ResetPasswordForm, DestinationForm
 from app.models import User,  Destination, Country, Region, Continent, Dest_Location, Dest_Image, Tag
 from app.email import send_password_reset_email
-from app.tools import execute
+from app.tools import execute, get_dests_by_tag
 from datetime import datetime
 import sys
 
@@ -115,18 +115,10 @@ def home():
 def user(id):
     user = User.query.filter_by(id=id).first_or_404()
 
-    def get_dests_by_tag(id, tag):
-        query = text("SELECT d.id "
-                    "FROM explored e JOIN destinations d ON e.dest_id = d.id "
-                                    "JOIN dest_tags dt ON  dt.dest_id = d.id "
-                                    "JOIN tags t ON dt.tag_id = t.id "
-                    "WHERE e.user_id = {} AND t.name = '{}'".format(id, tag))
-        results = execute(query)
-        return results
-
     favorites = [dest.id for dest in user.favorited_dests.all()]
     explored = [dest.id for dest in user.explored_dests.all()]
     dests = Destination.query.all()
+
     unesco = get_dests_by_tag(id=id, tag="UNESCO")
 
     #TODO: this query is easy enough for ORM -- change it
@@ -207,14 +199,13 @@ def search():
 
     tags = [tag.name for tag in Tag.query.all()]
 
-    return render_template('search.html', title="Explore | Wanderlist",dests=dests, locations=locations, tags=tags,  
+    return render_template('search.html', title="Explore | Wanderlist", dests=dests, locations=locations, tags=tags,  
                             explored=explored, favorites=favorites, keyword=keyword, location=location)    
 
 @app.route('/alter-featured-dest', methods=['POST'])
 @login_required
 def alter_featured_dest():
     id = request.form['id']
-
     query = "SELECT d.name as dest_name, c.name as country_name, d.id, c.id, d.description, i.img_url "\
             "FROM destinations d JOIN countries c ON d.country_id = c.id "\
                                 "JOIN dest_images i ON d.id = i.dest_id "\
@@ -231,8 +222,8 @@ def create_destination():
 
     if request.method == 'POST':
         dest = Destination(name=form.name.data, country_id=form.country_id.data, description=form.description.data)
-        tags = form.tags.data
-        for tag_name in tags.split(','):
+        tags = (form.tags.data).split(',')
+        for tag_name in tags:
             tag = Tag.query.filter_by(name=tag_name).first()
             dest.add_tag(tag)
         db.session.add(dest)
@@ -245,6 +236,7 @@ def create_destination():
         db.session.commit()
         
         return redirect(url_for('home'))
+
     tags = [tag.name for tag in Tag.query.all()]
     form.country_id.choices = [(0, '')] + ([(country.id, country.name) for country in Country.query.all()])
 
@@ -268,8 +260,8 @@ def edit_destination(id):
         dest_location.lng = form.lng.data
 
         dest.tags = []
-        tags = form.tags.data
-        for tag_name in tags.split(','):
+        tags = (form.tags.data).split(',')
+        for tag_name in tags:
             tag = Tag.query.filter_by(name=tag_name).first()
             dest.add_tag(tag)
         db.session.commit()   
@@ -288,16 +280,24 @@ def edit_destination(id):
 
     return render_template('edit_destination.html', form=form, tags=tags)
 
+@app.route('/user/<id>/<string:tag>')
+def user_destinations(id, tag):
+    user = User.query.get(id)
+    dests = get_dests_by_tag(id=id, tag=tag)
+    explored = [dest.id for dest in user.explored_dests.all()]
+    favorites = [dest.id for dest in user.favorited_dests.all()]
+
+    return render_template('user_destinations.html', user=user, tag=tag, 
+                            dests=dests, explored=explored, favorites=favorites)
+
+
 @app.route('/alter-explored', methods=['POST'])
 @login_required
 def alter_explored():
     dest = Destination.query.get(request.form['id'])
     action = request.form['action']
     
-    if action == "add":
-        current_user.add_explored(dest)
-    elif action == "remove":
-        current_user.remove_explored(dest)
+    current_user.add_explored(dest) if action == "add" else current_user.remove_explored(dest)
     db.session.commit()
 
     return "success"
@@ -308,10 +308,7 @@ def alter_favorite():
     dest = Destination.query.get(request.form['id'])
     action = request.form['action']
     
-    if action == "add":
-        current_user.add_favorite(dest)
-    elif action == "remove":
-        current_user.remove_favorite(dest)
+    current_user.add_favorite(dest) if action == "add" else current_user.remove_favorite(dest)
     db.session.commit()
 
     return "success"
