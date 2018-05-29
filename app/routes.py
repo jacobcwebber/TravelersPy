@@ -6,7 +6,6 @@ from app.forms import LoginForm, RegistrationForm, ResetPasswordRequestForm, Res
 from app.models import User,  Destination, Country, Region, Continent, Dest_Location, Dest_Image, Tag
 from app.email import send_password_reset_email
 from app.tools import execute, get_dests_by_tag
-from datetime import datetime
 import sys
 
 @app.route('/', methods=['GET', 'POST'])
@@ -43,19 +42,20 @@ def index():
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
-    login_form = LoginForm()
+    form = LoginForm()
 
-    if login_form.validate_on_submit() and login_form.login.data:
+    if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user is None or not user.check_password(login_form.password.data):
+        if user is None or not user.check_password(form.password.data):
             flash('Invalid email or password.')
             return redirect(url_for('login'))
-        login_user(user, remember=login_form.remember_me.data)
+        login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or is_safe_url(next_page):
             next_page = url_for('index')
         return redirect(next_page)
-    return render_template('login.html', title="Wanderlist | Login", login_form=login_form)
+
+    return render_template('login.html', title="Wanderlist | Login", form=form)
 
 @app.route('/reset_password_request', methods=['GET', 'POST'])
 def reset_password_request():
