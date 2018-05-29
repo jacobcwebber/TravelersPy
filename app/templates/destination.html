@@ -1,16 +1,15 @@
 {% extends 'layout.html' %}
-{% set active_page = "destinations" %}
 
 {% block body %}
 <div class="box-group wide-container">
   <div class="box center-text">
-    <span class="large teal">{{ destination.DestName }}, {{destination.CountryName}}</span>  
+    <span class="large teal">{{ dest.dest_name }}, {{dest.country_name}}</span>  
   </div>
   <div class="box wide-container center-text">    
-    <img class="image-element" style="height: 350px;" src="{{ destination.ImgUrl }}" alt="">
-    <div class="caption">{{destination.Description | safe}}</div>
-    {% for tag in tags %}
-      <a href="/search?keywords={{tag.TagName}}" class="label label-lg">{{ tag.TagName }}</a>
+    <img class="image-element" style="height: 350px;" src="{{ dest.img_url }}" alt="">
+    <div class="caption">{{dest.description | safe}}</div>
+    {% for tag in dest['Tags'] %}
+      <a href="" class="label label-lg">{{ tag }}</a>
     {% endfor %}
     <hr>
     <div id="map" style="height: 500px; width: 100%;"></div>
@@ -20,8 +19,8 @@
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABEVdEk2zQBeCHstcUpXQUkSxPhtmTv0Q&callback=initMap" async defer></script>
 <script>
-    var lat = {{destination.Lat}};
-    var lng = {{destination.Lng}};
+    var lat = {{dest.lat}};
+    var lng = {{dest.lng}};
 </script>
 <script src="/static/js/destination.js"></script>
 {% endblock %}

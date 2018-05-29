@@ -126,12 +126,14 @@ def user(id):
                  'FROM dest_locations l JOIN destinations d on l.dest_id = d.id ')
     locations = execute(query)    
 
-    counts = [len(explored), len(favorites), len(unesco)]
-    captions = ['Explored', 'Favorites', 'UNESCO Sites Visited']
+    ## FINDING TOP TAGS BY USER:
+    """select t.name, count(dt.tag_id) from tags t join dest_tags dt on t.
+id = dt.tag_id join destinations d on dt.dest_id = d.id join explored e on e.des
+t_id = d.id join users u on u.id = e.user_id where u.id=1 group by t.id order by
+ count(dt.tag_id) desc;"""
 
-
-    return render_template('user.html', title=user.full_name() + ' | Wanderlist', 
-                            user=user, locations=locations, counts=counts, captions=captions)
+    return render_template('user.html', title=user.full_name() + ' | Wanderlist', user=user,
+                            explored=explored, favorites=favorites, locations=locations)
 
 @app.route('/change-map', methods=['POST'])
 @login_required
@@ -313,5 +315,15 @@ def alter_favorite():
 
     return "success"
 
+#TODO: fix
+@app.route('/destination/<string:id>')
+def destination(id):
+    query = text("SELECT d.name as dest_name, c.name as country_name, d.id, description, img_url, lat, lng "\
+                "FROM destinations d JOIN countries c ON d.country_id = c.id "\
+                                    "JOIN dest_images i ON i.dest_id = d.id "\
+                                    "JOIN dest_locations l ON l.dest_id = d.id "\
+                "WHERE d.id = {}".format(id))
+    dest = execute(query)
+    dest['Tags'] = [tag.name for tag in Destination.query.get(id).tags.all()]
 
-
+    return render_template('destination.html', dest=dest)
