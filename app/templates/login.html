@@ -6,11 +6,11 @@
   <h2 class="header teal">Log into Wanderlist</h2>
   <form action="" method="POST" class="small-form">
     <div class="form-group">
-      {{ form.csrf_token }}
-      {{ render_field(form.email, class_="form-control", placeholder="Email") }} <br>
-      {{ render_field(form.password, class_="form-control", placeholder="Password") }}
+      {{ login_form.csrf_token }}
+      {{ render_field(login_form.email, class_="form-control", placeholder="Email") }} <br>
+      {{ render_field(login_form.password, class_="form-control", placeholder="Password") }}
     </div>
-    {{render_field(form.login, class_="btn btn btn-block btn-teal")}} <br>
+    {{render_field(login_form.login, class_="btn btn btn-block btn-teal")}} <br>
     <a class="link" href="{{ url_for('reset_password_request') }}">Forgot your Password?</a>
   </form>
 </div>  

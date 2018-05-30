@@ -6,7 +6,6 @@ from app.forms import LoginForm, RegistrationForm, ResetPasswordRequestForm, Res
 from app.models import User,  Destination, Country, Region, Continent, Dest_Location, Dest_Image, Tag
 from app.email import send_password_reset_email
 from app.tools import execute, get_dests_by_tag
-import sys
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -16,7 +15,7 @@ def index():
     login_form = LoginForm()
     registration_form = RegistrationForm()
 
-    if registration_form.validate_on_submit() and registration_form.register.data:
+    if registration_form.register.data and registration_form.validate_on_submit():
         user = User(first_name=registration_form.first_name.data, 
                     last_name=registration_form.last_name.data, 
                     email=registration_form.email.data)
@@ -25,7 +24,28 @@ def index():
         db.session.commit() 
         return redirect(url_for('login'))
 
-    if login_form.validate_on_submit() and login_form.login.data:
+    if login_form.login.data:
+        if login_form.validate_on_submit():
+            user = User.query.filter_by(email=login_form.email.data).first()
+            if user is None or not user.check_password(login_form.password.data):
+                flash('Invalid email or password.')
+                return redirect(url_for('login'))
+            login_user(user, remember=login_form.remember_me.data)
+            next_page = request.args.get('next')
+            if not next_page or is_safe_url(next_page):
+                next_page = url_for('index')
+            return redirect(next_page)
+        return redirect(url_for('login'))
+
+    return render_template('index.html', login_form=login_form, registration_form=registration_form)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    login_form = LoginForm()
+
+    if login_form.validate_on_submit():
         user = User.query.filter_by(email=login_form.email.data).first()
         if user is None or not user.check_password(login_form.password.data):
             flash('Invalid email or password.')
@@ -36,26 +56,7 @@ def index():
             next_page = url_for('index')
         return redirect(next_page)
 
-    return render_template('index.html', login_form=login_form, registration_form=registration_form)
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    form = LoginForm()
-
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user is None or not user.check_password(form.password.data):
-            flash('Invalid email or password.')
-            return redirect(url_for('login'))
-        login_user(user, remember=form.remember_me.data)
-        next_page = request.args.get('next')
-        if not next_page or is_safe_url(next_page):
-            next_page = url_for('index')
-        return redirect(next_page)
-
-    return render_template('login.html', title="Wanderlist | Login", form=form)
+    return render_template('login.html', title='Wanderlist | Login', login_form=login_form)
 
 @app.route('/reset_password_request', methods=['GET', 'POST'])
 def reset_password_request():
