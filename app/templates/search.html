@@ -27,18 +27,7 @@
     </div>
   </form>
   <div class="box hide">
-    <div class="feat-dest-wrapper item-group">
-      <img id="feat-dest-img" src="" alt=""></img>   
-      <div class="right">
-        <h3 class="header">
-          <span id="feat-dest-name"></span> - 
-          <span id="feat-country-name"></span>
-        </h3>
-        <span class="body" id="feat-dest-desc"></span>
-        <hr>
-        <div class="" id="feat-dest-tags"></div>
-      </div>
-    </div>
+    {% include 'includes/_featured_dest.html' %}
   </div>
   <div class="box">
     <div class="no-results {% if dests|length != 0 %}hidden{% endif %}">No destinations found for your search.</div>

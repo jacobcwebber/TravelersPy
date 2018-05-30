@@ -66,6 +66,8 @@ $('.item-mid').click(e => {
     });
 });
 
+$('.fa-times-circle').click(e => featBox.addClass('hide'));
+
 $(window).on('load', function() {
   $('.loading').addClass('hide');
   $('.five-wide').removeClass('hide');
