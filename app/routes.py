@@ -35,6 +35,7 @@ def index():
             if not next_page or is_safe_url(next_page):
                 next_page = url_for('index')
             return redirect(next_page)
+        flash('Invalid email or password.')
         return redirect(url_for('login'))
 
     return render_template('index.html', login_form=login_form, registration_form=registration_form)
