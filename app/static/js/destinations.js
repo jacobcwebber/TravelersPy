@@ -1,10 +1,19 @@
+// Initialize tooltips
+$(function () {
+    $('[rel="tooltip"]').tooltip({
+        delay: {'show': 500, 'hide': 100}
+    })
+})
+
 // Add/removes destination to favorites, changes star color, and pops up notification when star is clicked
 $('.fa-star').click(function(event) {
     event.preventDefault();
     if ($(this).hasClass('star-full')) {
         action = "remove";
+        $(this).tooltip({title: 'Add to Favorites'});
     } else {
         action = "add";
+        $(this).tooltip({title: 'Remove from Favorites'});
     }
     $.ajax({
         type: 'POST',
@@ -33,8 +42,10 @@ $('.fa-check').click(function(event) {
     event.preventDefault();
     if ($(this).hasClass('exp-full')) {
         action = "remove";
+        $(this).tooltip({title: 'Add to Explored'});
     } else {
         action = "add";
+        $(this).tooltip({title: 'Remove from Explored'});
     }
     $.ajax({
         type: 'POST',

@@ -67,11 +67,11 @@
   </div>
   {% endif %}
 </div>
-
-<script type="text/javascript" src="../static/js/profile.js"></script>
-<script>
-    var locations = {{locations | safe}};
-</script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABEVdEk2zQBeCHstcUpXQUkSxPhtmTv0Q&callback=initMap" async defer></script>
-
 {% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/profile.js') }}"></script>
+<script>var locations = {{locations | safe}};</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABEVdEk2zQBeCHstcUpXQUkSxPhtmTv0Q&callback=initMap" async defer></script>
+{% endblock %}
+

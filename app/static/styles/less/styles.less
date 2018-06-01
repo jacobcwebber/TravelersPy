@@ -72,64 +72,31 @@ a:focus {
     position: fixed;
     right:0;
     left: 0;
-    z-index: 1030;
-
-    .navbar-nav > .active > a > section {
-        color: @teal;
-        border-bottom: 3px solid;
-        padding-bottom: 2px;
-    }
+    z-index: 1030;    
 
     .nav-item {
         letter-spacing: 1px; 
         font-weight: 400; 
         font-size: 17px;
+        padding-left: 1em;
+        padding-right: 1em;
 
-        &:hover {
-            background:  transparent;
+        a:hover,
+        a:focus {
+            background-color: transparent;
         }
     }   
+
+    .nav-item.active > a {
+        color: @teal;
+        border-bottom: 3px solid;
+        padding-bottom: 2px;
+    }
 }
 .nav-justified {
     border-collapse:separate;
     border-spacing:2px;
  }
-@media (max-width: 1000px) {
-    .navbar-header {
-        float: none;
-    }
-    .navbar-left,.navbar-right {
-        float: none !important;
-    }
-    .navbar-toggle {
-        display: block;
-    }
-    .navbar-collapse {
-        border-top: 1px solid transparent;
-        box-shadow: inset 0px 1px 0px rgba(255,255,255,.1);
-    }
-    .navbar-fixed-top {
-        top: 0;
-        border-width: 0px 0px 1px;
-    }
-    .navbar-collapse.collapse {
-        display: none!important;
-    }
-    .navbar-nav {
-        float: none!important;
-        margin-top: 7.5px;
-    }
-    .navbar-nav>li {
-        float: none;
-    }
-    .navbar-nav>li>a {
-        padding-top: 10px;
-        padding-bottom: 10px;
-    }
-    .collapse.in{
-        display:block !important;
-    }
-}
 .teal {
     color: @teal;
 }
@@ -163,8 +130,8 @@ a:focus {
     font-size: 20px;
 }
 .icon {
-    float:left; 
-    padding-right: 8px;
+    margin-bottom: 8px;
+    margin-right: 8px;
 }
 .header-container {
     padding-bottom: 6px;
@@ -265,8 +232,10 @@ a:focus {
 }
 .fa-times-circle {
     position: absolute;
-    top: -10px;
-    right: -10px;
+    border-radius: 50%;
+    top: -28px;
+    right: -28px;
+    background-color: @lightnavy;
     cursor: pointer;
 }
 
@@ -449,21 +418,19 @@ a:focus {
 
 .feat-dest-wrapper {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 4fr 3fr;
     align-items: start;
     grid-gap: 16px;
-    overflow: visible;
     position: relative;
 
-
     #feat-dest-img {
-        width: 500px;
+        width: 100%;
         opacity: .75;
     }
 
     .right {
         height: 100%;
-        width: 500px;
+        width: 100%;
         margin-top: 0px;
 
         .header {

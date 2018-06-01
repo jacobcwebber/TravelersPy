@@ -8,6 +8,7 @@
 {% endblock %}
 
 {% block body %}
+{% include 'includes/_featured_dest.html' %}
 <div class="extra-wide-container">
   <form action="" method="GET" autocomplete="off">
     <div class="search search-filters" id="basic-search">
@@ -26,12 +27,9 @@
       </button>
     </div>
   </form>
-  <div class="box hide">
-    {% include 'includes/_featured_dest.html' %}
-  </div>
   <div class="box">
     <div class="no-results {% if dests|length != 0 %}hidden{% endif %}">No destinations found for your search.</div>
-    <span class="teal no-results loading">Loading...</span>
+    <span class="no-results loading">Loading...</span>
     <div class="item-group five-wide hide">
       {% for dest in dests %}
         {% include 'includes/_dest.html' %}
@@ -44,12 +42,9 @@
 {% endblock %}
 
 {% block scripts%}
-<script>
-  var locations = {{ locations | safe }};
-  var tags = {{ tags | safe }};
-</script>
+<script>var locations = {{ locations | safe }};var tags = {{ tags | safe }};</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-smooth-scroll/2.2.0/jquery.smooth-scroll.min.js"></script>
-<script src="../static/js/search.js"></script>
-<script src="../static/js/destinations.js"></script>
+<script src="{{ url_for('static', filename='js/search.js') }}"></script>
+<script src="{{ url_for('static', filename='js/destinations.js') }}"></script>
 {% endblock %}

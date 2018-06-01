@@ -5,11 +5,11 @@ A website with curated travel destinations from across the world that allows use
 TO-DO:
 
 Short term:
-- Add tag categories and give every tag a category
 - Add more stats to Profile page (Waterfalls visisted, cities visisted, etc.)
-- Update UpdateTime on change on picture/tags/etc. Not just dests table
-- Make the Search page responsive
-- Change href to incorporate Flask's url_for() 
+- Change href to incorporate Flask's url_for()
+- Add a footer
+- Incorporate searching users ability
+- Convert Search forms to WTForms
 
 Long term:
 - Add "Trips" so users can make and name a Trip and add destinations they want to go on that trip to it

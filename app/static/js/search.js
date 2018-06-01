@@ -55,18 +55,11 @@ $('.item-mid').click(e => {
           `<a href='/search?keywords=${tags[i]}' class='label label-lg'>${tags[i]}</a> `
         );
       });
-      featBox.removeClass('hide');
-      $.smoothScroll({
-        offset: -64,
-        scrollTarget: featBox
-      });
     })
     .fail(error => {
       console.log(error);
     });
 });
-
-$('.fa-times-circle').click(e => featBox.addClass('hide'));
 
 $(window).on('load', function() {
   $('.loading').addClass('hide');

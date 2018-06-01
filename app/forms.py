@@ -4,10 +4,10 @@ from wtforms.validators import InputRequired, Email, EqualTo, ValidationError, L
 from app.models import User
 
 class LoginForm(FlaskForm):
-    email = StringField('Email', validators=[InputRequired(message="Email required."), Email(message="Not a valid email.")])
-    password = PasswordField('Password', validators=[InputRequired(message="Password required.")])
+    email = StringField('Email', id="login-email", validators=[InputRequired(message="Email required."), Email(message="Not a valid email.")])
+    password = PasswordField('Password', id="login-password", validators=[InputRequired(message="Password required.")])
     remember_me = BooleanField('Remember Me')
-    login = SubmitField('Log In')
+    login = SubmitField('Log In')   
 
 class RegistrationForm(FlaskForm):
     email = StringField('Email', validators=[InputRequired(message="Email required."), Email(message="Not a valid email.")])
