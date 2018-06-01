@@ -42,7 +42,9 @@ body {
         text-decoration: underline !important;
     }
 }
-
+.model-content.box {
+    overflow: visible !important;
+}
 hr {
     margin-top: 1rem;
     margin-bottom: 1rem;
@@ -73,7 +75,6 @@ a:focus {
 }
 .trav-nav {
     background-color: @navy;
-    border: 0;
     text-transform: uppercase;
     font-family: 'Roboto', sans-serif;
     top: 0;
@@ -242,10 +243,14 @@ a:focus {
 .fa-times-circle {
     position: absolute;
     border-radius: 50%;
-    top: -28px;
-    right: -28px;
-    background-color: @lightnavy;
+    top: -12px;
+    right: -12px;
+    background-color: @navy;
     cursor: pointer;
+
+    &:hover {
+        background-color: @lightnavy;
+    }
 }
 
 /////////////////////////////////
@@ -425,14 +430,15 @@ a:focus {
     }
 }
 
+@media (min-width: 992px) {
+    .modal-lg {
+        max-width: 900px !important;
+    }
+}
 .modal-content {
     background-color: @navy !important;
-}
-
-.feat-dest-wrapper {
     overflow: visible;
 }
-
 .feat-dest {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -441,7 +447,7 @@ a:focus {
     position: relative;
 
     #feat-dest-img {
-        max-height: 320px;
+        max-height: 450px;
         width: 100%;
         opacity: .75;
     }
