@@ -63,5 +63,5 @@ $('.item-mid').click(e => {
 
 $(window).on('load', function() {
   $('.spinner').addClass('hide');
-  $('.five-wide').removeClass('hide');
+  $('.five-wide').removeClass('hide').addClass('fade-in');
 });
