@@ -10,6 +10,7 @@ Short term:
 - Add a footer
 - Incorporate searching users ability
 - Convert Search forms to WTForms
+- Put in AJAX calls on Search page to show more dests (only show 20 at a time)
 
 Long term:
 - Add "Trips" so users can make and name a Trip and add destinations they want to go on that trip to it

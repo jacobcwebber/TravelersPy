@@ -29,7 +29,11 @@
   </form>
   <div class="box">
     <div class="no-results {% if dests|length != 0 %}d-none{% endif %}">No destinations found for your search.</div>
-    <span class="no-results loading">Loading...</span>
+    <div class="spinner">
+      <div class="bounce1"></div>
+      <div class="bounce2"></div>
+      <div class="bounce3"></div>
+    </div>
     <div class="item-group five-wide hide">
       {% for dest in dests %}
         {% include 'includes/_dest.html' %}

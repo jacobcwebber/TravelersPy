@@ -12,14 +12,14 @@ let resultsBox = $('box:last-of-type');
 $('#location').typeahead({
   hint: false,
   highlight: true,
-  minLength: 1,
+  minLength: 2,
   source: locations
 });
 
 $('#keywords').typeahead({
   hint: false,
   highlight: true,
-  minLength: 1,
+  minLength: 2,
   source: tags
 })
 
@@ -62,6 +62,6 @@ $('.item-mid').click(e => {
 });
 
 $(window).on('load', function() {
-  $('.loading').addClass('hide');
+  $('.spinner').addClass('hide');
   $('.five-wide').removeClass('hide');
 });
