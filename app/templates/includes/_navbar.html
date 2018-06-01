@@ -1,6 +1,6 @@
 {% from "includes/_formhelpers.html" import render_field %}
 
-<nav class="navbar navbar-expand-lg trav-nav" styles="vertical-align: middle">
+<nav class="navbar navbar-expand-lg trav-nav">
   <div class="container {%if active_page == 'home'%}extra-wide-container{% endif %}">
     <a class="navbar-brand" href="{{ url_for('index') }}">
       <img class="icon" src="{{ url_for('static', filename='images/favicon.ico') }}" width="20" height="20" alt=""></img>

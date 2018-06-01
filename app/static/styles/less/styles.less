@@ -42,6 +42,14 @@ body {
         text-decoration: underline !important;
     }
 }
+
+hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 1px solid @white;
+}
+
 #logout {
     margin-top: 12px;
 }
@@ -131,7 +139,7 @@ a:focus {
 }
 .icon {
     margin-bottom: 8px;
-    margin-right: 8px;
+    margin-right: 6px;
 }
 .header-container {
     padding-bottom: 6px;
@@ -142,6 +150,7 @@ a:focus {
 }
 .label {
     color: @teal;
+    font-weight: 700; 
     padding: .3em .6em;
     border: 1px solid @teal;
     border-radius: 1em;
@@ -416,14 +425,23 @@ a:focus {
     }
 }
 
+.modal-content {
+    background-color: @navy !important;
+}
+
 .feat-dest-wrapper {
+    overflow: visible;
+}
+
+.feat-dest {
     display: grid;
-    grid-template-columns: 4fr 3fr;
+    grid-template-columns: 1fr 1fr;
     align-items: start;
     grid-gap: 16px;
     position: relative;
 
     #feat-dest-img {
+        max-height: 320px;
         width: 100%;
         opacity: .75;
     }
@@ -441,6 +459,10 @@ a:focus {
 
         .body {
             color: fadeout(@white, 10%);
+            font-size: 14px;
+        }
+        .tags {
+            font-size: 14px;
         }
     }
 }
