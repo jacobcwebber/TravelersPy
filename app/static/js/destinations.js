@@ -1,5 +1,5 @@
 // Initialize tooltips
-$(function () {
+$(() => {
     $('[rel="tooltip"]').tooltip({
         delay: {'show': 500, 'hide': 100}
     })
@@ -57,10 +57,10 @@ $('.fa-check').click(function(event) {
         }
     }).done(() => {
         if ($(this).hasClass('exp-full')) {
-            $('#toast').attr("text", "Removed from Explored destinations")
+            $('#toast').attr("text", "Removed from Explored")
             toast.show();
         } else {
-            $('#toast').attr("text", "Added to Explored destinations")
+            $('#toast').attr("text", "Added to Explored")
             toast.show()
         }
         $(this).toggleClass('exp-full');
@@ -68,3 +68,43 @@ $('.fa-check').click(function(event) {
         console.log(error);
     });
 });
+
+// Featured dest box 
+
+//Initializing variables
+let featBox = $('.box:first-of-type');
+let featDestWrapper = $('.feat-dest-wrapper');
+let featDestImg = $('#feat-dest-img');
+let featDestName = $('#feat-dest-name');
+let featCountryName = $('#feat-country-name');
+let featDestDesc = $('#feat-dest-desc');
+let featDestTags = $('#feat-dest-tags');
+
+let resultsBox = $('box:last-of-type');
+
+$('.item-mid').click(e => {
+    let id = e.target.id;
+    $.ajax({
+      type: 'POST',
+      url: '/alter-featured-dest',
+      data: {
+        id: id
+      }
+    })
+      .done(response => {
+        featDestImg.attr('src', response[0][0].img_url);
+        featDestName.text(response[0][0].dest_name);
+        featCountryName.text(response[0][0].country_name);
+        featDestDesc.html(response[0][0].description);
+        featDestTags.empty();
+        let tags = response[1];
+        $.each(tags, i => {
+          featDestTags.append(
+            `<a href='/search?keywords=${tags[i]}' class='label label-lg'>${tags[i]}</a> `
+          );
+        });
+      })
+      .fail(error => {
+        console.log(error);
+      });
+  });

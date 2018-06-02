@@ -35,5 +35,6 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="../static/js/destinations.js"></script>
+<script src="{{ url_for('static', filename='js/destinations.js') }}"></script>
+<script src="{{ url_for('static', filename='js/search.js') }}"></script>
 {% endblock %}
