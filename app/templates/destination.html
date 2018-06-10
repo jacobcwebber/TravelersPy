@@ -1,11 +1,11 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<div class="box-group wide-container">
+<div class="box-group container-md">
   <div class="box center-text">
-    <span class="large teal">{{ dest.dest_name }}, {{dest.country_name}}</span>  
+    <span class="large text-teal">{{ dest.dest_name }}, {{dest.country_name}}</span>  
   </div>
-  <div class="box wide-container center-text">    
+  <div class="box container-md center-text">    
     <img class="image-element" style="height: 350px;" src="{{ dest.img_url }}" alt="">
     <div class="caption">{{dest.description | safe}}</div>
     {% for tag in dest['Tags'] %}

@@ -10,16 +10,41 @@
 @limegreen: rgb(123,255,47);
 @yellow: rgb(255,255,81);  
 @brown: rgb(205,133,63);
+@red: rgb(244, 67, 54);
+
+
+@teal-shadow: inset 0px 1px 1px rgba(0,0,0,.01), 0px 0px 8px fade(@teal, 60%);
 
 /////////////////////////
 //       GENERAL       //
 /////////////////////////
 
+// TAGS
 body {
     font-family: Arial, Helvetica, sans-serif;
     background-color: @navy;
-    padding-top: 65px;
+    padding-top: 65px; // make space for header
 }
+hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 1px solid @white;
+}
+a:hover { text-decoration: none; }
+
+// TEXT
+.text-white { color: @white; }
+.text-teal { color: @teal; }
+.text-red { color: @red; }
+.text-error {
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    color: @red;
+}
+
+// FOOTER
 .footer {
     position: absolute;
     bottom: 0;
@@ -29,47 +54,20 @@ body {
     padding: 12px;
     background: @lightnavy;
 }
-.standard-text {
-    color: @white; 
-    font-size: 16px;
-}
-.link {
-    color: @teal;
-    cursor: pointer;
 
-    &:hover {
-        color: @teal;
-        text-decoration: underline !important;
-    }
-}
-hr {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    border: 0;
-    border-top: 1px solid @white;
-}
-
-#logout {
-    margin-top: 12px;
-}
-a:link,
-a:hover,
-a:focus {
-    text-decoration: none;
-}
-.small-container {
+// CONTAINERS
+.container-sm {
     width: 500px !important;
 }
-.wide-container {
+.container-md {
     width: 900px !important;
 }
-.extra-wide-container {
+.container-lg {
     width: 1075px !important;
     margin: 0px auto;
 }
-.container {
-    width: 90%;
-}
+
+// NAVBAR
 .trav-nav {
     background-color: @navy;
     text-transform: uppercase;
@@ -78,7 +76,7 @@ a:focus {
     position: fixed;
     right:0;
     left: 0;
-    z-index: 1030;    
+    z-index: 1030;
 
     .nav-item {
         letter-spacing: 1px; 
@@ -96,28 +94,21 @@ a:focus {
     .nav-item.active > a {
         color: @teal;
         border-bottom: 3px solid;
-        padding-bottom: 2px;
+        padding-bottom: 5px;
     }
 }
-.nav-justified {
-    border-collapse:separate;
-    border-spacing:2px;
- }
-.teal {
+.logo {
     color: @teal;
+    letter-spacing: 4px; 
+    font-size: 20px;
+    font-weight: 600;
 }
-.text-error {
-    display: block;
-    margin-top: 5px;
-    margin-bottom: 10px;
-    color: #f44336;
+.icon {
+    margin-bottom: 8px;
+    margin-right: 6px;
 }
-.caption {
-    text-align: center;
-    width: 75%;
-    margin: 5px auto;
-    color: @white;
-}
+
+// BUTTONS
 .btn-teal {
     color: @white;
     background-color: @teal;
@@ -129,25 +120,11 @@ a:focus {
         background-color: darken(@teal, 5%);
     }
 }
-.logo {
-    color: @teal;
-    letter-spacing: 4px; 
-    font-weight: 600; 
-    font-size: 20px;
-}
-.icon {
-    margin-bottom: 8px;
-    margin-right: 6px;
-}
-.header-container {
-    padding-bottom: 6px;
-    text-align: center;
-}
-.center-text {
-    text-align: center;
-}
+
+// LABELS
 .label {
-    color: @teal;
+    color: @teal !important;
+    font-size: 90%;
     font-weight: 700; 
     padding: .3em .6em;
     border: 1px solid @teal;
@@ -155,28 +132,18 @@ a:focus {
     display: inline-block;
     margin: 0 2px 6px 0;
     background-color: @navy !important;
+}
 
-    &:hover {
-        color: @teal !important;
-    }
-}
-.label-small {
-    font-size: 75%;
-}
-.label-lg {
-    font-size: 90%;
-}
+// MODIFIERS
 .hide {
-    position: absolute !important;
+    position: absolute !important; // This method of hiding is good for SEO
     left: -9999px !important;
 }
 .transparent {
     opacity: 0;
     transition: opacity 2000ms;
 }
-.fade-in {
-    opacity: 1;
-  }
+.fade-in { opacity: 1; }
 ///////////////////////////
 //         ICONS         //
 ///////////////////////////
@@ -202,15 +169,9 @@ a:focus {
     transition: all .2s ease-in-out;
     cursor: pointer;
 }
-.fa-search,
-.fa-cog,
-.fa-filter {
+.fa-search {
     color: @teal;
     cursor: pointer;
-}
-.loading-icon {
-    color: @teal;
-    font-size: 30px;
 }
 .exp-full::before {
     color: @limegreen;
@@ -251,10 +212,6 @@ a:focus {
     right: -12px;
     background-color: @navy;
     cursor: pointer;
-
-    &:hover {
-        background-color: @lightnavy;
-    }
 }
 
 /////////////////////////////////
@@ -266,6 +223,14 @@ a:focus {
     width: 650px;
 }
 
+.header-lg {
+    text-align: center;
+    color: @teal;
+    letter-spacing: 1px; 
+    font-size: 48px; 
+    font-family: 'Roboto', sans-serif;
+}
+
 .box {
     border: 1px solid fade(@lightnavy, 95%);
     background: fade(@lightnavy, 50%);
@@ -273,37 +238,19 @@ a:focus {
     padding: 16px;
     margin-bottom: 16px;
     overflow: hidden;
-
-    .large-header {
-        text-align: center;
-        color: @teal;
-        letter-spacing: 1px; 
-        font-size: 48px; 
-        font-family: 'Roboto', sans-serif;
-    }
-
-    .label {
-        transition: all .3s ease-in-out;       
-        &:hover {
-            font-size: 100%;
-        }
-    }
-
+    
     .box-header-text {
         font-size: 20px; 
         font-weight: 300; 
         margin-bottom: 8px; 
         color: @white;
     }
-
     .three-wide {
         grid-template-columns: repeat(3, 1fr);
     }
-
     .five-wide {
         grid-template-columns: repeat(5, 1fr);
     }
-
     .item-group {
         display: grid; 
         grid-gap: 8px;
@@ -392,7 +339,7 @@ a:focus {
             color: @teal;
         }
         &:focus {
-            box-shadow: 0 0 0 0.2rem rgba(70,188,194,.25);
+            box-shadow: @teal-shadow;
             &::-webkit-input-placeholder { color:transparent; }
             &:-moz-placeholder { color:transparent; }
         }
@@ -551,17 +498,6 @@ a:focus {
     border: 3px solid @teal;
     border-radius: 50%;
 }
-.pill-element {
-    background-color: rgba(51,64,85,.5);
-    border-spacing: 5px;
-    border-radius: 4px;
-}
-.nav-pills>li.active>a, 
-.nav-pills>li.active>a:focus, 
-.nav-pills>li.active>a:hover {
-    background-color: @teal;
-    cursor: pointer;    
-}
 .nav > li > a {
     color: @white;
     text-decoration: none;
@@ -628,17 +564,16 @@ a:focus {
 }
 
 .trav-input {
-    background-color: @navy;
-    border-color: @teal;
-    color: @white;
+    background-color: @navy !important;
+    border-color: @teal !important;
+    color: @white !important;
     border-radius: 12px;
     margin-right: 6px;
 
     &:focus {
-        border-color: @teal;
         outline: 0;
-        -webkit-box-shadow: inset 0px 1px 1px rgba(0,0,0,.075), 0px 0px 8px fade(@teal, 60%);
-                box-shadow: inset 0px 1px 1px rgba(0,0,0,.075), 0px 0px 8px fade(@teal, 60%); 
+        -webkit-box-shadow: @teal-shadow;
+                box-shadow: @teal-shadow; 
     }
 
     &::placeholder {

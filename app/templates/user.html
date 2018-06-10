@@ -6,7 +6,7 @@
 {% set active_page = "profile" %}
 
 {% block body %}
-<div class="box-group wide-container">
+<div class="box-group container-md">
   <div class="box">
     <div class="profile-container">
       <div class="pro-pic-container">
@@ -25,19 +25,19 @@
     <div class="circle-group">
       <div class="circle-with-text">
         <div class="circle">
-          <a href="/user/{{ user.id }}/explored">
+          <a href="/user/{{ user.id }}/Explored">
             <p class="stat-number">{{ explored|length }}</p>
           </a>
         </div>
-        <div class="standard-text">Explored</div>
+        <div class="text-white">Explored</div>
       </div>
       <div class="circle-with-text">
           <div class="circle">
-            <a href="/user/{{ user.id }}{/favorites">
+            <a href="/user/{{ user.id }}/Favorites">
               <p class="stat-number">{{ favorites|length }}</p>
             </a>
           </div>
-          <div class="standard-text">Favorites</div>
+          <div class="text-white">Favorites</div>
       </div>
       {% for n in range(0,3) %}
       <!-- <div class="cirWcle-with-text">
@@ -46,24 +46,24 @@
             <p class="stat-number"></p>
           </a>
         </div>
-        <div class="standard-text">Top 6 Tags</div>
+        <div class="text-white">Top 6 Tags</div>
       </div> -->
       {% endfor %}
     </div>
   </div>
-  <div class="box">
+  <!-- <div class="box">
     <ul class="nav nav-pills nav-justified">
       <li id="all" class="pill-element active"><a>All Destinations</a></li>
       <li id="favorites" class="pill-element"><a>Favorited Destinations</a></li>
       <li id="explored" class="pill-element"><a>Explored Destinations</a></li>
     </ul>
     <div id="map"></div>
-  </div>
+  </div> -->
   {% if user.id == current_user.id %}
   <div class="box">
     <div class="box-header-text">Account</div>
-    <div class="standard-text">Questions about Travelers or your account? Email the creator at <a class="link">jacobcwebber@gmail.com</a></div>
-    <div id="logout"><a class="standard-text link" href="/logout">Logout</a></div>
+    <div class="text-white">Questions about Travelers or your account? Email the creator at <span class="text-teal">jacobcwebber@gmail.com</span>.</div><br>
+    <a class="text-teal" href="{{url_for ('logout') }}">Logout</a>
   </div>
   {% endif %}
 </div>

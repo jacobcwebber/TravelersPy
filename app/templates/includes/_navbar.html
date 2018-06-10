@@ -1,7 +1,7 @@
 {% from "includes/_formhelpers.html" import render_field %}
 
 <nav class="navbar navbar-expand-lg trav-nav">
-  <div class="container {%if active_page == 'home'%}extra-wide-container{% endif %}">
+  <div class="container {%if active_page == 'home'%}container-lg{% endif %}">
     <a class="navbar-brand" href="{{ url_for('index') }}">
       <img class="icon" src="{{ url_for('static', filename='images/favicon.ico') }}" width="20" height="20" alt=""></img>
       <span class="logo">Wanderlist</span>
@@ -29,9 +29,9 @@
           </li>
         {% elif current_user.is_anonymous and request.path != '/login' %}
         <form action="" method="POST" class="form-inline login-form">
-          {{ render_field(login_form.csrf_token) }}
-          {{ render_field(login_form.email, class_="form-control input-sm trav-input", placeholder="Email") }}
-          {{ render_field(login_form.password, class_="form-control input-sm trav-input", placeholder="Password") }}
+          {{ render_field(login_form.csrf_token, id="login-csrf-token") }}
+          {{ render_field(login_form.email, class_="form-control form-control-sm trav-input", placeholder="Email") }}
+          {{ render_field(login_form.password, class_="form-control form-control-sm trav-input", placeholder="Password") }}
           {{ render_field(login_form.login, class_="btn btn-sm btn-teal") }}
         </form>
         {% endif %}
