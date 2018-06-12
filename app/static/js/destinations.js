@@ -72,15 +72,11 @@ $('.fa-check').click(function(event) {
 // Featured dest box 
 
 //Initializing variables
-let featBox = $('.box:first-of-type');
-let featDestWrapper = $('.feat-dest-wrapper');
 let featDestImg = $('#feat-dest-img');
 let featDestName = $('#feat-dest-name');
 let featCountryName = $('#feat-country-name');
 let featDestDesc = $('#feat-dest-desc');
 let featDestTags = $('#feat-dest-tags');
-
-let resultsBox = $('box:last-of-type');
 
 $('.item-mid').click(e => {
     let id = e.target.id;
@@ -102,6 +98,7 @@ $('.item-mid').click(e => {
           featDestTags.append(
             `<a href='/search?keywords=${tags[i]}' class='label label-lg'>${tags[i]}</a> `
           );
+          $('#modal').modal()
         });
       })
       .fail(error => {

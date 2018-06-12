@@ -316,16 +316,3 @@ def alter_favorite():
     db.session.commit()
 
     return "success"
-
-#TODO: fix
-@app.route('/destination/<string:id>')
-def destination(id):
-    query = text("SELECT d.name as dest_name, c.name as country_name, d.id, description, img_url, lat, lng "\
-                "FROM destinations d JOIN countries c ON d.country_id = c.id "\
-                                    "JOIN dest_images i ON i.dest_id = d.id "\
-                                    "JOIN dest_locations l ON l.dest_id = d.id "\
-                "WHERE d.id = {}".format(id))
-    dest = execute(query)
-    dest['Tags'] = [tag.name for tag in Destination.query.get(id).tags.all()]
-
-    return render_template('destination.html', dest=dest)
