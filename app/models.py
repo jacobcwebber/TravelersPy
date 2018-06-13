@@ -1,11 +1,12 @@
-from app import app, db, login
 from datetime import datetime
-from time import time
-import jwt
-from flask_login import UserMixin
-from sqlalchemy.orm import backref
-from werkzeug.security import generate_password_hash, check_password_hash
 from hashlib import md5
+from time import time
+from flask import current_app
+from flask_login import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy.orm import backref
+import jwt
+from app import db, login
 
 explored = db.Table('explored',
     db.Column('user_id', db.Integer, db.ForeignKey('users.id', onupdate="CASCADE", ondelete="CASCADE")),

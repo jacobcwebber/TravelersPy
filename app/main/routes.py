@@ -1,10 +1,9 @@
 from flask import render_template, redirect, url_for, flash, request, jsonify, current_app
-from flask_login import current_user, loogin_required
+from flask_login import current_user, login_required
 from sqlalchemy import desc, text
 from app import db
 from app.main.forms import DestinationForm
 from app.models import Destination, Country, Region, Continent, Dest_Location, Dest_Image, Tag
-from app.email import send_password_reset_email
 from app.tools import execute, get_dests_by_tag
 from app.main import bp
 
