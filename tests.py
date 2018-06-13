@@ -1,17 +1,24 @@
 import os
 import unittest
-from app import app, db
+from app import create_app, db
 from app.models import User, Destination, Country, Region, Continent
+from config import Config
+
+class TestingConfig(Config):
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = os.environ.get('TESTING_DATABASE_URL')
 
 class UserModelCase(unittest.TestCase):
     def setUp(self):
-        app.config['TESTING'] = True
-        app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('TESTING_DATABASE_URL')
+        self.app = create_app(TestingConfig)
+        self.app_context = self.app.app_context
+        self.app_context.push()
         db.create_all()
 
     def tearDown(self):
         db.session.remove()
         db.drop_all()
+        self.app_context.pop()
 
     def test_password_hashing(self):
         user = User(email='mackenzie@example.com')
