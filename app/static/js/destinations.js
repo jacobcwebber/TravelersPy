@@ -72,6 +72,7 @@ $('.fa-check').click(function(event) {
 // Featured dest box 
 
 //Initializing variables
+let featDest = $('#modal')
 let featDestImg = $('#feat-dest-img');
 let featDestName = $('#feat-dest-name');
 let featCountryName = $('#feat-country-name');
@@ -98,7 +99,7 @@ $('.item-mid').click(e => {
           featDestTags.append(
             `<a href='/search?keywords=${tags[i]}' class='label label-lg'>${tags[i]}</a> `
           );
-          $('#modal').modal()
+        featDest.modal();
         });
       })
       .fail(error => {

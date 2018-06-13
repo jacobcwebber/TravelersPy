@@ -1,101 +1,20 @@
-from flask import render_template, redirect, url_for, flash, request, jsonify
-from flask_login import current_user, login_user, logout_user, login_required
-from sqlalchemy import desc, func, text
-from app import app, db
-from app.forms import LoginForm, RegistrationForm, ResetPasswordRequestForm, ResetPasswordForm, DestinationForm
-from app.models import User,  Destination, Country, Region, Continent, Dest_Location, Dest_Image, Tag
+from flask import render_template, redirect, url_for, flash, request, jsonify, current_app
+from flask_login import current_user, loogin_required
+from sqlalchemy import desc, text
+from app import db
+from app.main.forms import DestinationForm
+from app.models import Destination, Country, Region, Continent, Dest_Location, Dest_Image, Tag
 from app.email import send_password_reset_email
 from app.tools import execute, get_dests_by_tag
+from app.main import bp
 
-@app.route('/', methods=['GET', 'POST'])
-@app.route('/index', methods=['GET', 'POST'])
+@bp.route('/')
+@bp.route('/index')
+@login_required
 def index():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    login_form = LoginForm()
-    registration_form = RegistrationForm()
+    if current_user.is_anonymous:
+        return redirect(url_for('auth.register'))
 
-    if registration_form.register.data and registration_form.validate_on_submit():
-        user = User(first_name=registration_form.first_name.data, 
-                    last_name=registration_form.last_name.data, 
-                    email=registration_form.email.data)
-        user.set_password(registration_form.password.data)
-        db.session.add(user)
-        db.session.commit() 
-        return redirect(url_for('login'))
-
-    if login_form.login.data:
-        if login_form.validate_on_submit():
-            user = User.query.filter_by(email=login_form.email.data).first()
-            if user is None or not user.check_password(login_form.password.data):
-                flash('Invalid email or password.')
-                return redirect(url_for('login'))
-            login_user(user, remember=login_form.remember_me.data)
-            next_page = request.args.get('next')
-            if not next_page or is_safe_url(next_page):
-                next_page = url_for('index')
-            return redirect(next_page)
-        flash('Invalid email or password.')
-        return redirect(url_for('login'))
-
-    return render_template('index.html', login_form=login_form, registration_form=registration_form)
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    login_form = LoginForm()
-
-    if login_form.validate_on_submit():
-        user = User.query.filter_by(email=login_form.email.data).first()
-        if user is None or not user.check_password(login_form.password.data):
-            flash('Invalid email or password.')
-            return redirect(url_for('login'))
-        login_user(user, remember=login_form.remember_me.data)
-        next_page = request.args.get('next')
-        if not next_page or is_safe_url(next_page):
-            next_page = url_for('index')
-        return redirect(next_page)
-
-    return render_template('login.html', title='Wanderlist | Login', login_form=login_form)
-
-@app.route('/reset_password_request', methods=['GET', 'POST'])
-def reset_password_request():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    form = ResetPasswordRequestForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user:
-            send_password_reset_email(user)
-        flash('Check your email for the instructions to reset your password')
-        return redirect(url_for('login'))
-    return render_template('reset_password_request.html', title='Reset Password', form=form)
-
-@app.route('/reset_password/<token>', methods=['GET', 'POST'])
-def reset_password(token):
-    if current_user.is_authenticated():
-        return redirect(url_for('home'))
-    user = User.verify_reset_password_token(token)
-    if not user:
-        return redirect(url_for('index'))
-    form = ResetPasswordForm()
-    if form.validate_on_submit():
-        user.set_password(form.password.data)
-        db.session.commit()
-        flash('Your password has been reset.')
-        return redirect(url_for('login'))
-    return render_template('reset_password.html', form=form)
-
-@app.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    return redirect(url_for('index'))
-
-@app.route('/home')
-@login_required
-def home():
     recent_query = text('SELECT d.id, d.name, d.update_date, i.img_url '
                         'FROM destinations d JOIN dest_images i on d.id = i.dest_id '
                         'ORDER BY d.update_date DESC')
@@ -110,9 +29,10 @@ def home():
     favorites = [dest.id for dest in current_user.favorited_dests.all()]
     dest_count = Destination.query.count()
 
-    return render_template('home.html', recent=recent, popular=popular, explored=explored, favorites=favorites, dest_count=dest_count)
+    return render_template('main/index.html', recent=recent, popular=popular, explored=explored,
+                            favorites=favorites, dest_count=dest_count)
 
-@app.route('/user/<id>')
+@bp.route('/user/<id>')
 @login_required
 def user(id):
     user = User.query.filter_by(id=id).first_or_404()
@@ -134,11 +54,10 @@ id = dt.tag_id join destinations d on dt.dest_id = d.id join explored e on e.des
 t_id = d.id join users u on u.id = e.user_id where u.id=1 group by t.id order by
  count(dt.tag_id) desc;"""
 
-    return render_template('user.html', title=user.full_name() + ' | Wanderlist', user=user,
+    return render_template('main/user.html', title=user.full_name() + ' | Wanderlist', user=user,
                             explored=explored, favorites=favorites, locations=locations)
 
-@app.route('/change-map', methods=['POST'])
-@login_required
+@bp.route('/change-map', methods=['POST'])
 def change_map(where=None):
     view = request.form['view']
     base = 'SELECT l.lat, l.lng, d.name '\
@@ -160,7 +79,7 @@ def change_map(where=None):
 
     return jsonify(locations)
 
-@app.route('/search')
+@bp.route('/search')
 @login_required
 def search():
     location = request.args.get('location')
@@ -203,10 +122,10 @@ def search():
 
     tags = [tag.name for tag in Tag.query.all()]
 
-    return render_template('search.html', title="Explore | Wanderlist", dests=dests, locations=locations, tags=tags,  
+    return render_template('main/search.html', title="Explore | Wanderlist", dests=dests, locations=locations, tags=tags,  
                             explored=explored, favorites=favorites, keyword=keyword, location=location)    
 
-@app.route('/alter-featured-dest', methods=['POST'])
+@bp.route('/alter-featured-dest', methods=['POST'])
 @login_required
 def alter_featured_dest():
     id = request.form['id']
@@ -219,7 +138,7 @@ def alter_featured_dest():
 
     return jsonify(dest, tags)
 
-@app.route('/create-destination', methods=['POST', 'GET'])
+@bp.route('/create-destination', methods=['POST', 'GET'])
 @login_required
 def create_destination():
     form = DestinationForm()
@@ -239,14 +158,14 @@ def create_destination():
         db.session.add_all([dest_img, dest_location])
         db.session.commit()
         
-        return redirect(url_for('home'))
+        return redirect(url_for('main.index'))
 
     tags = [tag.name for tag in Tag.query.all()]
     form.country_id.choices = [(0, '')] + ([(country.id, country.name) for country in Country.query.all()])
 
-    return render_template('create_destination.html', form=form, tags=tags)
+    return render_template('main/create_destination.html', form=form, tags=tags)
 
-@app.route('/edit-destination/<string:id>', methods=['POST', 'GET'])
+@bp.route('/edit-destination/<string:id>', methods=['POST', 'GET'])
 @login_required
 def edit_destination(id):
     form = DestinationForm()
@@ -270,7 +189,7 @@ def edit_destination(id):
             dest.add_tag(tag)
         db.session.commit()   
 
-        return redirect(url_for('home'))
+        return redirect(url_for('main.index'))
 
     tags = [tag.name for tag in Tag.query.all()]
     form.country_id.choices = [(0, '')] + ([(country.id, country.name) for country in Country.query.all()])
@@ -282,21 +201,20 @@ def edit_destination(id):
     form.description.data = dest.description
     form.img_url.data = dest_image.img_url
 
-    return render_template('edit_destination.html', form=form, tags=tags)
+    return render_template('main/edit_destination.html', form=form, tags=tags)
 
-@app.route('/user/<id>/<string:tag>')
+@bp.route('/user/<id>/<string:tag>')
 def user_destinations(id, tag):
     user = User.query.get(id)
     dests = get_dests_by_tag(id=id, tag=tag)
     explored = [dest.id for dest in user.explored_dests.all()]
     favorites = [dest.id for dest in user.favorited_dests.all()]
 
-    return render_template('user_destinations.html', user=user, tag=tag, 
+    return render_template('main/user_destinations.html', user=user, tag=tag, 
                             dests=dests, explored=explored, favorites=favorites)
 
 
-@app.route('/alter-explored', methods=['POST'])
-@login_required
+@bp.route('/alter-explored', methods=['POST'])
 def alter_explored():
     dest = Destination.query.get(request.form['id'])
     action = request.form['action']
@@ -306,8 +224,7 @@ def alter_explored():
 
     return "success"
 
-@app.route('/alter-favorite', methods=['POST'])
-@login_required
+@bp.route('/alter-favorite', methods=['POST'])
 def alter_favorite():
     dest = Destination.query.get(request.form['id'])
     action = request.form['action']
