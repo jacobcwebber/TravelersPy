@@ -1,6 +1,6 @@
 import os
-from flask_script import Manager #TODO: read about this
-from flask_migrate import Migrate, MigrateCommand #TODO: read about this
+from flask_script import Manager
+from flask_migrate import Migrate, MigrateCommand
 
 from app import app, db
 

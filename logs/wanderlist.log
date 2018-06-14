@@ -45,3 +45,4 @@ Traceback (most recent call last):
   File "c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\werkzeug\routing.py", line 1776, in build
     raise BuildError(endpoint, values, method, self)
 werkzeug.routing.BuildError: Could not build url for endpoint 'logout'. Did you mean 'auth.logout' instead?
+2018-06-13 21:07:32,403 INFO: Wanderlist startup [in C:\Users\jacob\Projects\Wanderlist\app\__init__.py:46]

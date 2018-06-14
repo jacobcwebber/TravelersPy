@@ -6,7 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_mail import Mail
-from config import Config, TestConfig
+from config import Config
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -14,7 +14,7 @@ login = LoginManager()
 login.login_view = 'auth.login'
 mail = Mail()
 
-def create_app(config_class=TestConfig):
+def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
 
