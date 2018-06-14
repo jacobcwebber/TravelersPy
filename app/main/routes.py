@@ -3,16 +3,15 @@ from flask_login import current_user, login_required
 from sqlalchemy import desc, text
 from app import db
 from app.main.forms import DestinationForm
-from app.models import Destination, Country, Region, Continent, Dest_Location, Dest_Image, Tag
+from app.models import User, Destination, Country, Region, Continent, Dest_Location, Dest_Image, Tag
 from app.tools import execute, get_dests_by_tag
 from app.main import bp
 
-@bp.route('/')
-@bp.route('/index')
+@bp.route('/home')
 @login_required
-def index():
+def home():
     if current_user.is_anonymous:
-        return redirect(url_for('auth.register'))
+        return redirect(url_for('auth.index'))
 
     recent_query = text('SELECT d.id, d.name, d.update_date, i.img_url '
                         'FROM destinations d JOIN dest_images i on d.id = i.dest_id '
@@ -28,7 +27,7 @@ def index():
     favorites = [dest.id for dest in current_user.favorited_dests.all()]
     dest_count = Destination.query.count()
 
-    return render_template('main/index.html', recent=recent, popular=popular, explored=explored,
+    return render_template('main/home.html', recent=recent, popular=popular, explored=explored,
                             favorites=favorites, dest_count=dest_count)
 
 @bp.route('/user/<id>')
@@ -157,7 +156,7 @@ def create_destination():
         db.session.add_all([dest_img, dest_location])
         db.session.commit()
         
-        return redirect(url_for('main.index'))
+        return redirect(url_for('main.home'))
 
     tags = [tag.name for tag in Tag.query.all()]
     form.country_id.choices = [(0, '')] + ([(country.id, country.name) for country in Country.query.all()])
@@ -188,7 +187,7 @@ def edit_destination(id):
             dest.add_tag(tag)
         db.session.commit()   
 
-        return redirect(url_for('main.index'))
+        return redirect(url_for('main.home'))
 
     tags = [tag.name for tag in Tag.query.all()]
     form.country_id.choices = [(0, '')] + ([(country.id, country.name) for country in Country.query.all()])

@@ -2,15 +2,11 @@ import os
 import unittest
 from app import create_app, db
 from app.models import User, Destination, Country, Region, Continent
-from config import Config
-
-class TestingConfig(Config):
-    TESTING = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get('TESTING_DATABASE_URL')
+from config import TestConfig
 
 class UserModelCase(unittest.TestCase):
     def setUp(self):
-        self.app = create_app(TestingConfig)
+        self.app = create_app(TestConfig)
         self.app_context = self.app.app_context
         self.app_context.push()
         db.create_all()

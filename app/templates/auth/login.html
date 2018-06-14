@@ -15,7 +15,7 @@
     <div class="form-group">
       {{render_field(login_form.login, class_="btn btn-block btn-teal", style="height: 45px;")}}
     </div>
-    <a class="link" href="{{ url_for('reset_password_request') }}">Forgot your Password?</a>
+    <a class="text-teal" href="{{ url_for('auth.reset_password_request') }}">Forgot your Password?</a>
   </form>
 </div>  
 {% endblock %}

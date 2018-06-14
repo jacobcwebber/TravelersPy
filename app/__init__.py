@@ -6,16 +6,15 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_mail import Mail
-from config import Config
+from config import Config, TestConfig
 
 db = SQLAlchemy()
 migrate = Migrate()
 login = LoginManager()
 login.login_view = 'auth.login'
-login.login_message = 'Please log in to access this page.'
 mail = Mail()
 
-def create_app(config_class=Config):
+def create_app(config_class=TestConfig):
     app = Flask(__name__)
     app.config.from_object(config_class)
 
