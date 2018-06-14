@@ -1,5 +1,5 @@
-from flask import render_template, redirect, url_for, flash, request, jsonify
-from flask_login import current_user, login_user, logout_user, login_required
+from flask import flash, jsonify, redirect, render_template, request, url_for
+from flask_login import current_user, login_required, login_user, logout_user
 from sqlalchemy import desc, func, text
 from app import db
 from app.auth import bp

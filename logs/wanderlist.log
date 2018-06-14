@@ -99,3 +99,7 @@ werkzeug.routing.BuildError: Could not build url for endpoint 'logout'. Did you 
 2018-06-13 23:55:55,478 INFO: Wanderlist startup [in C:\Users\jacob\Projects\Wanderlist\app\__init__.py:46]
 2018-06-13 23:56:01,704 INFO: Wanderlist startup [in C:\Users\jacob\Projects\Wanderlist\app\__init__.py:46]
 2018-06-13 23:56:05,946 INFO: Wanderlist startup [in C:\Users\jacob\Projects\Wanderlist\app\__init__.py:46]
+2018-06-13 23:57:50,591 INFO: Wanderlist startup [in C:\Users\jacob\Projects\Wanderlist\app\__init__.py:46]
+2018-06-14 00:17:54,473 INFO: Wanderlist startup [in C:\Users\jacob\Projects\Wanderlist\app\__init__.py:46]
+2018-06-14 00:28:31,546 INFO: Wanderlist startup [in C:\Users\jacob\Projects\Wanderlist\app\__init__.py:46]
+2018-06-14 00:28:49,393 INFO: Wanderlist startup [in C:\Users\jacob\Projects\Wanderlist\app\__init__.py:46]
