@@ -11,7 +11,7 @@ class TestConfig(Config):
 class UserModelCase(unittest.TestCase):
     def setUp(self):
         self.app = create_app(TestConfig)
-        self.app_context = self.app.app_context
+        self.app_context = self.app.app_context()
         self.app_context.push()
         db.create_all()
 
@@ -59,5 +59,7 @@ class UserModelCase(unittest.TestCase):
         user.remove_favorite(dest)
         db.session.commit()
 
+    def test
+
 if __name__ == '__main__':
-    unittest.main(verbosity=1)
+    unittest.main(verbosity=2)

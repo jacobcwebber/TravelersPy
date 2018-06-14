@@ -28,16 +28,19 @@
     </div>
   </section>
   <section class="right">
-    <h2 class="header large">Sign Up</h2>
+    <h2 class="header text-large">Sign Up</h2>
     <form action="" method="POST">
       {{registration_form.hidden_tag()}}
-      <div class="form-group">
+      <div class="form-group" style="margin-bottom: 0;">
         <div class="inline-input-group">
-          {{render_field(registration_form.first_name, class_="form-control input-lg signup-form", placeholder="First Name")}}
-          {{render_field(registration_form.last_name, class_="form-control input-lg signup-form", placeholder="Last Name")}}
+          {{render_field(registration_form.first_name, class_="form-control input-lg signup-form", placeholder="First name")}}
+          {{render_field(registration_form.last_name, class_="form-control input-lg signup-form", placeholder="Last name")}}
         </div>
-        {{render_field(registration_form.email, class_="form-control input-lg signup-form", placeholder="Email Name")}}                
-        {{render_field(registration_form.password, class_="form-control input-lg signup-form", placeholder="Password")}}
+        {{render_field(registration_form.email, class_="form-control input-lg signup-form", placeholder="Email")}}
+        <div class="inline-input-group">              
+          {{render_field(registration_form.password, class_="form-control input-lg signup-form", placeholder="Password")}}
+          {{render_field(registration_form.password2, class_="form-control input-lg signup-form", placeholder="Confirm password")}}
+        </div>
       </div>
       {{render_field(registration_form.register, class="btn btn-teal btn-lg")}}
     </form>

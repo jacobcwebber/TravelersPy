@@ -48,7 +48,7 @@
 {% endblock %}
 
 {% block scripts %}
-<script>var tags = {{ tags | safe }};</script>
+<script>var tags = '{{ tags | safe }}';</script>
 <script src="//cdn.ckeditor.com/4.6.2/basic/ckeditor.js"></script>
 <script type="text/javascript">CKEDITOR.replace('editor')</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>

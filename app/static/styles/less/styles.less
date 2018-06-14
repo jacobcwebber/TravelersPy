@@ -12,7 +12,6 @@
 @brown: rgb(205,133,63);
 @red: rgb(244, 67, 54);
 
-
 @teal-shadow: inset 0px 1px 1px rgba(0,0,0,.01), 0px 0px 8px fade(@teal, 60%);
 
 /////////////////////////
@@ -31,12 +30,17 @@ hr {
     border: 0;
     border-top: 1px solid @white;
 }
-a:hover { text-decoration: none; }
 
 // TEXT
-.text-white { color: @white; }
-.text-teal { color: @teal; }
-.text-red { color: @red; }
+.text-white { color: @white !important; }
+.text-teal { color: @teal !important; }
+.text-red { color: @red !important; }
+
+.text-large { font-size: 42px; }
+.text-small { font-size: 12px; }
+
+.text-underline { text-decoration: underline; }
+
 .text-error {
     display: block;
     margin-top: 5px;
@@ -144,6 +148,7 @@ a:hover { text-decoration: none; }
     transition: opacity 2000ms;
 }
 .fade-in { opacity: 1; }
+
 ///////////////////////////
 //         ICONS         //
 ///////////////////////////
@@ -245,12 +250,9 @@ a:hover { text-decoration: none; }
         margin-bottom: 8px; 
         color: @white;
     }
-    .three-wide {
-        grid-template-columns: repeat(3, 1fr);
-    }
-    .five-wide {
-        grid-template-columns: repeat(5, 1fr);
-    }
+    .three-wide { grid-template-columns: repeat(3, 1fr); }
+    .five-wide { grid-template-columns: repeat(5, 1fr); }
+
     .item-group {
         display: grid; 
         grid-gap: 8px;
@@ -285,7 +287,6 @@ a:hover { text-decoration: none; }
                     color: @white;
                     margin: 0px 4px;
                     font-size: 19px;
-                    // align-self: end;
                 }
                 .item-subtitle {
                     letter-spacing: .8px; 
@@ -507,6 +508,7 @@ a:hover { text-decoration: none; }
     background-color: rgba(51,64,85,.99);
     cursor: pointer; 
 }
+
 /////////////////////////////
 //           HOME          //
 /////////////////////////////
@@ -557,10 +559,6 @@ a:hover { text-decoration: none; }
     .right {
         float: right;
     }
-}
-
-.large {
-    font-size: 42px;
 }
 
 .trav-input {

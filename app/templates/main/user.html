@@ -62,7 +62,7 @@
   {% if user.id == current_user.id %}
   <div class="box">
     <div class="box-header-text">Account</div>
-    <div class="text-white">Questions about Travelers or your account? Email the creator at <span class="text-teal">jacobcwebber@gmail.com</span>.</div><br>
+    <div class="text-white">Questions about Travelers or your account? Email the creator at <a class="text-teal" href="#">jacobcwebber@gmail.com</a>.</div><br>
     <a class="text-teal" href="{{url_for ('auth.logout') }}">Logout</a>
   </div>
   {% endif %}
@@ -71,7 +71,7 @@
 
 {% block scripts %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/profile.js') }}"></script>
-<script>var locations = {{locations | safe}};</script>
+<script>var locations = '{{locations | safe}}';</script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABEVdEk2zQBeCHstcUpXQUkSxPhtmTv0Q&callback=initMap" async defer></script>
 {% endblock %}
 

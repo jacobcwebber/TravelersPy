@@ -2,7 +2,7 @@
 
 <nav class="navbar navbar-expand-lg trav-nav">
   <div class="container {%if active_page == 'home'%}container-lg{% endif %}">
-    <a class="navbar-brand" href="{{ url_for('main.home') }}">
+    <a class="navbar-brand" href="{{ url_for('auth.index') }}">
       <img class="icon" src="{{ url_for('static', filename='images/favicon.ico') }}" width="20" height="20" alt=""></img>
       <span class="logo">Wanderlist</span>
     </a>
@@ -20,6 +20,9 @@
       <ul class="nav navbar-nav ml-auto">
         {% if current_user.is_authenticated %}
           {% if current_user.is_admin %}
+          <li class="nav-item {% if 'admin_dashboard' == active_page %}active{% endif %}">
+            <a href="{{ url_for('main.home') }}">Administrator Dashboard</a>
+          </li>
           <li class="nav-item {% if 'new_destination' == active_page %}active{% endif %}">
             <a href="{{ url_for('main.create_destination') }}">New Destination</a>
           </li>

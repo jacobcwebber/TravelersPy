@@ -3,7 +3,7 @@
 {% block body %}
 <div class="box-group container-md">
   <div class="box center-text">
-    <span class="large text-teal">{{ dest.dest_name }}, {{dest.country_name}}</span>  
+    <span class="text-large text-teal">{{ dest.dest_name }}, {{dest.country_name}}</span>  
   </div>
   <div class="box container-md center-text">    
     <img class="image-element" style="height: 350px;" src="{{ dest.img_url }}" alt="">
@@ -19,8 +19,8 @@
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABEVdEk2zQBeCHstcUpXQUkSxPhtmTv0Q&callback=initMap" async defer></script>
 <script>
-    var lat = {{dest.lat}};
-    var lng = {{dest.lng}};
+    var lat = '{{dest.lat}}';
+    var lng = '{{dest.lng}}';
 </script>
 <script src="/static/js/destination.js"></script>
 {% endblock %}
