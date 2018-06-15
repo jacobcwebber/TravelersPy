@@ -3,7 +3,7 @@ from hashlib import md5
 from time import time
 from flask import current_app
 from flask_login import UserMixin
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy.orm import backref
 import jwt
 from app import db, login
@@ -99,7 +99,7 @@ class User(UserMixin, db.Model):
         lazy='dynamic')
 
     def __repr__(self):
-        return '<ID: {}, Name: {} {}>'.format(self.id, self.first_name, self.last_name)
+        return '<{} {}>'.format(self.first_name, self.last_name)
 
     def full_name(self):
         return '{} {}'.format(self.first_name, self.last_name)

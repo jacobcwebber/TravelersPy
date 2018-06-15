@@ -21,7 +21,7 @@
         {% if current_user.is_authenticated %}
           {% if current_user.is_admin %}
           <li class="nav-item {% if 'admin_dashboard' == active_page %}active{% endif %}">
-            <a href="{{ url_for('main.home') }}">Administrator Dashboard</a>
+            <a href="{{ url_for('main.home') }}">Admin</a>
           </li>
           <li class="nav-item {% if 'new_destination' == active_page %}active{% endif %}">
             <a href="{{ url_for('main.create_destination') }}">New Destination</a>

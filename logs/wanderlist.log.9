@@ -1,4 +1,4 @@
-2018-06-13 17:37:25,619 ERROR: Exception on /login [GET] [in c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\flask\app.py:1761]
+2018-06-13 17:33:27,659 ERROR: Exception on /login [GET] [in c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\flask\app.py:1761]
 Traceback (most recent call last):
   File "c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\flask\app.py", line 2292, in wsgi_app
     response = self.full_dispatch_request()
@@ -31,7 +31,7 @@ Traceback (most recent call last):
   File "C:\Users\jacob\Projects\Wanderlist\app\templates\layout.html", line 20, in top-level template code
     {% include 'includes/_navbar.html' %}
   File "C:\Users\jacob\Projects\Wanderlist\app\templates\includes\_navbar.html", line 5, in top-level template code
-    <a class="navbar-brand" href="{{ url_for('main.home') }}">
+    <a class="navbar-brand" href="{{ url_for('index') }}">
   File "c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\flask\helpers.py", line 356, in url_for
     return appctx.app.handle_url_build_error(error, endpoint, values)
   File "c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\flask\app.py", line 2061, in handle_url_build_error
@@ -43,8 +43,7 @@ Traceback (most recent call last):
   File "c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\werkzeug\routing.py", line 1776, in build
     raise BuildError(endpoint, values, method, self)
 werkzeug.routing.BuildError: Could not build url for endpoint 'index'. Did you mean 'main.index' instead?
-2018-06-13 18:46:23,592 INFO: Wanderlist startup [in C:\Users\jacob\Projects\Wanderlist\app\__init__.py:47]
-2018-06-13 18:51:09,325 ERROR: Exception on /reset_password_request [GET] [in c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\flask\app.py:1761]
+2018-06-13 17:33:30,620 ERROR: Exception on /login [GET] [in c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\flask\app.py:1761]
 Traceback (most recent call last):
   File "c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\flask\app.py", line 2292, in wsgi_app
     response = self.full_dispatch_request()
@@ -58,8 +57,8 @@ Traceback (most recent call last):
     rv = self.dispatch_request()
   File "c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\flask\app.py", line 1799, in dispatch_request
     return self.view_functions[rule.endpoint](**req.view_args)
-  File "C:\Users\jacob\Projects\Wanderlist\app\auth\routes.py", line 79, in reset_password_request
-    return render_template('auth/reset_password_request.html', title='Reset Password', form=form)
+  File "C:\Users\jacob\Projects\Wanderlist\app\auth\routes.py", line 27, in login
+    return render_template('auth/login.html', title='Wanderlist | Login', login_form=login_form)
   File "c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\flask\templating.py", line 135, in render_template
     context, ctx.app)
   File "c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\flask\templating.py", line 117, in _render
@@ -72,50 +71,20 @@ Traceback (most recent call last):
     reraise(exc_type, exc_value, tb)
   File "c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\jinja2\_compat.py", line 37, in reraise
     raise value.with_traceback(tb)
-  File "C:\Users\jacob\Projects\Wanderlist\app\templates\auth\reset_password_request.html", line 1, in top-level template code
-    {% extends "layout.html" %}
+  File "C:\Users\jacob\Projects\Wanderlist\app\templates\auth\login.html", line 1, in top-level template code
+    {% extends 'layout.html' %}
   File "C:\Users\jacob\Projects\Wanderlist\app\templates\layout.html", line 20, in top-level template code
     {% include 'includes/_navbar.html' %}
-  File "C:\Users\jacob\Projects\Wanderlist\app\templates\includes\_navbar.html", line 32, in top-level template code
-    {{ render_field(login_form.csrf_token, id="login-csrf-token") }}
-  File "c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\jinja2\environment.py", line 430, in getattr
-    return getattr(obj, attribute)
-jinja2.exceptions.UndefinedError: 'login_form' is undefined
-2018-06-13 18:51:24,792 ERROR: Exception on /user/1 [GET] [in c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\flask\app.py:1761]
-Traceback (most recent call last):
-  File "c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\flask\app.py", line 2292, in wsgi_app
-    response = self.full_dispatch_request()
-  File "c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\flask\app.py", line 1815, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\flask\app.py", line 1718, in handle_user_exception
+  File "C:\Users\jacob\Projects\Wanderlist\app\templates\includes\_navbar.html", line 5, in top-level template code
+    <a class="navbar-brand" href="{{ url_for('index') }}">
+  File "c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\flask\helpers.py", line 356, in url_for
+    return appctx.app.handle_url_build_error(error, endpoint, values)
+  File "c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\flask\app.py", line 2061, in handle_url_build_error
     reraise(exc_type, exc_value, tb)
   File "c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\flask\_compat.py", line 35, in reraise
     raise value
-  File "c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\flask\app.py", line 1799, in dispatch_request
-    return self.view_functions[rule.endpoint](**req.view_args)
-  File "c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\flask_login\utils.py", line 261, in decorated_view
-    return func(*args, **kwargs)
-  File "C:\Users\jacob\Projects\Wanderlist\app\main\routes.py", line 37, in user
-    user = User.query.filter_by(id=id).first_or_404()
-NameError: name 'User' is not defined
-2018-06-13 18:52:26,767 ERROR: Exception on /user/1 [GET] [in c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\flask\app.py:1761]
-Traceback (most recent call last):
-  File "c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\flask\app.py", line 2292, in wsgi_app
-    response = self.full_dispatch_request()
-  File "c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\flask\app.py", line 1815, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\flask\app.py", line 1718, in handle_user_exception
-    reraise(exc_type, exc_value, tb)
-  File "c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\flask\_compat.py", line 35, in reraise
-    raise value
-  File "c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\flask\app.py", line 1799, in dispatch_request
-    return self.view_functions[rule.endpoint](**req.view_args)
-  File "c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\flask_login\utils.py", line 261, in decorated_view
-    return func(*args, **kwargs)
-  File "C:\Users\jacob\Projects\Wanderlist\app\main\routes.py", line 37, in user
-    user = User.query.filter_by(id=id).first_or_404()
-NameError: name 'User' is not defined
+  File "c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\flask\helpers.py", line 345, in url_for
+    force_external=external)
+  File "c:\users\jacob\appdata\local\programs\python\python36\lib\site-packages\werkzeug\routing.py", line 1776, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.BuildError: Could not build url for endpoint 'index'. Did you mean 'main.index' instead?

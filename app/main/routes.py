@@ -5,6 +5,7 @@ from app import db
 from app.main.forms import DestinationForm
 from app.models import User, Destination, Country, Region, Continent, Dest_Location, Dest_Image, Tag
 from app.utils import execute, get_dests_by_tag
+from app.decorators import admin_required
 from app.main import bp
 
 @bp.route('/home')

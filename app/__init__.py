@@ -12,6 +12,7 @@ db = SQLAlchemy()
 migrate = Migrate()
 login = LoginManager()
 login.login_view = 'auth.login'
+login.login_message = 'Please log in to view this page.'
 mail = Mail()
 
 def create_app(config_class=Config):
