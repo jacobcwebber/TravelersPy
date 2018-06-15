@@ -1,5 +1,6 @@
 from flask import flash, jsonify, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
+from werkzeug.urls import url_parse
 from sqlalchemy import desc, func, text
 from app import db
 from app.auth import bp
@@ -20,7 +21,7 @@ def login():
             return redirect(url_for('auth.login'))
         login_user(user, remember=login_form.remember_me.data)
         next_page = request.args.get('next')
-        if not next_page or is_safe_url(next_page):
+        if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('main.home')
         return redirect(next_page)
 
@@ -50,7 +51,7 @@ def index():
                 return redirect(url_for('auth.login'))
             login_user(user, remember=login_form.remember_me.data)
             next_page = request.args.get('next')
-            if not next_page or is_safe_url(next_page):
+            if not next_page or url_parse(next_page).netloc != '':
                 next_page = url_for('main.home')
             return redirect(next_page)
         flash('Invalid email or password.')
