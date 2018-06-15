@@ -18,3 +18,11 @@ class Config(object):
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     ADMINS = ['jacobcwebber@gmail.com']
+
+class ProductionConfig(Config):
+    DEBUG = False
+
+class DevelopmentConfig(Config):
+    FLASK_ENV = DEVELOPMENT
+    DEBUG = True
+

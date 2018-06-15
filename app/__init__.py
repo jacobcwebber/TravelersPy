@@ -6,7 +6,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_mail import Mail
-from config import Config
+from config import Config, DevelopmentConfig
+import sys
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -17,7 +18,7 @@ mail = Mail()
 
 def create_app(config_class=Config):
     app = Flask(__name__)
-    app.config.from_object(config_class)
+    app.config.from_object(os.environ.get('APP_SETTINGS'))
 
     db.init_app(app)
     migrate.init_app(app)
