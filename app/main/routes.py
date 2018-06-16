@@ -218,7 +218,7 @@ def alter_explored():
     dest = Destination.query.get(request.form['id'])
     action = request.form['action']
     
-    current_user.add_explored(dest) if action == "add" else current_user.remove_explored(dest)
+    current_user.alter_explored(dest)
     db.session.commit()
 
     return "success"

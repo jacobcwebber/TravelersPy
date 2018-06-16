@@ -38,6 +38,8 @@ flask-mail = "*"
 pyjwt = "*"
 flask-moment = "*"
 flask-bower = "*"
+flask-test = "*"
+coverage = "*"
 
 [dev-packages]
 
