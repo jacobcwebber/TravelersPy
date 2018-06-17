@@ -1,13 +1,14 @@
 from tests.base import BaseTestCase
 from app.models import User, Destination, Country, Region, Continent
 from app import db
-import unittest
-import time
 
-class TestAuthBlueprint(BaseTestCase):
+class TestAuth(BaseTestCase):
     def test_user_registration(self):     
         u = User(email='test@example.com', password='password')
-        assert u is not None
+        db.session.add(u)
+        db.session.commit()
+        u = User.query.filter_by(email='test@example.com').first()
+        self.assertIsNotNone(u)
 
     def test_password_hashing(self):
         u = User(email='test@example.com', password='password')

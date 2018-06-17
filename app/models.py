@@ -105,7 +105,6 @@ class User(UserMixin, db.Model):
 
     def avatar(self, size):
         """Generate user gravatar."""
-
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
         return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, size)
 
@@ -122,25 +121,21 @@ class User(UserMixin, db.Model):
 
     def generate_confirmation_token(self, expiration=604800):
         """Generate a confirmation token to email a new user."""
-
         s = Serializer(current_app.config['SECRET_KEY'], expiration)
         return s.dumps({'confirm': self.id})
 
     def generate_email_change_token(self, new_email, expiration=3600):
         """Generate an email change token to email an existing user."""
-
         s = Serializer(current_app.config['SECRET_KEY'], expiration)
         return s.dumps({'change_email': self.id, 'new_email': new_email})
 
     def generate_reset_password_token(self, expires_in=3600):
         """Generate a password reset change token to email to an existing user."""
-
         s = Serializer(current_app.config['SECRET_KEY'], expiration)
         return s.dumps({'reset': self.id})
 
     def confirm_account(self, token):
         """Verify that the provided token is correct for this user's id."""
-
         s = Serializer(current_app.config['SECRET_KEY'])
         try:
             data = s.loads(token)
@@ -155,7 +150,6 @@ class User(UserMixin, db.Model):
 
     def reset_password(self, token, new_password):
         """Verify the new password for this user."""
-
         s = Serializer(current_app.config['SECRET_KEY'])
         try:
             data = s.loads(token)
@@ -170,7 +164,6 @@ class User(UserMixin, db.Model):
 
     def alter_explored(self, dest):
         """Add or remove destinations from user's Explored"""
-
         if not self.has_explored(dest):
             self.explored_dests.append(dest)
         else:
@@ -182,7 +175,6 @@ class User(UserMixin, db.Model):
 
     def alter_favorite(self, dest):
         """Add or remove destinations from user's Favorites"""
-
         if not self.has_favorited(dest):
             self.favorited_dests.append(dest)  
         else: 
