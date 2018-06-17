@@ -15,7 +15,7 @@ login.login_view = 'auth.login'
 login.login_message = 'Please log in to access this page.'
 mail = Mail()
 
-def create_app(config_class=DevelopmentConfig):
+def create_app(config_class=os.environ.get('APP_SETTINGS')):
     app = Flask(__name__)
     app.config.from_object(config_class)
 
