@@ -6,7 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_mail import Mail
-from config import DevelopmentConfig
+from config import Config, DevelopmentConfig
 
 db = SQLAlchemy()
 migrate = Migrate()
