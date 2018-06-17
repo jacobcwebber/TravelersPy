@@ -89,8 +89,8 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     about = db.Column(db.String(140))
     is_admin = db.Column(db.Boolean, default=0)
-    time_created = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     confirmed = db.Column(db.Boolean, default=False)
+    time_created = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     explored_dests = db.relationship(
         'Destination', secondary=explored,
         backref=db.backref('explored_users', lazy='dynamic'),
