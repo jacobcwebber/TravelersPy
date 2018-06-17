@@ -10,6 +10,8 @@ from app.models import User
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
+    """Log in an existing user."""
+    
     if current_user.is_authenticated:
         return redirect(url_for('main.home'))
     login_form = LoginForm()
@@ -29,6 +31,8 @@ def login():
 
 @bp.route('/', methods=['GET', 'POST'])
 def index():
+    """Register a new user and send them a confirmation email."""
+
     if current_user.is_authenticated:
         return redirect(url_for('main.home'))
     login_form = LoginForm()
@@ -37,10 +41,11 @@ def index():
     if registration_form.register.data and registration_form.validate_on_submit():
         user = User(first_name=registration_form.first_name.data, 
                     last_name=registration_form.last_name.data, 
-                    email=registration_form.email.data)
-        user.set_password(registration_form.password.data)
+                    email=registration_form.email.data,
+                    password=registration_form.password.data)
         db.session.add(user)
-        db.session.commit() 
+        db.session.commit()
+        token = user.generate_confirmation_token()
         return redirect(url_for('auth.login'))
 
     if login_form.login.data:

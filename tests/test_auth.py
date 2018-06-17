@@ -5,21 +5,19 @@ import unittest
 import time
 
 class TestAuthBlueprint(BaseTestCase):
-    def test_user_registration(self):
-        """Test that a user is successfully created through the site."""
-        
+    def test_user_registration(self):     
         u = User(email='test@example.com', password='password')
-        
+        assert u is not None
 
     def test_password_hashing(self):
-        u = User(email='test@example.com')
-        u.set_password('password')
+        u = User(email='test@example.com', password='password')
         self.assertFalse(u.check_password('passw0rd'))
         self.assertTrue(u.check_password('password'))
 
     def test_password_salts_are_random(self):
-        u = self.register_user('test@example.com', )
-
+        u1 = User(email='test@example.com', password='password')
+        u2 = User(email='test2@example.com', password='password')
+        self.assertTrue(u1.password_hash != u2.password_hash)
 
     def test_avatar(self):
         u = User(email='jacob@example.com')
@@ -34,22 +32,24 @@ class TestAuthBlueprint(BaseTestCase):
         dest = Destination(name='Bagan', id=1, country_id=1)
         u = User(email='jacob@example.com')
 
-        db.session.add_all([cont, region, country, dest, user])
+        db.session.add_all([cont, region, country, dest, u])
         db.session.commit()
 
         self.assertEqual(u.explored_dests.all(), [])
         self.assertEqual(u.favorited_dests.all(), [])
 
-        u.add_explored(dest)
-        u.add_favorite(dest)
+        u.alter_explored(dest)
+        u.alter_favorite(dest)
         db.session.commit()
         self.assertTrue(u.has_explored(dest))
         self.assertTrue(u.has_favorited(dest))
         self.assertEqual(u.explored_dests.first().name, 'Bagan')
         self.assertEqual(u.favorited_dests.first().name, 'Bagan')
-        self.assertEqual(dest.explored_us.first().email, 'jacob@example.com')
-        self.assertEqual(dest.favorited_us.first().email, 'jacob@example.com')
+        self.assertEqual(dest.explored_users.first().email, 'jacob@example.com')
+        self.assertEqual(dest.favorited_users.first().email, 'jacob@example.com')
 
-        u.remove_explored(dest)
-        u.remove_favorite(dest)
+        u.alter_explored(dest)
+        u.alter_favorite(dest)
+        self.assertFalse(u.has_explored(dest))
+        self.assertFalse(u.has_favorited(dest))
         db.session.commit()
