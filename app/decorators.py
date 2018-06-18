@@ -10,6 +10,6 @@ def admin_required(func):
     def decorated_view(*args, **kwargs):
         if current_user.is_admin:
             return func(*args, **kwargs)
-        flash("This page requires Administrator access.")
+        flash("This page requires Administrator access.", 'danger')
         return redirect(url_for('main.home'))
     return decorated_view

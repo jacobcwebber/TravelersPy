@@ -20,7 +20,7 @@ def login():
     if login_form.validate_on_submit():
         user = User.query.filter_by(email=login_form.email.data).first()
         if user is None or not user.check_password(login_form.password.data):
-            flash('Invalid email or password.')
+            flash('Invalid email or password.', 'danger')
             return redirect(url_for('auth.login'))
         login_user(user, remember=login_form.remember_me.data)
         next_page = request.args.get('next')
@@ -53,14 +53,14 @@ def index():
         if login_form.validate_on_submit():
             user = User.query.filter_by(email=login_form.email.data).first()
             if user is None or not user.check_password(login_form.password.data):
-                flash('Invalid email or password.')
+                flash('Invalid email or password.', 'danger')
                 return redirect(url_for('auth.login'))
             login_user(user, remember=login_form.remember_me.data)
             next_page = request.args.get('next')
             if not next_page or url_parse(next_page).netloc != '':
                 next_page = url_for('main.home')
             return redirect(next_page)
-        flash('Invalid email or password.')
+        flash('Invalid email or password.', 'danger')
         return redirect(url_for('auth.login'))
 
     return render_template('auth/index.html', login_form=login_form, registration_form=registration_form)
@@ -97,6 +97,6 @@ def reset_password(token):
     if form.validate_on_submit():
         user.password = form.new_password.data
         db.session.commit()
-        flash('Your password has been reset.')
+        flash('Your password has been reset.', 'success')
         return redirect(url_for('auth.login'))
     return render_template('auth/reset_password.html', form=form)

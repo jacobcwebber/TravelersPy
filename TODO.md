@@ -7,10 +7,10 @@ Short term:
 - Convert Search forms to WTForms
 - Put in AJAX calls on Search page to show more dests (only show 20 at a time)
 - Get Remember Me functionality working
-- Expand unit tests
 - Import coverage in testing to see extent of test coverage
 - Expand Admin functionality (create users, gets lists of users, create/edit dests)
 - Add OAuth for FaceBook/Google login
+- Make emails look prettier
 
 Long term:
 - Add "Trips" so users can make and name a Trip and add destinations they want to go on that trip to it
