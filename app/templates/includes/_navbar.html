@@ -30,7 +30,7 @@
           <li class="nav-item {% if 'profile' == active_page %}active{% endif %}">
             <a href="{{ url_for('main.user', id=current_user.id) }}">Profile</a>
           </li>
-        {% elif current_user.is_anonymous and request.path != '/login' %}
+        {% elif request.path == '/' %}
         <form action="" method="POST" class="form-inline login-form">
           {{ render_field(login_form.csrf_token, id="login-csrf-token") }}
           {{ render_field(login_form.email, class_="form-control form-control-sm trav-input", placeholder="Email") }}
