@@ -33,12 +33,12 @@ class EditProfileForm(FlaskForm):
     submit = SubmitField('Submit')
 
 class ResetPasswordRequestForm(FlaskForm):
-    email = EmailField('Email', validators=[InputRequired(), Length(1, 120), Email()])
+    email = EmailField('Email', validators=[InputRequired("Email required."), Length(1, 120), Email()])
     submit = SubmitField('Request Password Reset')
 
 class ResetPasswordForm(FlaskForm):
-    new_password = PasswordField('New password', validators=[InputRequired()])
-    new_password2 = PasswordField('Confirm new Password', validators=[InputRequired(), EqualTo('new_password')])
+    new_password = PasswordField('New password', validators=[InputRequired(message="Required.")])
+    new_password2 = PasswordField('Confirm new Password', validators=[InputRequired(message="Required."), EqualTo('new_password')])
     submit = SubmitField('Request Password Reset')
 
 class ChangeEmailForm(FlaskForm):

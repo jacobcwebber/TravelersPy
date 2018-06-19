@@ -13,6 +13,7 @@ migrate = Migrate()
 login = LoginManager()
 login.login_view = 'auth.login'
 login.login_message = 'Please log in to access this page.'
+login.login_message_category = 'danger'
 mail = Mail()
 
 def create_app(config_class=os.environ.get('APP_SETTINGS')):
@@ -34,17 +35,22 @@ def create_app(config_class=os.environ.get('APP_SETTINGS')):
     app.register_blueprint(main_bp)
 
     if not app.debug and not app.testing:
-        if not os.path.exists('logs'):
-            os.mkdir('logs')
-        file_handler = RotatingFileHandler('logs/wanderlist.log', maxBytes=10240,
-                                        backupCount=10)
-        file_handler.setFormatter(logging.Formatter(
-            '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
-        file_handler.setLevel(logging.INFO)
-        app.logger.addHandler(file_handler)
+        if app.config['LOG_TO_STOUT']:
+            stream_handler = logging.StreamHandler()
+            stream_handler.setLevel(logging.INFO)
+            app.logger.addHandler(stream_handler)
+        else:
+            if not os.path.exists('logs'):
+                os.mkdir('logs')
+            file_handler = RotatingFileHandler('logs/wanderlist.log', maxBytes=10240,
+                                            backupCount=10)
+            file_handler.setFormatter(logging.Formatter(
+                '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
+            file_handler.setLevel(logging.INFO)
+            app.logger.addHandler(file_handler)
 
-        app.logger.setLevel(logging.INFO)
-        app.logger.info('Wanderlist startup')
+            app.logger.setLevel(logging.INFO)
+            app.logger.info('Wanderlist startup')
     
     return app
 

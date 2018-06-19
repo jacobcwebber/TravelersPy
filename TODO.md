@@ -11,6 +11,7 @@ Short term:
 - Expand Admin functionality (create users, gets lists of users, create/edit dests)
 - Add OAuth for FaceBook/Google login
 - Make emails look prettier
+- Make image storage more efficient
 
 Long term:
 - Add "Trips" so users can make and name a Trip and add destinations they want to go on that trip to it

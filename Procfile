@@ -1,1 +1,1 @@
-web: gunicorn wanderlist:app
+web: flask db upgrade; gunicorn wanderlist:app
