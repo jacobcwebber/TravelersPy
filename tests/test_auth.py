@@ -3,17 +3,13 @@ from app.models import User, Destination, Country, Region, Continent
 from app import db
 
 class TestAuth(BaseTestCase):
-    def test_user_registration(self):  
-        user = User(
-            first_name = self.faker.first_name(),
-            last_name = self.faker.last_name(),
-            email = self.faker.email(),
-            password = self.faker.password()
-        )
-        db.session.add(user)
-        db.session.commit()
-        registered_user = User.query.filter_by(email=user.email).first()
-        self.assertIsNotNone(registered_user)
+    def test_create_user(self):  
+        u = self.register_user()
+        self.assertIsNotNone(u)
+
+    def test_password_not_callable(self):
+        u = self.register_user()
+        self.assertRaises(AttributeError, lambda: u.password)
 
     def test_password_hashing(self):
         u = User(email='test@example.com', password='password')

@@ -47,6 +47,7 @@ def index():
         db.session.add(user)
         db.session.commit()
         token = user.generate_confirmation_token()
+        confirm_link = url_for('auth.confirm', token=token, _external=True)
         return redirect(url_for('auth.login'))
 
     if login_form.login.data:
