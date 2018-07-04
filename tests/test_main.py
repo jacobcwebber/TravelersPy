@@ -3,14 +3,13 @@ from app.models import User, Destination, Country, Region, Continent
 from app import db
 
 class TestMain(BaseTestCase):
-   def test_explored_and_favorites(self):
-        cont = Continent(name='Asia', id=1)
-        region = Region(name='Southeast Asia', id=1, cont_id=1)
-        country = Country(name='Myanmar', id=1, region_id=1)
-        dest = Destination(name='Bagan', id=1, country_id=1)
-        u = User(email='jacob@example.com')
 
-        db.session.add_all([cont, region, country, dest, u])
+  #This is more of an integration test. Probably better to break it out.
+   def test_explored_and_favorites(self):
+        dest = self.create_dest()
+        u = self.register_user()
+
+        db.session.add_all([dest, u])
         db.session.commit()
 
         self.assertEqual(u.explored_dests.all(), [])
@@ -21,10 +20,10 @@ class TestMain(BaseTestCase):
         db.session.commit()
         self.assertTrue(u.has_explored(dest))
         self.assertTrue(u.has_favorited(dest))
-        self.assertEqual(u.explored_dests.first().name, 'Bagan')
-        self.assertEqual(u.favorited_dests.first().name, 'Bagan')
-        self.assertEqual(dest.explored_users.first().email, 'jacob@example.com')
-        self.assertEqual(dest.favorited_users.first().email, 'jacob@example.com')
+        self.assertEqual(u.explored_dests.first().name, dest.name)
+        self.assertEqual(u.favorited_dests.first().name, dest.name)
+        self.assertEqual(dest.explored_users.first().email, u.email)
+        self.assertEqual(dest.favorited_users.first().email, u.email)
 
         u.alter_explored(dest)
         u.alter_favorite(dest)

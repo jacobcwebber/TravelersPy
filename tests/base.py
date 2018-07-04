@@ -2,7 +2,8 @@ from app import create_app, db
 from flask_testing import TestCase
 from config import TestConfig
 from faker import Faker
-from app.models import User, Destination, Country
+from random import randint
+from app.models import User, Destination, Country, Region, Continent
 
 class BaseTestCase(TestCase):
     def create_app(self):
@@ -31,17 +32,47 @@ class BaseTestCase(TestCase):
             password = self.faker.password()
         )
     
-    def create_destination(self, name):
-        return Destination(
-            name = name,
+    def create_dest(self):
+        country_id = self.create_country().id
+        dest =  Destination(
+            id = randint(0,100),
+            name = self.faker.state(),
             description = self.faker.text(),
-            update_date = self.faker.past_datetime()
+            update_date = self.faker.past_datetime(),
+            country_id = country_id
         )
+        return dest
     
     def create_country(self):
-        return Country(
-            name = self.faker.country()
+        region_id = self.create_region().id
+        country =  Country(
+            id = randint(0,100),
+            name = self.faker.country(),
+            region_id = region_id
         )
+        db.session.add(country)
+        db.session.commit()
+        return country
+
+    def create_region(self):
+        cont_id = self.create_cont().id
+        region = Region(
+            id = randint(0,100),
+            name = self.faker.state(),
+            cont_id = cont_id
+        )
+        db.session.add(region)
+        db.session.commit()
+        return region
+    
+    def create_cont(self):
+        cont = Continent(
+            id = randint(0,100),
+            name = self.faker.state()
+        )
+        db.session.add(cont)
+        db.session.commit()
+        return cont
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
