@@ -1,6 +1,7 @@
 from tests.base import BaseTestCase
-from app.models import User, Destination, Country, Region, Continent
+from app.models import User
 from app import db
+import time
 
 class TestAuth(BaseTestCase):
     def test_create_user(self):  
@@ -20,6 +21,29 @@ class TestAuth(BaseTestCase):
         u1 = User(email='test@example.com', password='password')
         u2 = User(email='test2@example.com', password='password')
         self.assertTrue(u1.password_hash != u2.password_hash)
+
+    def test_valid_confirmation_token(self):
+        u = self.register_user()
+        db.session.add(u)
+        db.session.commit()
+        token = u.generate_confirmation_token()
+        self.assertTrue(u.confirm_account(token))
+
+    def test_invalid_confirmation_token(self):
+        u1 = self.register_user()
+        u2 = self.register_user()
+        db.session.add_all([u1, u2])
+        db.session.commit()
+        token = u1.generate_confirmation_token()
+        self.assertFalse(u2.confirm_account(token))
+
+    def test_expired_confirmation_token(self):
+        u = self.register_user()
+        db.session.add(u)
+        db.session.commit()
+        token = u.generate_confirmation_token(1)
+        time.sleep(2)
+        self.assertFalse(u.confirm_account(token))
 
     def test_avatar(self):
         u = User(email='jacob@example.com')

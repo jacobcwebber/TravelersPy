@@ -13,12 +13,13 @@
       {{ render_field(login_form.password, class_="form-control", placeholder="Password") }}
     </div>
     <div class="form-group">
-      {{ render_field(login_form.remember_me, class="form-check-input", checked=True)}} <span class="text-teal">Remember me</span>
-    </div>
-    <div class="form-group">
       {{render_field(login_form.login, class_="btn btn-block btn-teal", style="height: 45px;")}}
     </div>
-    <a class="text-teal" href="{{ url_for('auth.reset_password_request') }}">Forgot your Password?</a>
+    <div class="form-group float-left">
+      {{ render_field(login_form.remember_me, class="form-check-input", checked=True, style="margin-left: 0")}} 
+      <span class="text-teal" style="margin-left: 20px;">Remember me</span>
+    </div>
+    <a class="text-teal float-right" href="{{ url_for('auth.reset_password_request') }}">Forgot your Password?</a>
   </form>
 </div>  
 {% endblock %}
