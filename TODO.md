@@ -5,7 +5,6 @@ Short term:
 - Incorporate searching users ability
 - Convert Search forms to WTForms
 - Put in AJAX calls on Search page to show more dests (only show 20 at a time)
-- Import coverage in testing to see extent of test coverage
 - Expand Admin functionality (create users, gets lists of users, create/edit dests)
 - Add OAuth for FaceBook/Google login
 - Make emails look prettier

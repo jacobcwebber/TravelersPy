@@ -35,7 +35,9 @@ hr {
 .text-white { color: @white !important; }
 .text-teal { color: @teal !important; }
 .text-red { color: @red !important; }
+
 .text-lg { font-size: 42px; }
+.text-md { font-size: 16px; }
 .text-sm { font-size: 13px; }
 
 .text-underline { text-decoration: underline; }
@@ -58,7 +60,7 @@ hr {
     background: @lightnavy;
 }
 
-// CONTAINERS
+// CONTAINERS TODO: get rid of this shit
 .container-sm {
     width: 500px !important;
 }
@@ -71,7 +73,7 @@ hr {
 }
 
 // NAVBAR
-.trav-nav {
+.wander-nav {
     background-color: @navy;
     text-transform: uppercase;
     font-family: 'Roboto', sans-serif;
@@ -100,6 +102,7 @@ hr {
         padding-bottom: 5px;
     }
 }
+
 .logo {
     color: @teal;
     letter-spacing: 4px; 
@@ -512,9 +515,14 @@ hr {
 //           HOME          //
 /////////////////////////////
 
+@media (max-width: 992px) {
+    .welcome .left {
+        display: none;
+    }
+}
+
 .welcome {
     margin: 45px auto 0px;
-    width: 75%;
     font-family: 'Roboto', sans-serif;
 
     .header{
@@ -523,39 +531,29 @@ hr {
         font-weight: 600;
         letter-spacing: .05em;
     }
-
-    section {
-        float: left;
-        width: 50%;
-        padding: 8px;
-        
-        .bullet-group {
-            width: 400px;
-            margin: 36px auto 0;
-        }
-        .bullet {
-            display: flex;
-            align-items: center;
-            margin-bottom: 24px;
-            font-size: 18px;
-
-            .icon-holder {
-                color: lighten(@lightnavy, 15%);
-                height: 54px;
-                width: 54px;
-            }
-            .bullet-text {
-                margin-left: 20px;
-                font-size: 20px;
-                font-weight: 600;
-                letter-spacing: .075em;
-                color: @teal;
-            }
-        }
+    
+    .bullet-group {
+        width: 80%;
+        margin: 36px auto 0;
     }
+    .bullet {
+        display: flex;
+        align-items: center;
+        margin-bottom: 24px;
+        font-size: 18px;
 
-    .right {
-        float: right;
+        .icon-holder {
+            color: lighten(@lightnavy, 15%);
+            height: 54px;
+            width: 54px;
+        }
+        .bullet-text {
+            margin-left: 20px;
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: .075em;
+            color: @teal;
+        }
     }
 }
 
@@ -592,10 +590,6 @@ hr {
 }
 .login {
     text-align: center;
-}
-.login-form {
-    padding: 16px;
-    margin-right: -15px;
 }
 .signup-form {
     margin-bottom: 16px;
