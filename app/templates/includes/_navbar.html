@@ -6,11 +6,13 @@
       <img class="icon" src="{{ url_for('static', filename='images/favicon.ico') }}" width="22" height="22" alt="Wanderlist"></img>
       <span class="logo">Wanderlist</span>
     </a>
+    {% if current_user.is_authenticated %}
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+    {% endif %}
   
-    <div class="collapse navbar-collapse">
+    <div {% if current_user.is_authenticated %} class="collapse navbar-collapse" {% endif %}>
       <ul class="nav navbar-nav mr-auto">
         {% if current_user.is_authenticated %}
           <li class="nav-item {% if 'destinations' == active_page %}active{% endif %}">
@@ -35,12 +37,15 @@
             <a href="{{ url_for('main.user', id=current_user.id) }}">Profile</a>
           </li>
         {% elif request.path == '/' %}
-        <form action="" method="POST" class="form-inline">
+        <form action="" method="POST" class="form-inline login-form">
           {{ render_field(login_form.csrf_token, id="login-csrf-token") }}
           {{ render_field(login_form.email, class_="form-control form-control-sm trav-input", placeholder="Email") }}
           {{ render_field(login_form.password, class_="form-control form-control-sm trav-input", placeholder="Password") }}
           {{ render_field(login_form.login, class_="btn btn-sm btn-teal") }}
         </form>
+        <li class="nav-item login {% if 'destinations' == active_page %}active{% endif %}">
+          <a href="{{ url_for('auth.login') }}">Login</a>
+        </li>
         {% else %}
         <li class="nav-item">
           <a href="{{ url_for('auth.index') }}">Register</a>

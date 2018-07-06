@@ -5,6 +5,12 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python: startup.py",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/startup.py",
+        },        
+        {
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
