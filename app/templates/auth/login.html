@@ -2,24 +2,26 @@
 
 {% block body %}
 {% from "includes/_formhelpers.html" import render_field %}
-<div class="welcome box container-sm">
-  <h2 class="header text-teal ">Log in to Wanderlist</h2>
-  <form action="" method="POST" class="small-form">
-    {{ login_form.csrf_token }}
-    <div class="form-group">
-      {{ render_field(login_form.email, class_="form-control", placeholder="Email") }}
-    </div>
-    <div class="form-group">
-      {{ render_field(login_form.password, class_="form-control", placeholder="Password") }}
-    </div>
-    <div class="form-group">
-      {{render_field(login_form.login, class_="btn btn-block btn-teal", style="height: 45px;")}}
-    </div>
-    <div class="form-group float-left">
-      {{ render_field(login_form.remember_me, class="form-check-input", checked=True, style="margin-left: 0")}} 
-      <span class="text-teal" style="margin-left: 20px;">Remember me</span>
-    </div>
-    <a class="text-teal float-right" href="{{ url_for('auth.reset_password_request') }}">Forgot your Password?</a>
-  </form>
+<div class= "login-box box col-5">
+  <h2 class="centered text-teal header">Log into Wanderlist</h2>
+  <div class="row">
+    <form action="" method="POST" class="centered col-10">
+      {{ login_form.csrf_token }}
+      <div class="form-group">
+        {{ render_field(login_form.email, class_="form-control", placeholder="Email") }}
+      </div>
+      <div class="form-group">
+        {{ render_field(login_form.password, class_="form-control", placeholder="Password") }}
+      </div>
+      <div class="form-group">
+        {{render_field(login_form.login, class_="btn btn-block btn-teal", style="height: 45px;")}}
+      </div>
+      <div class="float-xl-left form-group">
+        {{ render_field(login_form.remember_me, class="form-check-input", checked=True, style="margin-left: 0")}} 
+        <span class="text-teal" style="margin-left: 20px;">Remember me</span>
+      </div>
+      <a class="float-xl-right text-teal" href="{{ url_for('auth.reset_password_request') }}">Forgot your Password?</a>
+    </form>
+  </div>
 </div>  
 {% endblock %}

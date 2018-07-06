@@ -14,9 +14,9 @@
 @red                 : rgb(244, 67, 54);
 
 //SCREEN SIZES     
-@phone-screen        : 768px;
-@tablet-screen       : 992px;
-@computer-screen     : 1200px;
+@phone               : 768px;
+@tablet              : 992px;
+@computer            : 1200px;
 
 // MISC     
 @teal-shadow         : inset 0px 1px 1px rgba(0,0,0,.01), 0px 0px 8px fade(@teal, 60%);
@@ -56,17 +56,6 @@ hr {
     color: @red;
 }
 
-// FOOTER
-.footer {
-    position: absolute;
-    bottom: 0;
-    margin-top: 24px;
-    width:100%; 
-    height: 45px; 
-    padding: 12px;
-    background: @lightnavy;
-}
-
 // CONTAINERS TODO: get rid of this shit
 .container-sm {
     width: 500px !important;
@@ -79,19 +68,34 @@ hr {
     margin: 0px auto;
 }
 
-// NAVBAR
+//////////////////
+// NAVBAR STYLES
+//////////////////
 
-@media (min-width: @tablet-screen) {
+@media (min-width: @tablet) {
     .login {
         display: none;
     }
 }
-@media (max-width: @tablet-screen) {
+@media (max-width: @tablet) {
     .login-form {
         display: none;
     }
 }
+@media (max-width: @phone) {
+    h2 {
+        font-size: 1.5rem;
+    }
+}
 
+//Don't show bottom bar if navbar in compressed mode
+@media (max-width: @tablet) {
+    .nav-item.active > a {
+        border-bottom: none !important;
+    }
+}
+
+//Behavior of core un-collapsed navigation bar
 .wander-nav {
     background-color: @navy;
     text-transform: uppercase;
@@ -101,25 +105,35 @@ hr {
     right:0;
     left: 0;
     z-index: 1030;
+}
+.nav-item {
+    letter-spacing: 1px; 
+    font-weight: 400; 
+    font-size: 17px;
+    padding-left: 1em;
+    padding-right: 1em;
 
-    .nav-item {
-        letter-spacing: 1px; 
-        font-weight: 400; 
-        font-size: 17px;
-        padding-left: 1em;
-        padding-right: 1em;
-
-        a:hover,
-        a:focus {
-            background-color: transparent;
-        }
-    }   
-
-    .nav-item.active > a {
-        color: @teal;
-        border-bottom: 3px solid;
-        padding-bottom: 5px;
+    a:hover,
+    a:focus {
+        background-color: transparent !important;
     }
+}   
+.nav-item.active > a {
+    color: @teal;
+    border-bottom: 2px solid;
+    padding-bottom: 5px;
+}
+
+// Behavior of collapsed navbar
+.collapse.show {
+
+}
+// Behavior of hamburger collapse button
+.navbar-toggler:focus {
+    outline: 5px auto @teal;
+}
+.navbar-toggler.collapsed:focus {
+    outline: none !important;
 }
 
 .logo {
@@ -159,6 +173,13 @@ hr {
     background-color: @navy !important;
 }
 
+/*
+LOGIN STYLES
+*/
+.login-box {
+    margin: 5rem auto 0;
+}
+
 // MODIFIERS
 .hide {
     position: absolute !important; // This method of hiding is good for SEO
@@ -169,6 +190,12 @@ hr {
     transition: opacity 2000ms;
 }
 .fade-in { opacity: 1; }
+
+.centered {
+    float: none;
+    margin: 0 auto;
+    text-align: center;
+}
 
 ///////////////////////////
 //         ICONS         //
@@ -405,7 +432,7 @@ hr {
     }
 }
 
-@media (min-width: @tablet-screen) {
+@media (min-width: @tablet) {
     .modal-lg {
         max-width: 900px !important;
     }
@@ -534,22 +561,22 @@ hr {
 //           HOME          //
 /////////////////////////////
 
-@media (max-width: @tablet-screen) {
+@media (max-width: @tablet) {
     .welcome .left {
         display: none;
     }
 }
 
+.header{
+    color: fade(@white, 90%);
+    margin: 0px 0px 24px;
+    font-weight: 600;
+    letter-spacing: .05em;
+}
+
 .welcome {
     margin: 45px auto 0px;
     font-family: 'Roboto', sans-serif;
-
-    .header{
-        color: fade(@white, 90%);
-        margin: 0px 0px 24px;
-        font-weight: 600;
-        letter-spacing: .05em;
-    }
     
     .bullet-group {
         width: 80%;
@@ -595,20 +622,19 @@ hr {
 }
 
 .inline-input-group {
-    width: 100%;
     display: flex;
     flex-direction: row;
 
-    input:first-of-type {
+    input:not(:last-of-type) {
         margin-right: 8px;
     }
 }
-.small-form {
-    width: 350px;
-    margin: 0px auto;
-}
 .signup-form {
     margin-bottom: 16px;
+    &:focus {
+        -webkit-box-shadow: @teal-shadow;
+                box-shadow: @teal-shadow; 
+    }
 }
 .spinner {
     margin: 0 auto 0;
