@@ -2,7 +2,7 @@ from flask import render_template, redirect, url_for, flash, request, jsonify, c
 from flask_login import current_user, login_required
 from sqlalchemy import desc, text
 from app import db
-from app.main.forms import DestinationForm
+from app.main.forms import DestinationForm, SearchForm
 from app.models import User, Destination, Country, Region, Continent, Dest_Location, Dest_Image, Tag
 from app.utils import execute, get_dests_by_tag
 from app.decorators import admin_required
@@ -84,6 +84,8 @@ def search():
     location = request.args.get('location')
     keyword = request.args.get('keywords')
 
+    form = SearchForm()
+
     base = 'SELECT d.id, d.name as name, c.name as country, i.img_url, co.name as cont '\
            'FROM destinations d JOIN dest_images i ON d.id = i.dest_id '\
                                'JOIN countries c ON d.country_id = c.id '\
@@ -122,7 +124,7 @@ def search():
     tags = [tag.name for tag in Tag.query.all()]
 
     return render_template('main/search.html', title="Explore | Wanderlist", dests=dests, locations=locations, tags=tags,  
-                            explored=explored, favorites=favorites, keyword=keyword, location=location)    
+                            explored=explored, favorites=favorites, keyword=keyword, location=location, form=form)    
 
 @bp.route('/alter-featured-dest', methods=['POST'])
 @login_required

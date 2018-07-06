@@ -10,3 +10,7 @@ class DestinationForm(FlaskForm):
     description = TextAreaField('Description')
     img_url = StringField('Image Upload', validators=[InputRequired()])
     tags = StringField('Tags', validators=[InputRequired(message="At least one tag required.")])
+
+class SearchForm(FlaskForm):
+    location = StringField('Location')
+    keywords = StringField('Keywords')

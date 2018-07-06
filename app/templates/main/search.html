@@ -8,20 +8,24 @@
 {% endblock %}
 
 {% block body %}
+{% from "includes/_formhelpers.html" import render_field %}
 {% include 'includes/_featured_dest.html' %}
 <div class="centered col-11">
   <form action="" method="GET" autocomplete="off">
+      {{ form.csrf_token }}
     <div class="search search-filters" id="basic-search">
-      <input class="form-control input-lg search-input" 
-              id="location" name="location" 
-              autocomplete="off" 
-              placeholder="Search by location" 
-              {% if location %}value="{{ location }}"{% endif %}>
-      <input class="form-control input-lg search-input" 
-              id="keywords" name="keywords" 
-              autocomplete="off" 
-              {% if not keyword %}placeholder="Filter by keywords"{% endif %} 
-              {% if keyword %}value="{{ keyword }}"{% endif %} >
+      {{ render_field(form.location, 
+                      class_="form-control input-lg search-input", 
+                      autocomplete="off",
+                      placeholder="Search by location",
+                      value=location|default("", true)
+                      ) }}
+      {{ render_field(form.keywords, 
+                      class_="form-control input-lg search-input", 
+                      autocomplete="off",
+                      placeholder="Filter by keywords",
+                      value=keyword|default("", true)
+                      ) }}
       <button class="btn btn-lg search-btn" type="submit">
         <i class="fas fa-search fa-x-lg"></i>
       </button>
