@@ -69,8 +69,6 @@ $('.fa-check').click(function(event) {
     });
 });
 
-// Featured dest box 
-
 //Initializing variables
 let featDest = $('#modal')
 let featDestImg = $('#feat-dest-img');

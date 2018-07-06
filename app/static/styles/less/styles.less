@@ -129,8 +129,12 @@ hr {
 
 }
 // Behavior of hamburger collapse button
-.navbar-toggler:focus {
-    outline: 5px auto @teal;
+.navbar-toggler {
+    padding: .4rem .4rem;
+
+    &:focus {
+        outline: 5px auto @teal;
+    }
 }
 .navbar-toggler.collapsed:focus {
     outline: none !important;
@@ -273,7 +277,7 @@ LOGIN STYLES
 
 .box-group {
     margin: 16px auto;
-    width: 650px;
+    text-align: left;
 }
 
 .header-lg {
@@ -310,7 +314,6 @@ LOGIN STYLES
             position: relative;
             text-align: center;
             height: 240px; 
-            width: 200px; 
             background-position: center center;
             background-size: auto 240px;
             position: relative;

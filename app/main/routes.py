@@ -228,7 +228,7 @@ def alter_favorite():
     dest = Destination.query.get(request.form['id'])
     action = request.form['action']
     
-    current_user.add_favorite(dest) if action == "add" else current_user.remove_favorite(dest)
+    current_user.alter_favorite(dest)
     db.session.commit()
 
     return "success"
