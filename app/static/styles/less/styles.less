@@ -1,3 +1,8 @@
+////////////////////////////////////////
+//      WANDERLIST STYLES © 2018      //
+////////////////////////////////////////
+
+
 /////////////////////////
 //      VARIABLES      //
 /////////////////////////
@@ -14,9 +19,10 @@
 @red                 : rgb(244, 67, 54);
 
 //SCREEN SIZES     
-@phone               : 768px;
-@tablet              : 992px;
-@computer            : 1200px;
+@xs                  : 576px;
+@sm                  : 768px;
+@md                  : 992px;
+@lg                  : 1200px;
 
 // MISC     
 @teal-shadow         : inset 0px 1px 1px rgba(0,0,0,.01), 0px 0px 8px fade(@teal, 60%);
@@ -56,40 +62,63 @@ hr {
     color: @red;
 }
 
-// CONTAINERS TODO: get rid of this shit
-.container-sm {
-    width: 500px !important;
-}
-.container-md {
-    width: 900px !important;
-}
-.container-lg {
-    width: 1075px !important;
-    margin: 0px auto;
+// BUTTONS
+.btn-teal {
+    color: @white;
+    background-color: @teal;
+    border-color: @navy;
+
+    &:hover,
+    &:focus {
+        color: @white;
+        background-color: darken(@teal, 5%);
+    }
 }
 
-//////////////////
-// NAVBAR STYLES
-//////////////////
+// LABELS
+.label {
+    color: @teal !important;
+    font-size: 90%;
+    font-weight: 700; 
+    padding: .3em .6em;
+    border: 1px solid @teal;
+    border-radius: 1em;
+    display: inline-block;
+    margin: 0 2px 6px 0;
+    background-color: @navy !important;
+}
 
-@media (min-width: @tablet) {
-    .login {
-        display: none;
-    }
+// MODIFIERS
+.hide {
+    position: absolute !important; // This method of hiding is good for SEO
+    left: -9999px !important;
 }
-@media (max-width: @tablet) {
-    .login-form {
-        display: none;
-    }
+.transparent {
+    opacity: 0;
+    transition: opacity 2000ms;
 }
-@media (max-width: @phone) {
-    h2 {
-        font-size: 1.5rem;
-    }
+.fade-in { opacity: 1; }
+
+.centered {
+    float: none;
+    margin: 0 auto;
+    text-align: center;
 }
+
+
+/////////////////////////////////////////////////////////////////////////////
+//                                                                         //
+//                         PAGE-SPECIFIC STYLES                            //
+//                                                                         //
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////
+//       NAVBAR        //
+/////////////////////////
 
 //Don't show bottom bar if navbar in compressed mode
-@media (max-width: @tablet) {
+@media (max-width: @md) {
     .nav-item.active > a {
         border-bottom: none !important;
     }
@@ -123,11 +152,6 @@ hr {
     border-bottom: 2px solid;
     padding-bottom: 5px;
 }
-
-// Behavior of collapsed navbar
-.collapse.show {
-
-}
 // Behavior of hamburger collapse button
 .navbar-toggler {
     padding: .4rem .4rem;
@@ -139,7 +163,6 @@ hr {
 .navbar-toggler.collapsed:focus {
     outline: none !important;
 }
-
 .logo {
     color: @teal;
     letter-spacing: 4px; 
@@ -151,124 +174,27 @@ hr {
     margin-right: 6px;
 }
 
-// BUTTONS
-.btn-teal {
-    color: @white;
-    background-color: @teal;
-    border-color: @navy;
 
-    &:hover,
-    &:focus {
-        color: @white;
-        background-color: darken(@teal, 5%);
+/////////////////////////
+//      REGISTER       //
+/////////////////////////
+@media (max-width: @lg) {
+    h3 {
+        font-size: 1.5rem;
+    }
+    .icon-holder .fas {
+        font-size: 2.75em;
+    }
+    .bullet-text {
+        font-size: 1.03rem !important;
     }
 }
 
-// LABELS
-.label {
-    color: @teal !important;
-    font-size: 90%;
-    font-weight: 700; 
-    padding: .3em .6em;
-    border: 1px solid @teal;
-    border-radius: 1em;
-    display: inline-block;
-    margin: 0 2px 6px 0;
-    background-color: @navy !important;
-}
-
-/*
-LOGIN STYLES
-*/
+/////////////////////////
+//       LOGIN         //
+/////////////////////////
 .login-box {
     margin: 5rem auto 0;
-}
-
-// MODIFIERS
-.hide {
-    position: absolute !important; // This method of hiding is good for SEO
-    left: -9999px !important;
-}
-.transparent {
-    opacity: 0;
-    transition: opacity 2000ms;
-}
-.fade-in { opacity: 1; }
-
-.centered {
-    float: none;
-    margin: 0 auto;
-    text-align: center;
-}
-
-///////////////////////////
-//         ICONS         //
-///////////////////////////
-
-.fa-star {
-    float: right;
-    color: @white;
-    transition: all .2s ease-in-out;
-    cursor: pointer;
-}
-.fa-check {
-    float: left;
-    color: @white;
-    transition: all .2s ease-in-out;
-    cursor: pointer;
-}
-.fa-pencil-alt {
-    display: none;
-    position: absolute;
-    bottom: 0px;
-    right: 0px;
-    color: @white;
-    transition: all .2s ease-in-out;
-    cursor: pointer;
-}
-.fa-search {
-    color: @teal;
-    cursor: pointer;
-}
-.exp-full::before {
-    color: @limegreen;
-}
-.star-full::before {
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    content: "\f005";
-    color: @yellow;  
-}
-.item-footer:hover .fa-pencil-alt {
-    display: block;
-}
-.fa-star:hover::before {
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    content: "\f005";
-    color: @yellow;
-}
-.fa-star:hover {
-    transform: scale(1.175);
-}
-.fa-check:hover {
-    color: @limegreen;
-    transform: scale(1.175);
-}
-.fa-pencil-alt:hover {
-    color: @brown;
-    transform: scale(1.175);
-}
-.fa-x-lg {
-    font-size: 2.33em;
-}
-.fa-times-circle {
-    position: absolute;
-    border-radius: 50%;
-    top: -12px;
-    right: -12px;
-    background-color: @navy;
-    cursor: pointer;
 }
 
 /////////////////////////////////
@@ -435,7 +361,7 @@ LOGIN STYLES
     }
 }
 
-@media (min-width: @tablet) {
+@media (min-width: @md) {
     .modal-lg {
         max-width: 900px !important;
     }
@@ -564,12 +490,6 @@ LOGIN STYLES
 //           HOME          //
 /////////////////////////////
 
-@media (max-width: @tablet) {
-    .welcome .left {
-        display: none;
-    }
-}
-
 .header{
     color: fade(@white, 90%);
     margin: 0px 0px 24px;
@@ -598,7 +518,7 @@ LOGIN STYLES
         }
         .bullet-text {
             margin-left: 20px;
-            font-size: 20px;
+            font-size: 1.25rem;
             font-weight: 600;
             letter-spacing: .075em;
             color: @teal;
@@ -678,4 +598,75 @@ LOGIN STYLES
             transform: scale(1.0);
         }
     }
+}
+
+
+///////////////////////////
+//         ICONS         //
+///////////////////////////
+
+.fa-star {
+    float: right;
+    color: @white;
+    transition: all .2s ease-in-out;
+    cursor: pointer;
+}
+.fa-check {
+    float: left;
+    color: @white;
+    transition: all .2s ease-in-out;
+    cursor: pointer;
+}
+.fa-pencil-alt {
+    display: none;
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    color: @white;
+    transition: all .2s ease-in-out;
+    cursor: pointer;
+}
+.fa-search {
+    color: @teal;
+    cursor: pointer;
+}
+.exp-full::before {
+    color: @limegreen;
+}
+.star-full::before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: "\f005";
+    color: @yellow;  
+}
+.item-footer:hover .fa-pencil-alt {
+    display: block;
+}
+.fa-star:hover::before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: "\f005";
+    color: @yellow;
+}
+.fa-star:hover {
+    transform: scale(1.175);
+}
+.fa-check:hover {
+    color: @limegreen;
+    transform: scale(1.175);
+}
+.fa-pencil-alt:hover {
+    color: @brown;
+    transform: scale(1.175);
+}
+.fa-x-lg {
+    font-size: 2.33em;
+}
+.fa-times-circle {
+    position: absolute;
+    border-radius: 50%;
+    top: -12px;
+    right: -12px;
+    background-color: @navy;
+    cursor: pointer;
 }

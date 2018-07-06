@@ -37,13 +37,13 @@
             <a href="{{ url_for('main.user', id=current_user.id) }}">Profile</a>
           </li>
         {% elif request.path == '/' %}
-        <form action="" method="POST" class="form-inline login-form">
+        <form action="" method="POST" class="form-inline login-form d-none d-lg-block">
           {{ render_field(login_form.csrf_token, id="login-csrf-token") }}
           {{ render_field(login_form.email, class_="form-control form-control-sm trav-input", placeholder="Email") }}
           {{ render_field(login_form.password, class_="form-control form-control-sm trav-input", placeholder="Password") }}
           {{ render_field(login_form.login, class_="btn btn-sm btn-teal") }}
         </form>
-        <li class="nav-item login {% if 'destinations' == active_page %}active{% endif %}">
+        <li class="nav-item d-lg-none {% if 'destinations' == active_page %}active{% endif %}">
           <a href="{{ url_for('auth.login') }}">Login</a>
         </li>
         {% else %}
