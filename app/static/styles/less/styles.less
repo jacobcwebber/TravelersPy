@@ -215,11 +215,10 @@ hr {
 }
 
 .box {
-    border: 1px solid fade(@lightnavy, 95%);
+    border: 0.05rem solid fade(@lightnavy, 95%);
     background: fade(@lightnavy, 50%);
-    border-radius: 6px; 
-    padding: 16px;
-    margin-bottom: 16px;
+    padding: 1rem;
+    margin-bottom: 1rem;
     overflow: hidden;
     
     .box-header-text {
@@ -495,6 +494,19 @@ hr {
     margin: 0px 0px 24px;
     font-weight: 600;
     letter-spacing: .05em;
+}
+
+.home-dest-container {
+    width: 617.5px;
+}
+
+@media (max-width: @sm) {
+    .home-dest-container {
+        width: 260px;
+    }
+    .box .three-wide {
+        grid-template-columns: none;
+    }
 }
 
 .welcome {
