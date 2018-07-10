@@ -26,14 +26,16 @@
       <ul class="nav navbar-nav ml-auto">
         {% if current_user.is_authenticated %}
           {% if current_user.is_admin %}
-          <li class="nav-item {% if 'admin_dashboard' == active_page %}active{% endif %}">
+          <!-- <li class="nav-item {% if 'admin_dashboard' == active_page %}active{% endif %}">
             <a href="{{ url_for('main.home') }}">Admin</a>
-          </li>
-          <li class="nav-item {% if 'new_destination' == active_page %}active{% endif %}">
-            <a href="{{ url_for('main.create_destination') }}">New Destination</a>
-          </li>
+          </li> -->
           {% endif %}
-          <li class="nav-item {% if 'profile' == active_page %}active{% endif %}">
+          <li class="d-none d-lg-block nav-item">
+            <a href="{{ url_for('main.user', id=current_user.id) }}">
+              <img src="{{ current_user.avatar(36) }}" alt="" class="mini-pro-pic">
+            </a>
+          </li>
+          <li class="d-block d-lg-none nav-item {% if 'search' == active_page %}active{% endif %}" id="profile-link">
             <a href="{{ url_for('main.user', id=current_user.id) }}">Profile</a>
           </li>
         {% elif request.path == '/' %}

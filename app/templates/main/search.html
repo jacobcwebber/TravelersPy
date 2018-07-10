@@ -12,7 +12,6 @@
 {% include 'includes/_featured_dest.html' %}
 <div class="centered col-11">
   <form action="" method="GET" autocomplete="off">
-      {{ form.csrf_token }}
     <div class="search search-filters" id="basic-search">
       {{ render_field(form.location, 
                       class_="form-control input-lg search-input", 
@@ -32,7 +31,7 @@
     </div>
   </form>
   <div class="box">
-    <div class="no-results {% if dests|length != 0 %}d-none{% endif %}">No destinations found for your search.</div>
+    <div class="float-left no-results {% if dests|length != 0 %}d-none{% endif %}">No destinations found for your search.</div>
     <div class="spinner">
       <div class="bounce1"></div>
       <div class="bounce2"></div>
