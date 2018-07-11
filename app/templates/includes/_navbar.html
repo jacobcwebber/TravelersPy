@@ -35,7 +35,7 @@
               <img src="{{ current_user.avatar(36) }}" alt="" class="mini-pro-pic">
             </a>
           </li>
-          <li class="d-block d-lg-none nav-item {% if 'search' == active_page %}active{% endif %}" id="profile-link">
+          <li class="d-block d-lg-none nav-item {% if 'profile' == active_page %}active{% endif %}" id="profile-link">
             <a href="{{ url_for('main.user', id=current_user.id) }}">Profile</a>
           </li>
         {% elif request.path == '/' %}
