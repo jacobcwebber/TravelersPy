@@ -139,33 +139,6 @@ def alter_featured_dest():
 
     return jsonify(dest, tags)
 
-@bp.route('/create-destination', methods=['POST', 'GET'])
-@login_required
-def create_destination():
-    form = DestinationForm()
-
-    if request.method == 'POST':
-        dest = Destination(name=form.name.data, country_id=form.country_id.data, description=form.description.data)
-        tags = (form.tags.data).split(',')
-        for tag_name in tags:
-            tag = Tag.query.filter_by(name=tag_name).first()
-            dest.add_tag(tag)
-        db.session.add(dest)
-        db.session.commit()
-
-        dest_img = Dest_Image(dest_id=dest.id, img_url=form.img_url.data)
-        dest_location = Dest_Location(dest_id=dest.id, lat=form.lat.data, lng=form.lng.data)
-
-        db.session.add_all([dest_img, dest_location])
-        db.session.commit()
-        
-        return redirect(url_for('main.home'))
-
-    tags = [tag.name for tag in Tag.query.all()]
-    form.country_id.choices = [(0, '')] + ([(country.id, country.name) for country in Country.query.all()])
-
-    return render_template('main/create_destination.html', form=form, tags=tags)
-
 @bp.route('/edit-destination/<string:id>', methods=['POST', 'GET'])
 @login_required
 def edit_destination(id):

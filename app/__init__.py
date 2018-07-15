@@ -34,6 +34,9 @@ def create_app(config_class=os.environ.get('APP_SETTINGS')):
     from app.main import bp as main_bp
     app.register_blueprint(main_bp)
 
+    from app.admin import bp as admin_bp
+    app.register_blueprint(admin_bp, url_prefix='/admin')
+
     if not app.debug and not app.testing:
         if app.config['LOG_TO_STOUT']:
             stream_handler = logging.StreamHandler()

@@ -140,15 +140,18 @@ a:hover {
 .nav-item {
     letter-spacing: 1px; 
     font-weight: 400; 
-    font-size: 17px;
+    font-size: 1em;
     padding-left: 1em;
     padding-right: 1em;
 
     a:hover,
     a:focus {
         background-color: transparent !important;
+        padding-bottom: 5px;
+        border-bottom: 2px solid @teal;
     }
 }   
+#nav-pro-pic > a:hover {border: none !important;}
 .nav-item.active > a {
     color: @teal;
     border-bottom: 2px solid;
@@ -180,6 +183,7 @@ a:hover {
 /////////////////////////
 //      REGISTER       //
 /////////////////////////
+
 @media (max-width: @lg) {
     h3 {
         font-size: 1.5rem;
@@ -195,6 +199,7 @@ a:hover {
 /////////////////////////
 //       LOGIN         //
 /////////////////////////
+
 .login-box {
     width: 440px;
     margin: 5rem auto 0;
@@ -204,10 +209,44 @@ a:hover {
     .login-box {
         width: 320px;
     }
+    .nav > .li > a {
+
+    }
 }
 
 .remember-me {
     margin-left: 20px;
+}
+
+/////////////////////////
+//       ADMIN         //
+/////////////////////////
+@media (max-width: @md) {
+    .content .sub-header {
+        display: none;
+    }
+}
+
+.admin.box {margin: 0.75rem !important;}
+.content {
+    margin-left: 85px;
+
+    .header {
+        color: @white;
+        font-weight: 700;
+        font-size: 1.5rem;
+        letter-spacing: .05em;
+        margin-bottom: 0px !important;
+    }
+    .sub-header {
+        color: fade(@white, 90%);
+        font-weight: 300;
+        font-size: .6em;
+        letter-spacing: .05em;
+    }
+    .content {
+        //
+    }
 }
 
 /////////////////////////////////
