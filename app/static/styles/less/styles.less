@@ -32,7 +32,6 @@
 /////////////////////////
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
     background-color: @navy;
     padding-top: 65px; // make space for header
 }
@@ -74,6 +73,24 @@ a:hover {
     &:focus {
         color: @white;
         background-color: darken(@teal, 5%);
+    }
+    &:focus {
+        box-shadow: @teal-shadow;
+    }
+}
+.btn-outline-teal {
+    color: @teal;
+    background-color: transparent;
+    border-color: @teal;
+    margin-bottom: 2em;
+
+    &:hover,
+    &:focus {
+        color: @white;
+        background-color: @teal;
+    }
+    &:focus {
+        box-shadow: @teal-shadow;
     }
 }
 
@@ -209,9 +226,6 @@ a:hover {
     .login-box {
         width: 320px;
     }
-    .nav > .li > a {
-
-    }
 }
 
 .remember-me {
@@ -221,15 +235,12 @@ a:hover {
 /////////////////////////
 //       ADMIN         //
 /////////////////////////
-@media (max-width: @md) {
-    .content .sub-header {
-        display: none;
+.admin{
+    .admin.box {margin: 0.75rem !important;}
+    .content{margin-left: 85px;}
+    .page-header {
+        margin-bottom: 2rem;
     }
-}
-
-.admin.box {margin: 0.75rem !important;}
-.content {
-    margin-left: 85px;
 
     .header {
         color: @white;
@@ -237,17 +248,29 @@ a:hover {
         font-size: 1.5rem;
         letter-spacing: .05em;
         margin-bottom: 0px !important;
+        .sub-header {
+            font-weight: 300;
+            font-size: .6em;
+            letter-spacing: .05em;
+        }
     }
-    .sub-header {
-        color: fade(@white, 90%);
-        font-weight: 300;
-        font-size: .6em;
-        letter-spacing: .05em;
+    .no-records-found td {color: @white;}
+
+    thead {
+        background-color: fade(@lightnavy, 70%);
     }
-    .content {
-        //
+    .table-header {
+        font-size: 1.1em;
+        letter-spacing: 1px;
+        padding: 0.25rem 0 !important;
+    }
+
+    tbody tr:hover {
+        background-color: @lightnavy !important;
+        cursor: pointer !important;
     }
 }
+
 
 /////////////////////////////////
 //            BOXES            //

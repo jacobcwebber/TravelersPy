@@ -65,12 +65,6 @@ def index():
 
     return render_template('auth/index.html', login_form=login_form, registration_form=registration_form)
 
-@bp.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    return redirect(url_for('auth.index'))
-
 @bp.route('/reset_password_request', methods=['GET', 'POST'])
 def reset_password_request():
     if current_user.is_authenticated:
@@ -99,3 +93,9 @@ def reset_password(token):
         flash('Your password has been reset.', 'success')
         return redirect(url_for('auth.login'))
     return render_template('auth/reset_password.html', form=form)
+
+@bp.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('auth.index'))

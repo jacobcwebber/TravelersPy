@@ -3,8 +3,9 @@ from flask_login import current_user, login_required
 from sqlalchemy import desc, func, text
 from app import db
 from app.admin import bp
+from app.admin.forms import ChangeUserEmailForm, NewUserForm, DestinationForm
 from app.decorators import admin_required
-from app.models import User
+from app.models import User, Destination, Country, Region, Continent, Dest_Location, Dest_Image, Tag
 
 @bp.route('/')
 @login_required
@@ -39,10 +40,38 @@ def new_user():
         flash('User {} successfully created'.format(user.full_name()), 'success')
     return render_template('admin/new_user.html', form=form)
 
-@bp.route('/create-destination', methods=['POST', 'GET'])
+@bp.route('/user/<int:user_id>')
+@bp.route('/user/<int:user_id>/info')
+@login_required
+@admin_required
+def user_info(user_id):
+    """View a user's profile."""
+    user = User.query.filter_by(id=user_id).first()
+    if user is None:
+        abort(404)
+    return render_template('admin/manage_user.html', user=user)
+
+
+@bp.route('/user/<int:user_id>/_delete')
+@login_required
+@admin_required
+def delete_user(user_id):
+    """Delete a user's account."""
+    if current_user.id == user_id:
+        flash('You cannot delete your own account. Please ask another '
+              'administrator to do this.', 'error')
+    else:
+        user = User.query.filter_by(id=user_id).first()
+        db.session.delete(user)
+        db.session.commit()
+        flash('Successfully deleted user %s.' % user.full_name(), 'success')
+    return redirect(url_for('admin.registered_users'))
+
+@bp.route('/new-destination', methods=['POST', 'GET'])
 @login_required
 @admin_required
 def new_destination():
+    """Create a new destination."""
     form = DestinationForm()
 
     if request.method == 'POST':
@@ -65,4 +94,4 @@ def new_destination():
     tags = [tag.name for tag in Tag.query.all()]
     form.country_id.choices = [(0, '')] + ([(country.id, country.name) for country in Country.query.all()])
 
-    return render_template('main/create_destination.html', form=form, tags=tags)
+    return render_template('admin/new_destination.html', form=form, tags=tags)

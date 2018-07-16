@@ -2,18 +2,19 @@
 {% from "includes/_formhelpers.html" import render_field %}
 {% set active_page = "admin" %}
 
-{% macro dashboard_option(title, endpoint, description=None, icon=None) %}
-<div class="admin box col-12 col-md-5">
+{% macro dashboard_option(title, endpoint, icon, description=None) %}
+<div class="admin box col-12 col-lg-5">
   <a href="{{ url_for(endpoint) }}">
     <h3 class="text-white">
       <i class="float-left fas fa-{{ icon }} fa-2x"></i>
       <div class="content">
-        <div class="header">{{ title }}</div>
+        <div class="header">{{ title }}
         {% if description is not none %}
           <div class="sub-header">
             {{ description }}
           </div>
         {% endif %}
+        </div>
       </div>
     </h3>
   </a>
@@ -30,6 +31,8 @@
                           description='View and manage user accounts', icon='users') }}
       {{ dashboard_option('Add New User', 'admin.new_user',
                           description='Create a new user account', icon='user-plus') }}
+      {{ dashboard_option('Destinations', 'admin.new_destination',
+                          description='View and manage all destinations', icon='map-marked-alt') }}
       {{ dashboard_option('Add New Destination', 'admin.new_destination',
                           description='Create a new destination', icon='globe-americas') }}
   </div>

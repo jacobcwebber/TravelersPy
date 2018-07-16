@@ -2,31 +2,52 @@
 {% from "includes/_formhelpers.html" import render_field %}
 {% set active_page = "admin" %}
 
+{% block head %}
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.css">
+{% endblock %}
+
 {% block body %}
-<a class="btn btn-teal" href="{{ url_for('admin.index') }}">
-  <i class="fas fa-chevron-left"></i>
-  Back to dashboard
-</a>
-<h2 class="header">Registered Users</h2>
+<div class="admin">
+  <a class="btn btn-outline-teal btn-sm" href="{{ url_for('admin.index') }}">
+    <i class="fas fa-chevron-left" style="margin-right: 10px;"></i>
+    Back to Dashboard
+  </a>
+  <div class="page-header">
+    <h2 class="header">
+      Registered Users
+      <div class="sub-header">View and manage currently registered users.</div>
+    </h2>
+  </div>
 
-<table class="table table-bordered">
-  <thead>
-    <th class="text-teal" scope="col">ID</th>
-    <th class="text-teal" scope="col">First</th>
-    <th class="text-teal" scope="col">Last</th>
-    <th class="text-teal" scope="col">Email</th>
-  </thead>
-  <tbody>
-    {% for user in users %}
-    <tr>
-      <th class="text-white" scope="row">{{ user.id }}</th>
-      <td class="text-white">{{ user.first_name }}</td>
-      <td class="text-white">{{ user.last_name }}</td>
-      <td class="text-white">{{ user.email }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+  <table id="table" data-toggle="table" data-pagination="true" data-pagination-h-align="left">
+    <thead>
+      <th data-field="id" data-visible="false"></th>
+      <th class="table-header text-white" data-field="first-name">First name</th>
+      <th class="table-header text-white" data-sortable="true" data-field="last-name">Last name</th>
+      <th class="table-header text-white" data-sortable="true" data-field="email">Email</th>
+      <th class="table-header text-white" data-field="role">Account type</th>
+    </thead>
+    <tbody>
+      {% for user in users %}
+      <tr class="clickable-row" onclick="">
+        <td>{{ user.id }}</td>
+        <td class="text-white">{{ user.first_name }}</td>
+        <td class="text-white">{{ user.last_name }}</td>
+        <td class="text-white">{{ user.email }}</td>
+        <td class="text-white">{% if user.is_admin %}Administrator{% else %}User{% endif %}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
 
+{% block scripts %}
+<script>
+$('#table').on('click-row.bs.table', function (e, row) {
+  console.log(row.id);
+});
+</script>
 
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
 {% endblock %}
