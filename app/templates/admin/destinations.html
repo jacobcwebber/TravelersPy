@@ -1,0 +1,51 @@
+{% extends 'layout.html' %}
+{% from "includes/_formhelpers.html" import render_field %}
+{% set active_page = "admin" %}
+
+{% block head %}
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.css">
+{% endblock %}
+
+{% block body %}
+<div class="admin">
+  <a class="btn btn-outline-teal btn-sm" href="{{ url_for('admin.index') }}">
+    <i class="fas fa-chevron-left" style="margin-right: 10px;"></i>
+    Back to Dashboard
+  </a>
+  <div class="page-header">
+    <h2 class="header">
+      Destinations
+      <div class="sub-header">View and manage all destinations.</div>
+    </h2>
+  </div>
+
+  <table id="table" data-toggle="table" data-pagination="true" data-pagination-h-align="left">
+    <thead>
+      <th data-field="id" data-visible="false"></th>
+      <th class="table-header text-white" data-field="first-name">Name</th>
+      <th class="table-header text-white" data-sortable="true" data-field="last-name">Country</th>
+      <th class="table-header text-white" data-sortable="true" data-field="email">Image Link</th>
+    </thead>
+    <tbody>
+      {% for destination in destinations %}
+      <tr class="clickable-row" onclick="">
+        <td>{{ destination.id }}</td>
+        <td class="text-white">{{ destination.name }}</td>
+        <td class="text-white">country</td>
+        <td class="text-white">image link</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$('#table').on('click-row.bs.table', function (e, row) {
+  console.log(row.id);
+});
+</script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
+{% endblock %}

@@ -67,6 +67,16 @@ def delete_user(user_id):
         flash('Successfully deleted user %s.' % user.full_name(), 'success')
     return redirect(url_for('admin.registered_users'))
 
+@bp.route('/destinations')
+@login_required
+@admin_required
+def destinations():
+    """View all destinations."""
+    destinations = Destination.query.order_by(Destination.name).all()
+    return render_template(
+        'admin/destinations.html', destinations=destinations)
+
+
 @bp.route('/new-destination', methods=['POST', 'GET'])
 @login_required
 @admin_required
