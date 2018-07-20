@@ -628,6 +628,13 @@ a:hover {
     border-radius: 12px;
     margin-right: 6px;
 
+    &:-webkit-autofill,
+    &:-webkit-autofill:focus {
+        -webkit-transition: none;
+        -webkit-box-shadow: 0 0 0 30px @navy inset;
+        -webkit-text-fill-color: @white !important;      
+    }
+
     &:focus {
         outline: 0;
         -webkit-box-shadow: @teal-shadow;
