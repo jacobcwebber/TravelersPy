@@ -72,7 +72,7 @@ def delete_user(user_id):
 @admin_required
 def destinations():
     """View all destinations."""
-    destinations = Destination.query.order_by(Destination.name).all()
+    destinations = Destination.query.join(Country).order_by(Destination.name).all()
     return render_template(
         'admin/destinations.html', destinations=destinations)
 

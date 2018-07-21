@@ -19,20 +19,18 @@
     </h2>
   </div>
 
-  <table id="table" data-toggle="table" data-pagination="true" data-pagination-h-align="left">
+  <table id="table" data-toggle="table" data-pagination="true" data-pagination-h-align="left" >
     <thead>
       <th data-field="id" data-visible="false"></th>
       <th class="table-header text-white" data-field="first-name">Name</th>
       <th class="table-header text-white" data-sortable="true" data-field="last-name">Country</th>
-      <th class="table-header text-white" data-sortable="true" data-field="email">Image Link</th>
     </thead>
     <tbody>
-      {% for destination in destinations %}
+      {% for dest in destinations %}
       <tr class="clickable-row" onclick="">
-        <td>{{ destination.id }}</td>
-        <td class="text-white">{{ destination.name }}</td>
-        <td class="text-white">country</td>
-        <td class="text-white">image link</td>
+        <td>{{ dest.id }}</td>
+        <td class="text-white">{{ dest.name }}</td>
+        <td class="text-white">{{ dest.country.name }} </td>
       </tr>
       {% endfor %}
     </tbody>
