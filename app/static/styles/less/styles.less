@@ -37,11 +37,11 @@ a:hover {
     color: @red;
 }
 
-// BUTTONS
+// BUTTONS, TODO: can start building mixins to this since they're all similar
 .btn-teal {
-    color: @white;
+    color: @white !important;
     background-color: @teal;
-    border-color: @navy;
+    border-color: @teal;
 
     &:hover,
     &:focus {
@@ -52,6 +52,7 @@ a:hover {
         box-shadow: @teal-shadow;
     }
 }
+
 .btn-outline-teal {
     color: @teal;
     background-color: transparent;
@@ -66,6 +67,20 @@ a:hover {
     &:focus {
         box-shadow: @teal-shadow;
     }
+}
+
+.btn-tertiary {
+    color: @white !important;
+    border-color: @white;
+    background-color: transparent;
+
+    &:hover {
+        color: @black !important;
+        background-color: @white;
+    }
+    &:focus {
+        box-shadow: @teal-shadow;
+    } 
 }
 
 // LABELS
@@ -202,7 +217,10 @@ a:hover {
 //       ADMIN         //
 /////////////////////////
 .admin{
-    .admin.box {margin: 0.75rem !important;}
+    .admin.box {
+        margin: 0.75rem !important;
+        .header {margin-bottom: 0px !important;}
+    }
     .content{margin-left: 85px;}
     .page-header {
         margin-bottom: 2rem;
@@ -213,7 +231,6 @@ a:hover {
         font-weight: 700;
         font-size: 1.5rem;
         letter-spacing: .05em;
-        margin-bottom: 0px !important;
         .sub-header {
             font-weight: 300;
             font-size: .6em;
@@ -251,6 +268,49 @@ a:hover {
         background-color: @teal;
         border-color: @white;
     }
+}
+
+//Progress bar for destination creation
+.progressbar {
+	overflow: hidden;
+	counter-reset: step;
+	width: 60%;
+	margin: 30px auto;
+}
+.progressbar li {
+	list-style-type: none;
+	color: @white;
+	width: 20%;
+	float: left;
+	position: relative;
+}
+.progressbar li:before {
+	content: counter(step);
+	counter-increment: step;
+	width: 25px;
+	line-height: 25px;
+	display: block;
+	color: @black;
+	background: @white;
+	border-radius: 50%;
+	margin: 0 auto 5px auto;
+}
+.progressbar li:after {
+	content: '';
+	width: 100%;
+	height: 3px;
+	background: @white;
+	position: absolute;
+	left: -50%;
+	top: 9px;
+	z-index: -1;
+}
+.progressbar li:first-child:after {
+	content: none; 
+}
+.progressbar li.active:before,  .progressbar li.active:after{
+	background: @teal;
+	color: @white;
 }
 
 /////////////////////////////////
@@ -599,7 +659,9 @@ a:hover {
     &:-webkit-autofill,
     &:-webkit-autofill:focus {
         -webkit-transition: none;
+                transition: none;
         -webkit-box-shadow: 0 0 0 30px @navy inset;
+                box-shadow: 0 0 0 30px @navy inset;
         -webkit-text-fill-color: @white !important;      
     }
 

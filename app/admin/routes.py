@@ -102,6 +102,6 @@ def new_destination():
         return redirect(url_for('main.home'))
 
     tags = [tag.name for tag in Tag.query.all()]
-    form.country_id.choices = [(0, '')] + ([(country.id, country.name) for country in Country.query.all()])
+    form.country_id.choices = [(0, 'Country')] + ([(country.id, country.name) for country in Country.query.all()])
 
     return render_template('admin/new_destination.html', form=form, tags=tags)

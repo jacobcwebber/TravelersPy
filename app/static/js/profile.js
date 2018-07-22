@@ -30,7 +30,7 @@ function clearMarkers() {
 }
 
 // Shows markers according to tab clicked
-$('.pill-element').click(function(event) {
+$('.pill-element').click(() => {
     view = $(this).attr('id');
     $(this).siblings().removeClass('active');
     $(this).addClass('active');

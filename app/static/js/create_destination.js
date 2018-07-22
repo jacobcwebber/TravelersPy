@@ -1,31 +1,36 @@
-var currentTab = 0;
-showTab(currentTab);
+//Deal with multi-step form navigation
+var sections = $(".form-section");
+var steps = $(".progressbar li");
+const LAST_SECTION = sections.length - 1; 
+var currentSection = 0;
+navigateTo(currentSection)
+console.log(LAST_SECTION)
 
-function showTab(n) {
-    var x = document.getElementsByClassName("tab");
-    x[n].style.display = "block";
-    if (n == 0) {
-        document.getElementById("prevBtn").style.display = "none";
+function navigateTo(currentSection) {
+    sections.eq(currentSection).show();
+    currentSection ? $("#prevBtn").show() : $("#prevBtn").hide();
+    console.log(currentSection)
+    if (currentSection == LAST_SECTION) {
+        $("#nextBtn").html("Create destination");
     } else {
-        document.getElementById("prevBtn").style.display = "inline";
+        $("#nextBtn").html("Next");
     }
-    if (n == (x.length - 1)) {
-        document.getElementById("nextBtn").innerHTML = "Submit"
-    } else {
-        document.getElementById("nextBtn").innerHTML = "Next"
-    }
-}
+};
 
-function nextPrev(n) {
-    var x = document.getElementsByClassName("tab");
-    x[currentTab].style.display = "none";
-    currentTab = currentTab + n;
-    if (currentTab >= x.length) {
-        document.getElementById("submitForm").submit();
-        return false;
+$(".btn").click(function() {
+    if ($(this).attr('id') == "nextBtn") {
+        steps.eq(currentSection+1).toggleClass("active");
+        currentSection++
+    } else {
+        steps.eq(currentSection).toggleClass("active");
+        currentSection--
     }
-    showTab(currentTab)
-}
+    if (currentSection >= LAST_SECTION) {
+        $("#submitForm").submit();
+        return;
+    }
+    navigateTo(currentSection)
+});
 
 // Creates tags input and the autocomplete
 $('#tags').typeahead({
@@ -36,8 +41,8 @@ $('#tags').typeahead({
 /// Initiates map
 function initMap() {
     var map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 1,
-      center: {lat: 0, lng: 0}
+      zoom: 2,
+      center: {lat: 30, lng: 0}
     });
   }
 
@@ -81,10 +86,10 @@ fileUpload.on('change', function(event) {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
         data: formData
-    }).then(function(res) {
+    }).then((res) => {
         imgPreview.attr('src', res.data.secure_url);
         $('#img-link').attr('value', res.data.secure_url)
-    }).catch(function(error) {
-        console.log(error);
+    }).catch((e) => {
+        console.log(e);
     })
 });
