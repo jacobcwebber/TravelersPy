@@ -1,15 +1,20 @@
 //Deal with multi-step form navigation
 var sections = $(".form-section");
 var steps = $(".progressbar li");
+
+var sectionHeader = $("#sectionHeader");
 const LAST_SECTION = sections.length - 1; 
 var currentSection = 0;
+
 navigateTo(currentSection)
-console.log(LAST_SECTION)
 
 function navigateTo(currentSection) {
-    sections.eq(currentSection).show();
+    currentStepName = steps.eq(currentSection).text()
+    sections.eq(currentSection).show();   
+    sectionHeader.text(currentStepName)
+    //Hides previous button if on first section (currentSection == 0)
     currentSection ? $("#prevBtn").show() : $("#prevBtn").hide();
-    console.log(currentSection)
+
     if (currentSection == LAST_SECTION) {
         $("#nextBtn").html("Create destination");
     } else {
@@ -17,7 +22,8 @@ function navigateTo(currentSection) {
     }
 };
 
-$(".btn").click(function() {
+$(".btn").click(function buttonClick() {
+    sections.eq(currentSection).hide()
     if ($(this).attr('id') == "nextBtn") {
         steps.eq(currentSection+1).toggleClass("active");
         currentSection++

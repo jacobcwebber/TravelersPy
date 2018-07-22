@@ -3,15 +3,18 @@
 
 {% block body %}
 {% from "includes/_formhelpers.html" import render_field %}
+<div class="col-10 offset-1">
+  <h2 class="centered header">Create Destination</h2>
+</div>
 <ul class="progressbar">
-		<li class="centered active">Basics</li>
-		<li class="centered">Details</li>
-    <li class="centered">Location</li>
-    <li class="centered">Photos</li>
-		<li class="centered">Review</li>
-	</ul>
+  <li class="centered active">Basics</li>
+  <li class="centered">Details</li>
+  <li class="centered">Location</li>
+  <li class="centered">Photos</li>
+  <li class="centered">Review</li>
+</ul>
 <div class="box col-10 offset-1">
-  <h3 class="header">Create Destination</h3>
+  <h3 class="header" id="sectionHeader"></h3>
   <div class="panel-body">
     <form method="POST" id="submitForm" action="" style="display: inline-block; width: 100%;">
       <div class="form-section">
