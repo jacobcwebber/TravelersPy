@@ -1,4 +1,4 @@
-//Deal with multi-step form navigation
+//Deals with multi-step form navigation
 var sections = $(".form-section");
 var steps = $(".progressbar li");
 
@@ -9,60 +9,64 @@ var currentSection = 0;
 navigateTo(currentSection)
 
 function navigateTo(currentSection) {
-    currentStepName = steps.eq(currentSection).text()
     sections.eq(currentSection).show();   
+
+    //Changes text of section header
+    currentStepName = steps.eq(currentSection).text()
     sectionHeader.text(currentStepName)
+
     //Hides previous button if on first section (currentSection == 0)
     currentSection ? $("#prevBtn").show() : $("#prevBtn").hide();
 
+    //Swaps Next button with Submit button if on last section
     if (currentSection == LAST_SECTION) {
-        $("#nextBtn").html("Create destination");
+        $("#nextBtn").hide();
+        $("#submitBtn").show();
     } else {
-        $("#nextBtn").html("Next");
+        $("#nextBtn").show();
+        $("#submitBtn").hide();       
     }
 };
 
-$(".btn").click(function buttonClick() {
+$(".btn").click(function() {
     sections.eq(currentSection).hide()
-    if ($(this).attr('id') == "nextBtn") {
+    let btnId = $(this).attr('id')
+    if (btnId == "nextBtn") {
         steps.eq(currentSection+1).toggleClass("active");
         currentSection++
-    } else {
+    } else if (btnId == "prevBtn") {
         steps.eq(currentSection).toggleClass("active");
         currentSection--
-    }
-    if (currentSection >= LAST_SECTION) {
-        $("#submitForm").submit();
-        return;
     }
     navigateTo(currentSection)
 });
 
 // Creates tags input and the autocomplete
 $('#tags').typeahead({
-    confirmKeys: [13, 44, 9],
+    hint: false,
+    highlight: true,
     source: tags
 });
 
 /// Initiates map
 function initMap() {
-    var map = new google.maps.Map(document.getElementById('map'), {
+    var map = new google.maps.Map(document.getElementById('createDestMap'), {
       zoom: 2,
-      center: {lat: 30, lng: 0}
+      center: {lat: 0, lng: 0}
     });
   }
 
-// Changes map viewport and adds pins when country input is changed
-$('#country_id').change(function initMap() {
+// Changes map viewport and adds pin to verify correct location
+$('#nextBtn').click(function initMap() {
     var address = $('#dest-name').val() + ', ' + $('#country_id').find(":selected").text();
     var geocoder = new google.maps.Geocoder();
     geocoder.geocode({ 'address': address }, function(results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
-            var map = new google.maps.Map(document.getElementById('map'), {
+            var map = new google.maps.Map(document.getElementById('createDestMap'), {
                 zoom: 5,
                 center: results[0].geometry.location
             });
-            var marker = new google.maps.Marker({
+            new google.maps.Marker({
                 map: map,
                 position: results[0].geometry.location
             });

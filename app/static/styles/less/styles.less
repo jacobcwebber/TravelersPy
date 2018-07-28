@@ -6,7 +6,7 @@
 
 body {
     background-color: @navy;
-    padding-top: 65px; // make space for header
+    padding-top: 65px;
 }
 hr {
     margin-top: 1rem;
@@ -69,6 +69,10 @@ a:hover {
     }
 }
 
+.btn-wide {
+    width: 6em;
+}
+
 .btn-tertiary {
     color: @white !important;
     border-color: @white;
@@ -79,7 +83,7 @@ a:hover {
         background-color: @white;
     }
     &:focus {
-        box-shadow: @teal-shadow;
+        box-shadow: @white-shadow;
     } 
 }
 
@@ -254,6 +258,11 @@ a:hover {
     }
 }
 
+#createDestMap {
+    height: 300px;
+    margin-bottom: 1em;
+}
+
 //Destinations table
 .pagination-info {display: none;}
 .page-list {display: none !important;}
@@ -275,7 +284,8 @@ a:hover {
 	overflow: hidden;
 	counter-reset: step;
 	width: 60%;
-	margin: 30px auto;
+    margin: 30px auto;
+    padding: 0px;
 }
 .progressbar li {
 	list-style-type: none;
@@ -310,7 +320,7 @@ a:hover {
 }
 .progressbar li.active:before,  .progressbar li.active:after{
 	background: @teal;
-	color: @white;
+    color: @white;
 }
 
 /////////////////////////////////

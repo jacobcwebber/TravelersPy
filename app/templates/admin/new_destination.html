@@ -1,73 +1,72 @@
 {% extends 'layout.html' %}
 {% set active_page = "new_destination" %}
 
+<!-- Consider adding macro for sections -->
+
 {% block body %}
 {% from "includes/_formhelpers.html" import render_field %}
 <div class="col-10 offset-1">
   <h2 class="centered header">Create Destination</h2>
 </div>
 <ul class="progressbar">
-  <li class="centered active">Basics</li>
-  <li class="centered">Details</li>
-  <li class="centered">Location</li>
-  <li class="centered">Photos</li>
-  <li class="centered">Review</li>
+  <a href="#1"><li class="centered active" id="step1">Basics</li></a>
+  <li class="centered" id="step2">Details</li>
+  <li class="centered" id="step3">Location</li>
+  <li class="centered" id="step4">Photos</li>
+  <li class="centered" id="step5">Review</li>
 </ul>
 <div class="box col-10 offset-1">
   <h3 class="header" id="sectionHeader"></h3>
-  <div class="panel-body">
-    <form method="POST" id="submitForm" action="" style="display: inline-block; width: 100%;">
-      <div class="form-section">
-        <div class="form-group">
-          {{ render_field(form.name, placeholder="Destination", id="dest-name", class_="form-control", autocomplete="off") }}
-        </div>
-        <div class="form-group">
-          {{ render_field(form.country_id, placeholder="Country", class_="form-control") }}
-        </div>
+  <form method="POST" id="submitForm" action="">
+    <div class="form-section">
+      <div class="form-group">
+        {{ render_field(form.name, placeholder="Destination", id="dest-name", class_="form-control", autocomplete="off") }}
       </div>
-
-      <div class="form-section" style="display: none;">
-        <div class="form-group">
-          {{ render_field(form.tags, id="tags", placeholder="Tags", class="form-control", type="text")}}
-        </div>
-        <div class="form-group">
-            {{ render_field(form.description, placeholder="Description", id="editor", class_="form-control") }}
-        </div>
+      <div class="form-group">
+        {{ render_field(form.country_id, placeholder="Country", class_="form-control") }}
       </div>
-      
-      <div class="form-section" style="display: none;">
-      <!-- <div class="form-group">
-          {{ render_field(form.lat, id="lat", style="width: 33%; display: inline;", class_="form-control") }}
-          {{ render_field(form.lng, id="lng", style="width: 33%; display: inline;", class_="form-control") }}
-        </div> -->
-        <div id="map" style="height: 280px; background-color: lightgrey;"></div>
-      </div>
-
-      <div class="form-section" style="display: none;">
-        <div class="form-group">
-            {{ render_field(form.img_url, id="img-link", class_="form-control") }}
-            <input type="file" id="file-upload">
-        </div>
-      </div>
-
-      <div class="form-section" style="display: none;">
-          <div class="form-group">
-              {{ render_field(form.img_url, id="img-link", class_="form-control") }}
-          </div>
-        </div>
-
-    </form>
-    <div style="float: right">
-      <button class="btn btn-tertiary" id="prevBtn">Previous</button>  
-      <button class="btn btn-teal" id="nextBtn">Next</button>
-      <button class="btn btn-teal" style="display: none;" id="submit-btn" type="submit">Create destination</button>
     </div>
+
+    <div class="form-section" style="display: none;">
+      <div class="form-group">
+        {{ render_field(form.tags, id="tags", placeholder="Tags", class="form-control", autocomplete="off") }}
+      </div>
+      <div class="form-group">
+        {{ render_field(form.description, placeholder="Description", id="editor", class_="form-control") }}
+      </div>
+    </div>
+    <div class="form-section" style="display: none;">
+      <div class="form-group">
+        {{ render_field(form.lat, id="lat", style="display: none;") }}
+        {{ render_field(form.lng, id="lng", style="display: none;") }}
+      </div>
+      <div id="createDestMap" style="background-color: lightgrey;"></div>
+    </div>
+    <div class="form-section" style="display: none;">
+      <div class="form-group">
+        {{ render_field(form.img_url, id="img-link", class_="form-control") }}
+        <input type="file" id="file-upload">
+      </div>
+    </div>
+    <div class="form-section" style="display: none;">
+      <div class="form-group">
+        {{ render_field(form.img_url, id="img-link", class_="form-control") }}
+      </div>
+    </div>
+    {{ render_field(form.submit, id="submitBtn", class="btn btn-teal", style="display: none; float: right;")}}
+  </form>
+  <button class="btn btn-tertiary" id="prevBtn" style="float: left">Back</button>  
+  <button class="btn btn-teal btn-wide" id="nextBtn" style="float: right">Next</button>
+
+  <div>
   </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
-<!-- <script>var tags = '{{ tags | safe }}';</script> -->
+<script>
+  var tags = "{{ tags | safe }}";
+</script>
 <script src="//cdn.ckeditor.com/4.6.2/basic/ckeditor.js"></script>
 <script type="text/javascript">CKEDITOR.replace('editor')</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>

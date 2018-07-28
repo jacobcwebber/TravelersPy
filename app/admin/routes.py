@@ -85,6 +85,8 @@ def new_destination():
     form = DestinationForm()
 
     if request.method == 'POST':
+        import sys
+        print("form submitted", file=sys.stderr)
         dest = Destination(name=form.name.data, country_id=form.country_id.data, description=form.description.data)
         tags = (form.tags.data).split(',')
         for tag_name in tags:
@@ -99,7 +101,7 @@ def new_destination():
         db.session.add_all([dest_img, dest_location])
         db.session.commit()
         
-        return redirect(url_for('main.home'))
+        return redirect(url_for('admin.index'))
 
     tags = [tag.name for tag in Tag.query.all()]
     form.country_id.choices = [(0, 'Country')] + ([(country.id, country.name) for country in Country.query.all()])
