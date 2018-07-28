@@ -8,31 +8,33 @@
 <div class="col-10 offset-1">
   <h2 class="centered header">Create Destination</h2>
 </div>
+
 <ul class="progressbar">
-  <a href="#1"><li class="centered active" id="step1">Basics</li></a>
+  <a class="section-link" href="#1"><li class="centered active" id="step1">Basics</li></a>
   <li class="centered" id="step2">Details</li>
   <li class="centered" id="step3">Location</li>
-  <li class="centered" id="step4">Photos</li>
-  <li class="centered" id="step5">Review</li>
+  <li class="centered" id="step4">Add Photos</li>
+  <li class="centered" id="step5">Confirm</li>
 </ul>
+
 <div class="box col-10 offset-1">
   <h3 class="header" id="sectionHeader"></h3>
   <form method="POST" id="submitForm" action="">
     <div class="form-section">
-      <div class="form-group">
-        {{ render_field(form.name, placeholder="Destination", id="dest-name", class_="form-control", autocomplete="off") }}
+      <div class="form-group" id="destFormSection">
+        {{ render_field(form.name, placeholder="Destination", id="destName", class_="form-control input-field", autocomplete="off") }}
       </div>
       <div class="form-group">
-        {{ render_field(form.country_id, placeholder="Country", class_="form-control") }}
+        {{ render_field(form.country_id, placeholder="Country", id="country", class_="form-control") }}
       </div>
     </div>
 
     <div class="form-section" style="display: none;">
       <div class="form-group">
-        {{ render_field(form.tags, id="tags", placeholder="Tags", class="form-control", autocomplete="off") }}
+        {{ render_field(form.tags, placeholder="Tags", id="tags", class="form-control", autocomplete="off") }}
       </div>
       <div class="form-group">
-        {{ render_field(form.description, placeholder="Description", id="editor", class_="form-control") }}
+        {{ render_field(form.description, placeholder="Description", id="description", class_="form-control") }}
       </div>
     </div>
     <div class="form-section" style="display: none;">
@@ -44,13 +46,15 @@
     </div>
     <div class="form-section" style="display: none;">
       <div class="form-group">
-        {{ render_field(form.img_url, id="img-link", class_="form-control") }}
-        <input type="file" id="file-upload">
+        {{ render_field(form.img_url, id="img-link", class_="form-control", style="display: none;") }}
+        {{ render_field(form.img_upload, class_="form-control-file", id="imgUpload") }}
       </div>
     </div>
     <div class="form-section" style="display: none;">
       <div class="form-group">
-        {{ render_field(form.img_url, id="img-link", class_="form-control") }}
+        {{ form.name.label }}
+        {{ form.country_id.label }}
+        {{ form.description.label }}
       </div>
     </div>
     {{ render_field(form.submit, id="submitBtn", class="btn btn-teal", style="display: none; float: right;")}}
@@ -68,7 +72,7 @@
   var tags = "{{ tags | safe }}";
 </script>
 <script src="//cdn.ckeditor.com/4.6.2/basic/ckeditor.js"></script>
-<script type="text/javascript">CKEDITOR.replace('editor')</script>
+<script type="text/javascript">CKEDITOR.replace('description')</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABEVdEk2zQBeCHstcUpXQUkSxPhtmTv0Q&callback=initMap"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.min.js"></script>

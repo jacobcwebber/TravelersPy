@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import ValidationError
-from wtforms.fields import DecimalField, PasswordField, SelectField, StringField, SubmitField, TextAreaField
+from wtforms.fields import DecimalField, FileField, PasswordField, SelectField, StringField, SubmitField, TextAreaField
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import Email, EqualTo, InputRequired, Length
 from app import db
@@ -29,11 +29,16 @@ class NewUserForm(FlaskForm):
             raise ValidationError('Email already registered.')
 
 class DestinationForm(FlaskForm):
-    name = StringField('Name', validators=[InputRequired()])
-    country_id = SelectField('Country', choices=[], coerce=int, validators=[InputRequired()])
+    name = StringField('Destination', validators=[InputRequired(message="Submit a destination name.")])
+    country_id = SelectField('Country', choices=[], coerce=int)
     lat = DecimalField('Latitude', places=8, rounding=None, validators=[InputRequired()])
     lng = DecimalField('Longitude', places=8, rounding=None, validators=[InputRequired()])
     description = TextAreaField('Description')
-    img_url = StringField('Image Upload', validators=[InputRequired()])
+    img_url = StringField('', validators=[InputRequired("Please upload a photo.")])
+    img_upload = FileField('Upload a photo')
     tags = StringField('Tags', validators=[InputRequired(message="At least one tag required.")])
     submit = SubmitField('Create destination')
+
+    def validate_country_id(self, field):
+        if self.country_id.data == 0:
+            raise ValidationError('Select a country.')

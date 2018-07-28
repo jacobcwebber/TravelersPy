@@ -81,9 +81,12 @@ const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/jacobcwebber/upload/';
 const CLOUDINARY_UPLOAD_PRESET = 'pzrian47';
 
 var imgPreview = $('#img-preview');
-var fileUpload = $('#file-upload');
+var fileUpload = $('#imgUpload');
+var nextBtn = $('#nextBtn');
 
 fileUpload.on('change', function(event) {
+    nextBtn.prop('disabled', true);
+    nextBtn.html('<i class="fas fa-spinner fa-spin"></i>');
     var file = event.target.files[0];
     var formData = new FormData();
     formData.append('file', file);
@@ -97,6 +100,8 @@ fileUpload.on('change', function(event) {
         },
         data: formData
     }).then((res) => {
+        nextBtn.prop('disabled', false);
+        nextBtn.html('Next');
         imgPreview.attr('src', res.data.secure_url);
         $('#img-link').attr('value', res.data.secure_url)
     }).catch((e) => {

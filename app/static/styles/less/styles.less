@@ -1,4 +1,5 @@
 @import "variables.less";
+@import "overrides.less";
 
 /////////////////////////
 //       GENERAL       //
@@ -45,11 +46,13 @@ a:hover {
 
     &:hover,
     &:focus {
-        color: @white;
         background-color: darken(@teal, 5%);
     }
     &:focus {
         box-shadow: @teal-shadow;
+    }
+    &:disabled {
+        background-color: @teal;
     }
 }
 
@@ -86,6 +89,8 @@ a:hover {
         box-shadow: @white-shadow;
     } 
 }
+
+//INPUTS
 
 // LABELS
 .label {

@@ -73,8 +73,7 @@ def delete_user(user_id):
 def destinations():
     """View all destinations."""
     destinations = Destination.query.join(Country).order_by(Destination.name).all()
-    return render_template(
-        'admin/destinations.html', destinations=destinations)
+    return render_template('admin/destinations.html', destinations=destinations)
 
 
 @bp.route('/new-destination', methods=['POST', 'GET'])
@@ -83,27 +82,29 @@ def destinations():
 def new_destination():
     """Create a new destination."""
     form = DestinationForm()
-
-    if request.method == 'POST':
-        import sys
-        print("form submitted", file=sys.stderr)
-        dest = Destination(name=form.name.data, country_id=form.country_id.data, description=form.description.data)
-        tags = (form.tags.data).split(',')
-        for tag_name in tags:
-            tag = Tag.query.filter_by(name=tag_name).first()
-            dest.add_tag(tag)
-        db.session.add(dest)
-        db.session.commit()
-
-        dest_img = Dest_Image(dest_id=dest.id, img_url=form.img_url.data)
-        dest_location = Dest_Location(dest_id=dest.id, lat=form.lat.data, lng=form.lng.data)
-
-        db.session.add_all([dest_img, dest_location])
-        db.session.commit()
-        
-        return redirect(url_for('admin.index'))
-
+    
     tags = [tag.name for tag in Tag.query.all()]
     form.country_id.choices = [(0, 'Country')] + ([(country.id, country.name) for country in Country.query.all()])
+
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            dest = Destination(name=form.name.data, country_id=form.country_id.data, description=form.description.data)
+            tags = (form.tags.data).split(',')
+            for tag_name in tags:
+                tag = Tag.query.filter_by(name=tag_name).first()
+                dest.add_tag(tag)
+            db.session.add(dest)
+            db.session.commit()
+
+            dest_img = Dest_Image(dest_id=dest.id, img_url=form.img_url.data)
+            dest_location = Dest_Location(dest_id=dest.id, lat=form.lat.data, lng=form.lng.data)
+
+            db.session.add_all([dest_img, dest_location])
+            db.session.commit()
+            
+            flash('Destination successfully created.', 'success')
+            return redirect(url_for('admin.index'))
+        else:
+            flash("Please fill in all forms correctly.", "danger")
 
     return render_template('admin/new_destination.html', form=form, tags=tags)
