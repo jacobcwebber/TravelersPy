@@ -29,7 +29,7 @@ class NewUserForm(FlaskForm):
             raise ValidationError('Email already registered.')
 
 class DestinationForm(FlaskForm):
-    name = StringField('Destination', validators=[InputRequired(message="Submit a destination name.")])
+    name = StringField('Destination', validators=[InputRequired(message="Destination name required.")])
     country_id = SelectField('Country', choices=[], coerce=int)
     lat = DecimalField('Latitude', places=8, rounding=None, validators=[InputRequired()])
     lng = DecimalField('Longitude', places=8, rounding=None, validators=[InputRequired()])
