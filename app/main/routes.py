@@ -4,7 +4,7 @@ from sqlalchemy import desc, text
 from app import db
 from app.main.forms import DestinationForm, SearchForm
 from app.models import User, Destination, Country, Region, Continent, Dest_Location, Dest_Image, Tag
-from app.utils import execute, get_dests_by_tag
+from app.utils import execute, get_dests
 from app.decorators import admin_required
 from app.main import bp
 
@@ -40,21 +40,22 @@ def user(id):
     explored = [dest.id for dest in user.explored_dests.all()]
     dests = Destination.query.all()
 
-    unesco = get_dests_by_tag(id=id, tag="UNESCO")
+    locations = Dest_Location.query.join(Destination).all()
 
-    #TODO: this query is easy enough for ORM -- change it
-    query = text('SELECT l.lat, l.lng, d.name '
-                 'FROM dest_locations l JOIN destinations d on l.dest_id = d.id ')
-    locations = execute(query)    
-
-    ## FINDING TOP TAGS BY USER:
-    """select t.name, count(dt.tag_id) from tags t join dest_tags dt on t.
-id = dt.tag_id join destinations d on dt.dest_id = d.id join explored e on e.des
-t_id = d.id join users u on u.id = e.user_id where u.id=1 group by t.id order by
- count(dt.tag_id) desc;"""
+    # Find top tags for user
+    tags_text = 'SELECT t.name, COUNT(dt.tag_id) '\
+            'FROM tags t JOIN dest_tags dt ON t.id = dt.tag_id '\
+                        'JOIN destinations d ON dt.dest_id = d.id '\
+                        'JOIN explored e ON e.dest_id = d.id '\
+                        'JOIN users u ON u.id = e.user_id '\
+            'WHERE u.id = {} '\
+            'GROUP BY t.id '\
+            'ORDER BY COUNT(dt.tag_id) DESC'.format(id)
+    query = text(tags_text)
+    tags = execute(query)    
 
     return render_template('main/user.html', title=user.full_name() + ' | Wanderlist', user=user,
-                            explored=explored, favorites=favorites, locations=locations)
+                            explored=explored, favorites=favorites, locations=locations, tags=tags)
 
 @bp.route('/change-map', methods=['POST'])
 def change_map(where=None):
@@ -180,12 +181,11 @@ def edit_destination(id):
 @bp.route('/user/<id>/<string:tag>')
 def user_destinations(id, tag):
     user = User.query.get(id)
-    dests = get_dests_by_tag(id=id, tag=tag)
-    explored = [dest.id for dest in user.explored_dests.all()]
-    favorites = [dest.id for dest in user.favorited_dests.all()]
+    dests = get_dests(id=id, tag=tag)
+    explored = [dest for dest in user.explored_dests.all()]
+    favorites = [dest for dest in user.favorited_dests.all()]
 
-    return render_template('main/user_destinations.html', user=user, tag=tag, 
-                            dests=dests, explored=explored, favorites=favorites)
+    return render_template('main/user_destinations.html', user=user, tag=tag, dests=dests)
 
 
 @bp.route('/alter-explored', methods=['POST'])

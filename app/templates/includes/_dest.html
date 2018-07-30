@@ -2,12 +2,14 @@
     class='item' 
     style="background-image: linear-gradient(rgba(51, 64, 85, 0.40), rgba(51, 64, 85, 0.40)), url({{ dest.img_url }});">
   <div class="item-header">
+    {% if active_page != "user_destinations" %}
       <i id="{{ dest.id }}" rel="tooltip" title="{% if dest.id in explored %}Remove from{% else %}Add to{% endif %} Explored" 
         class="fas fa-check fa-lg {% if dest.id in explored %}exp-full{% endif %}" 
         aria-hidden="true"></i> 
       <i id="{{ dest.id }}" rel="tooltip" title="{% if dest.id in favorites %}Remove from{% else %}Add to{% endif %} Favorites"
         class="fas fa-star fa-lg {% if dest.id in favorites %}star-full{% endif %}" 
         aria-hidden="true"></i> 
+    {% endif %}
   </div>
   <div>
     <a id="{{ dest.id }}" class="item-mid">
