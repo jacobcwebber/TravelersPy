@@ -1,6 +1,7 @@
 TO-DO:
 
 Short term:
+- Write more unit tests
 - Incorporate searching users ability
 - Put in AJAX calls on Search page to show more dests (only show 20 at a time)
 - Add more admin functionality within Users page (delete user, etc.)

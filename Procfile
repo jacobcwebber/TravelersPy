@@ -1,1 +1,1 @@
-web: flask db upgrade; gunicorn wanderlist:app
+web: flask db upgrade; gunicorn wanderlist:app --preload --workers 1ss
