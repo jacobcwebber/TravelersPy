@@ -41,10 +41,11 @@ $(".btn").click(function() {
     navigateTo(currentSection)
 });
 
-// Creates tags input and the autocomplete
+// Creates tags autocomplete
 $('#tags').typeahead({
-    hint: false,
+    hint: true,
     highlight: true,
+    accent: true,
     source: tags
 });
 
@@ -58,22 +59,33 @@ function initMap() {
 
 // Changes map viewport and adds pin to verify correct location
 $('#nextBtn').click(function initMap() {
-    var address = $('#dest-name').val() + ', ' + $('#country_id').find(":selected").text();
-    var geocoder = new google.maps.Geocoder();
-    geocoder.geocode({ 'address': address }, function(results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
-            var map = new google.maps.Map(document.getElementById('createDestMap'), {
-                zoom: 5,
-                center: results[0].geometry.location
-            });
-            new google.maps.Marker({
-                map: map,
-                position: results[0].geometry.location
-            });
-            $("#lat").val(results[0].geometry.location.lat());
-            $("#lng").val(results[0].geometry.location.lng());
-        }
-    });
+    var destName = $('#destName').val();
+    var countryName =  $('#country').find(':selected').text() != 'Country' ? $('#country').find(':selected').text() : null;
+
+    if (destName || countryName ) {
+        let address = destName + ', ' + countryName;
+        let geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ 'address': address }, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                let map = new google.maps.Map(document.getElementById('createDestMap'), {
+                    zoom: 5,
+                    center: results[0].geometry.location
+                });
+                new google.maps.Marker({
+                    map: map,
+                    position: results[0].geometry.location
+                });
+                $("#lat").val(results[0].geometry.location.lat());
+                $("#lng").val(results[0].geometry.location.lng());
+            }
+        });
+    }
+    else {
+        new google.maps.Map(document.getElementById('createDestMap'), {
+            zoom: 1,
+            center: new google.maps.LatLng(0, 0)
+        });
+    }
 });
 
 // Saves image address to server
@@ -103,7 +115,7 @@ fileUpload.on('change', function(event) {
         nextBtn.prop('disabled', false);
         nextBtn.html('Next');
         imgPreview.attr('src', res.data.secure_url);
-        $('#img-link').attr('value', res.data.secure_url)
+        $('#imgLink').attr('value', res.data.secure_url)
     }).catch((e) => {
         console.log(e);
     })

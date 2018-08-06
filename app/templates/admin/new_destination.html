@@ -46,7 +46,7 @@
     </div>
     <div class="form-section" style="display: none;">
       <div class="form-group">
-        {{ render_field(form.img_url, id="img-link", class_="form-control", style="display: none;") }}
+        {{ render_field(form.img_url, id="imgLink", class_="form-control", style="display: none;") }}
         {{ render_field(form.img_upload, class_="form-control-file", id="imgUpload") }}
       </div>
     </div>
@@ -69,7 +69,7 @@
 
 {% block scripts %}
 <script>
-  var tags = "{{ tags | safe }}";
+  var tags = {{ tags | safe }};
 </script>
 <script src="//cdn.ckeditor.com/4.6.2/basic/ckeditor.js"></script>
 <script type="text/javascript">CKEDITOR.replace('description')</script>
