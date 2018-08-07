@@ -2,6 +2,9 @@
 {% set active_page = "new_destination" %}
 
 <!-- Consider adding macro for sections -->
+{% block head %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+{% endblock %}
 
 {% block body %}
 {% from "includes/_formhelpers.html" import render_field %}
@@ -22,18 +25,22 @@
   <form method="POST" id="submitForm" action="">
     <div class="form-section">
       <div class="form-group" id="destFormSection">
-        {{ render_field(form.name, placeholder="Destination", id="destName", class_="form-control input-field", autocomplete="off") }}
+        <div class="form-label">Destination</div>
+        {{ render_field(form.name, id="destName", class_="form-control input-field", autocomplete="off") }}
       </div>
       <div class="form-group">
+        <div class="form-label">Country</div>
         {{ render_field(form.country_id, placeholder="Country", id="country", class_="form-control") }}
       </div>
     </div>
 
     <div class="form-section" style="display: none;">
       <div class="form-group">
-        {{ render_field(form.tags, placeholder="Tags", id="tags", class="form-control", autocomplete="off") }}
+        <div class="form-label">Tags</div>
+        {{ render_field(form.tags, id="tags", class="form-control", autocomplete="off") }}
       </div>
       <div class="form-group">
+        <div class="form-label">Description</div>
         {{ render_field(form.description, placeholder="Description", id="description", class_="form-control") }}
       </div>
     </div>
@@ -60,21 +67,17 @@
     {{ render_field(form.submit, id="submitBtn", class="btn btn-teal", style="display: none; float: right;")}}
   </form>
   <button class="btn btn-tertiary" id="prevBtn" style="float: left">Back</button>  
-  <button class="btn btn-teal btn-wide" id="nextBtn" style="float: right">Next</button>
-
-  <div>
-  </div>
+  <button class="btn btn-teal btn-wide" id="nextBtn" style="float: right">Continue</button>
 </div>
 {% endblock %}
 
 {% block scripts %}
-<script>
-  var tags = {{ tags | safe }};
-</script>
+<script>var tags = {{ tags | safe }};</script>
 <script src="//cdn.ckeditor.com/4.6.2/basic/ckeditor.js"></script>
 <script type="text/javascript">CKEDITOR.replace('description')</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABEVdEk2zQBeCHstcUpXQUkSxPhtmTv0Q&callback=initMap"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 <script src="/static/js/create_destination.js"></script>
 {% endblock %}

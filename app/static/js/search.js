@@ -1,14 +1,14 @@
 $('#location').typeahead({
   hint: false,
   highlight: true,
-  minLength: 2,
+  minLength: 1,
   source: locations
 });
 
 $('#keywords').typeahead({
   hint: false,
   highlight: true,
-  minLength: 2,
+  minLength: 1,
   source: tags
 })
 

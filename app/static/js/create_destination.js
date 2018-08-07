@@ -15,6 +15,11 @@ function navigateTo(currentSection) {
     currentStepName = steps.eq(currentSection).text()
     sectionHeader.text(currentStepName)
 
+    //Changes Next button text on pages
+    // if (currentStepName == 'Location') {
+    //     $("#nextBtn").text("Confirm location")
+    // }
+
     //Hides previous button if on first section (currentSection == 0)
     currentSection ? $("#prevBtn").show() : $("#prevBtn").hide();
 
@@ -41,13 +46,24 @@ $(".btn").click(function() {
     navigateTo(currentSection)
 });
 
-// Creates tags autocomplete
-$('#tags').typeahead({
-    hint: true,
-    highlight: true,
-    accent: true,
-    source: tags
+$(document).ready(function() {
+    $('#country').prepend('<option></option>');
+    $('#country').select2({
+        placeholder: 'Why you no work.',
+        width: '100%'
+    });
+
+    // Creates tags autocomplete
+    $('#tags').typeahead({
+        hint: true,
+        highlight: true,
+        accent: true,
+        source: tags
+    });
 });
+
+
+
 
 /// Initiates map
 function initMap() {
@@ -73,7 +89,8 @@ $('#nextBtn').click(function initMap() {
                 });
                 new google.maps.Marker({
                     map: map,
-                    position: results[0].geometry.location
+                    position: results[0].geometry.location,
+                    title: destName ? destName : countryName
                 });
                 $("#lat").val(results[0].geometry.location.lat());
                 $("#lng").val(results[0].geometry.location.lng());
