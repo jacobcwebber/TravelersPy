@@ -1,11 +1,20 @@
-//Deals with multi-step form navigation
+//Variables
+var nextBtn = $('#nextBtn');
+var prevBtn = $('#prevBtn');
+var submitBtn = $('#submitBtn')
+
+var destNameField = $('#destName');
+var countryField = $('#country');
+
 var sections = $(".form-section");
 var steps = $(".progressbar li");
 
 var sectionHeader = $("#sectionHeader");
+
 const LAST_SECTION = sections.length - 1; 
 var currentSection = 0;
 
+//Tab navigation
 navigateTo(currentSection)
 
 function navigateTo(currentSection) {
@@ -16,9 +25,14 @@ function navigateTo(currentSection) {
     sectionHeader.text(currentStepName)
 
     //Changes Next button text on pages
-    // if (currentStepName == 'Location') {
-    //     $("#nextBtn").text("Confirm location")
-    // }
+    if (currentStepName == 'Location') {
+        nextBtn.text("Confirm location")
+    } else {
+        nextBtn.text("Continue");
+    }
+
+    //Makes the metro nav circle large for active step
+    //steps.eq(currentSection).
 
     //Hides previous button if on first section (currentSection == 0)
     currentSection ? $("#prevBtn").show() : $("#prevBtn").hide();
@@ -33,25 +47,44 @@ function navigateTo(currentSection) {
     }
 };
 
+//JS validation for forms
+// $('.form-control').change(() => validateFields(currentSection));
+
+// function validateFields(currentSection) {
+//     switch (currentSection) {
+//         case 0:
+//             if (destNameField.val() != '' && countryField.val() != 0) {
+//                 nextBtn.prop('disabled', false);
+//             } else {
+//                 nextBtn.prop('disabled', true);
+//             };
+//             break
+//         case 1:
+            
+//     }
+
+// };
+
+//Deals with clicking into metro nav to hop between steps
+//TODO: FUNC GOES HERE
+
 $(".btn").click(function() {
     sections.eq(currentSection).hide()
+    steps.eq(currentSection).toggleClass("active");
     let btnId = $(this).attr('id')
     if (btnId == "nextBtn") {
-        steps.eq(currentSection+1).toggleClass("active");
+        steps.eq(currentSection+1).toggleClass("complete");
         currentSection++
     } else if (btnId == "prevBtn") {
-        steps.eq(currentSection).toggleClass("active");
+        steps.eq(currentSection).toggleClass("complete");
         currentSection--
     }
+    steps.eq(currentSection).toggleClass("active")
     navigateTo(currentSection)
 });
 
 $(document).ready(function() {
-    $('#country').prepend('<option></option>');
-    $('#country').select2({
-        placeholder: 'Why you no work.',
-        width: '100%'
-    });
+    $('#country').select2();
 
     // Creates tags autocomplete
     $('#tags').typeahead({
@@ -63,8 +96,6 @@ $(document).ready(function() {
 });
 
 
-
-
 /// Initiates map
 function initMap() {
     var map = new google.maps.Map(document.getElementById('createDestMap'), {
@@ -74,7 +105,7 @@ function initMap() {
   }
 
 // Changes map viewport and adds pin to verify correct location
-$('#nextBtn').click(function initMap() {
+nextBtn.click(function initMap() {
     var destName = $('#destName').val();
     var countryName =  $('#country').find(':selected').text() != 'Country' ? $('#country').find(':selected').text() : null;
 
@@ -111,7 +142,6 @@ const CLOUDINARY_UPLOAD_PRESET = 'pzrian47';
 
 var imgPreview = $('#img-preview');
 var fileUpload = $('#imgUpload');
-var nextBtn = $('#nextBtn');
 
 fileUpload.on('change', function(event) {
     nextBtn.prop('disabled', true);

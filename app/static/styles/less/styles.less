@@ -73,7 +73,7 @@ a:hover {
 }
 
 .btn-wide {
-    width: 6em;
+    padding: .375rem 1.25rem;
 }
 
 .btn-tertiary {
@@ -328,18 +328,18 @@ a:hover {
 
 //Progress bar for destination creation
 .progressbar {
-	overflow: hidden;
+    overflow: hidden;
 	counter-reset: step;
 	width: 60%;
     margin: 30px auto;
-    padding: 0px;
+    padding: 12px 0px 0px;
 }
 .progressbar li {
 	list-style-type: none;
 	color: @white;
 	width: 20%;
 	float: left;
-	position: relative;
+    position: relative;
 }
 .progressbar li:before {
 	content: counter(step);
@@ -350,7 +350,13 @@ a:hover {
 	color: @black;
 	background: @white;
 	border-radius: 50%;
-	margin: 0 auto 5px auto;
+	margin: 0 auto 10px auto;
+}
+.progressbar li.active:before {
+	width: 38px;
+    line-height: 38px;
+    box-shadow: @teal-shadow;
+    margin: -8px auto 5px auto;
 }
 .progressbar li:after {
 	content: '';
@@ -365,7 +371,7 @@ a:hover {
 .progressbar li:first-child:after {
 	content: none; 
 }
-.progressbar li.active:before,  .progressbar li.active:after{
+.progressbar li.complete:before,  .progressbar li.complete:after{
 	background: @teal;
     color: @white;
 }
@@ -689,6 +695,9 @@ body.modal-open .navbar {
     }
     .box .three-wide {
         grid-template-columns: none;
+    }
+    .box-header-text {
+        text-align: center;
     }
 }
 

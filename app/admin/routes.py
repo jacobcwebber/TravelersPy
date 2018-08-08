@@ -84,7 +84,7 @@ def new_destination():
     form = DestinationForm()
     
     tags = [tag.name for tag in Tag.query.all()]
-    form.country_id.choices = ([(country.id, country.name) for country in Country.query.all()])
+    form.country_id.choices = [(0, '')] + ([(country.id, country.name) for country in Country.query.all()])
 
     if request.method == 'POST':
         if form.validate_on_submit():
