@@ -1,4 +1,5 @@
 //Variables
+var allBtns = $('.btn')
 var nextBtn = $('#nextBtn');
 var prevBtn = $('#prevBtn');
 var submitBtn = $('#submitBtn')
@@ -26,60 +27,47 @@ function navigateTo(currentSection) {
 
     //Changes Next button text on pages
     if (currentStepName == 'Location') {
-        nextBtn.text("Confirm location")
+        nextBtn.text("Confirm location & Continue")
     } else {
         nextBtn.text("Continue");
     }
 
-    //Makes the metro nav circle large for active step
-    //steps.eq(currentSection).
-
     //Hides previous button if on first section (currentSection == 0)
-    currentSection ? $("#prevBtn").show() : $("#prevBtn").hide();
+    currentSection ? prevBtn.show() : prevBtn.hide();
 
     //Swaps Next button with Submit button if on last section
     if (currentSection == LAST_SECTION) {
-        $("#nextBtn").hide();
-        $("#submitBtn").show();
+        nextBtn.hide();
+        submitBtn.show();
     } else {
-        $("#nextBtn").show();
-        $("#submitBtn").hide();       
+        nextBtn.show();
+        submitBtn.hide();       
     }
 };
 
-//JS validation for forms
-// $('.form-control').change(() => validateFields(currentSection));
+//Deals with clicking into completed steps in metro nav to hop between steps
+$(".progressbar").on('click', 'li.complete', function(event) {
+    var clickedStepNum = parseInt((event.target.id).slice(-1)) - 1;
+    if (clickedStepNum == currentSection) {return}
 
-// function validateFields(currentSection) {
-//     switch (currentSection) {
-//         case 0:
-//             if (destNameField.val() != '' && countryField.val() != 0) {
-//                 nextBtn.prop('disabled', false);
-//             } else {
-//                 nextBtn.prop('disabled', true);
-//             };
-//             break
-//         case 1:
-            
-//     }
+    sections.eq(currentSection).hide();
+    steps.eq(currentSection).removeClass("active");
+    steps.eq(clickedStepNum).addClass("active");
+    currentSection = clickedStepNum;
+    navigateTo(currentSection);
+})
 
-// };
-
-//Deals with clicking into metro nav to hop between steps
-//TODO: FUNC GOES HERE
-
-$(".btn").click(function() {
+allBtns.click(function() {
     sections.eq(currentSection).hide()
-    steps.eq(currentSection).toggleClass("active");
+    steps.eq(currentSection).removeClass("active");
     let btnId = $(this).attr('id')
     if (btnId == "nextBtn") {
-        steps.eq(currentSection+1).toggleClass("complete");
+        steps.eq(currentSection+1).addClass("complete");
         currentSection++
     } else if (btnId == "prevBtn") {
-        steps.eq(currentSection).toggleClass("complete");
         currentSection--
     }
-    steps.eq(currentSection).toggleClass("active")
+    steps.eq(currentSection).addClass("active");
     navigateTo(currentSection)
 });
 

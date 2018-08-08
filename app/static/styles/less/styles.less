@@ -333,47 +333,55 @@ a:hover {
 	width: 60%;
     margin: 30px auto;
     padding: 12px 0px 0px;
-}
-.progressbar li {
-	list-style-type: none;
-	color: @white;
-	width: 20%;
-	float: left;
-    position: relative;
-}
-.progressbar li:before {
-	content: counter(step);
-	counter-increment: step;
-	width: 25px;
-	line-height: 25px;
-	display: block;
-	color: @black;
-	background: @white;
-	border-radius: 50%;
-	margin: 0 auto 10px auto;
-}
-.progressbar li.active:before {
-	width: 38px;
-    line-height: 38px;
-    box-shadow: @teal-shadow;
-    margin: -8px auto 5px auto;
-}
-.progressbar li:after {
-	content: '';
-	width: 100%;
-	height: 3px;
-	background: @white;
-	position: absolute;
-	left: -50%;
-	top: 9px;
-	z-index: -1;
-}
-.progressbar li:first-child:after {
-	content: none; 
-}
-.progressbar li.complete:before,  .progressbar li.complete:after{
-	background: @teal;
-    color: @white;
+    li {
+        list-style-type: none;
+        color: @white;
+        width: 20%;
+        float: left;
+        position: relative;
+        //styles step circles
+        &:before {
+            content: counter(step);
+            counter-increment: step;
+            width: 25px;
+            line-height: 25px;
+            display: block;
+            color: @black;
+            background: @white;
+            border-radius: 50%;
+            margin: 0 auto 10px; 
+        }
+        //styles the lines between steps
+        &:after {
+            content: '';
+            width: 100%;
+            height: 3px;
+            background: @white;
+            position: absolute;
+            left: -50%;
+            top: 10px;
+            z-index: -1;
+        }
+        //Makes the active step larger & have shadow
+        &.active:before {
+            width: 38px;
+            line-height: 38px;
+            box-shadow: @teal-shadow;
+            margin: -8px auto 5px;
+        }
+        //First step has no line before it
+        &:first-child:after {
+            content: none;
+        }
+        //Steps that have been completed
+        &.complete:before,
+        &.complete:after {
+            background: @teal;
+            color: @white;        
+            cursor: pointer;  
+        }
+
+    }
 }
 
 /////////////////////////////////
