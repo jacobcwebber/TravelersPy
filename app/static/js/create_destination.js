@@ -45,6 +45,14 @@ function navigateTo(currentSection) {
     }
 };
 
+$('#updateSearchTerm').click(function() {
+    sections.eq(2).hide();
+    steps.eq(2).removeClass("active");
+    steps.eq(0).addClass("active");
+    currentSection = 0;
+    navigateTo(currentSection);
+})
+
 //Deals with clicking into completed steps in metro nav to hop between steps
 $(".progressbar").on('click', 'li.complete', function(event) {
     var clickedStepNum = parseInt((event.target.id).slice(-1)) - 1;
@@ -83,7 +91,6 @@ $(document).ready(function() {
     });
 });
 
-
 /// Initiates map
 function initMap() {
     var map = new google.maps.Map(document.getElementById('createDestMap'), {
@@ -92,16 +99,26 @@ function initMap() {
     });
   }
 
+//Call to updateMap on Next button click or any navigation using metro nav
+nextBtn.click(updateMap);
+$(".progressbar").on('click', 'li.complete', updateMap);
+
 // Changes map viewport and adds pin to verify correct location
-nextBtn.click(function initMap() {
+function updateMap() {
     var destName = $('#destName').val();
     var countryName =  $('#country').find(':selected').text() != 'Country' ? $('#country').find(':selected').text() : null;
 
     if (destName || countryName ) {
-        let address = destName + ', ' + countryName;
         let geocoder = new google.maps.Geocoder();
-        geocoder.geocode({ 'address': address }, function(results, status) {
+        geocoder.geocode({
+            address: destName,
+            componentRestrictions: {
+                country: countryName
+            }
+        }, function(results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
+                $('.dest-not-found').hide();
+                $('#createDestMap').show();
                 let map = new google.maps.Map(document.getElementById('createDestMap'), {
                     zoom: 5,
                     center: results[0].geometry.location
@@ -113,6 +130,10 @@ nextBtn.click(function initMap() {
                 });
                 $("#lat").val(results[0].geometry.location.lat());
                 $("#lng").val(results[0].geometry.location.lng());
+            } else if (status == google.maps.GeocoderStatus.ZERO_RESULTS) {
+                $('.dest-not-found').show();
+                $('#createDestMap').hide();
+                $('#destSearchTerm').text(destName + ', ' + countryName);
             }
         });
     }
@@ -122,7 +143,7 @@ nextBtn.click(function initMap() {
             center: new google.maps.LatLng(0, 0)
         });
     }
-});
+};
 
 // Saves image address to server
 const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/jacobcwebber/upload/';

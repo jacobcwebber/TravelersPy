@@ -46,6 +46,9 @@
     </div>
     <div class="form-section" style="display: none;">
       <div class="form-group">
+        <div class="form-label dest-not-found">We could not find your destination. Please check that the destination is spelled correctly and the country is correctly selected.</div>
+        <div class="form-label dest-not-found">Searching for: <div id="destSearchTerm"></div></div>
+        <div class="form-label dest-not-found" id="updateSearchTerm">Update search</div>
         {{ render_field(form.lat, id="lat", style="display: none;") }}
         {{ render_field(form.lng, id="lng", style="display: none;") }}
       </div>

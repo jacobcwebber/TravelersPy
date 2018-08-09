@@ -305,9 +305,25 @@ a:hover {
     }
 }
 
+//Create destination
+
+//Map tab
 #createDestMap {
     height: 300px;
     margin-bottom: 1em;
+}
+.dest-not-found {
+    display: none;
+    #destSearchTerm {
+        font-weight: 700;
+        display: inline-block;
+    }
+}
+#updateSearchTerm {
+    display: none;
+    font-style: italic;
+    cursor: pointer;
+    font-size: .85rem;
 }
 
 //Destinations table
@@ -368,17 +384,20 @@ a:hover {
             line-height: 38px;
             box-shadow: @teal-shadow;
             margin: -8px auto 5px;
+            font-size: 22px;
         }
         //First step has no line before it
         &:first-child:after {
             content: none;
+        }
+        &.complete{
+            cursor: pointer;  
         }
         //Steps that have been completed
         &.complete:before,
         &.complete:after {
             background: @teal;
             color: @white;        
-            cursor: pointer;  
         }
 
     }
