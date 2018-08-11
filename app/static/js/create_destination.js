@@ -6,9 +6,11 @@ var submitBtn = $('#submitBtn')
 
 var destNameField = $('#destName');
 var countryField = $('#country');
+var destinationField = $('.cke_editable p');
 
 var sections = $(".form-section");
 var steps = $(".progressbar li");
+var countryCode;
 
 var sectionHeader = $("#sectionHeader");
 
@@ -22,12 +24,12 @@ function navigateTo(currentSection) {
     sections.eq(currentSection).show();   
 
     //Changes text of section header
-    currentStepName = steps.eq(currentSection).text()
-    sectionHeader.text(currentStepName)
+    currentStepName = steps.eq(currentSection).text();
+    sectionHeader.text(currentStepName);
 
     //Changes Next button text on pages
     if (currentStepName == 'Location') {
-        nextBtn.text("Confirm location & Continue")
+        nextBtn.text("Confirm location & Continue");
     } else {
         nextBtn.text("Continue");
     }
@@ -63,20 +65,27 @@ $(".progressbar").on('click', 'li.complete', function(event) {
     steps.eq(clickedStepNum).addClass("active");
     currentSection = clickedStepNum;
     navigateTo(currentSection);
+    updateConfirmTab();
 })
 
+function updateConfirmTab() {
+    $('#destinationConfirm').text(destNameField.val());
+    $('#countryConfirm').text(countryField.val());
+    $('#descriptionConfirm').text(destinationField.val());
+}
+
 allBtns.click(function() {
-    sections.eq(currentSection).hide()
+    sections.eq(currentSection).hide();
     steps.eq(currentSection).removeClass("active");
-    let btnId = $(this).attr('id')
+    let btnId = $(this).attr('id');
     if (btnId == "nextBtn") {
         steps.eq(currentSection+1).addClass("complete");
-        currentSection++
+        currentSection++;
     } else if (btnId == "prevBtn") {
-        currentSection--
+        currentSection--;
     }
     steps.eq(currentSection).addClass("active");
-    navigateTo(currentSection)
+    navigateTo(currentSection);
 });
 
 $(document).ready(function() {
@@ -100,20 +109,43 @@ function initMap() {
   }
 
 //Call to updateMap on Next button click or any navigation using metro nav
-nextBtn.click(updateMap);
+nextBtn.on("click", () => {
+    updateMap();
+    updateConfirmTab();
+});
+
 $(".progressbar").on('click', 'li.complete', updateMap);
+
+//Ajax call to get country_code when country is changed
+countryField.on("change", function() {
+    if ($(this).val() != '0') {
+        $.ajax({
+            type: 'GET',
+            url: '/admin/get-country-code',
+            context: this,
+            data: {
+                id: $(this).val()
+            }
+        }).done((response) => {
+            console.log(response);
+            countryCode = response;
+        }).fail((error) => {
+            console.log(error);
+        })
+    }
+});
 
 // Changes map viewport and adds pin to verify correct location
 function updateMap() {
     var destName = $('#destName').val();
-    var countryName =  $('#country').find(':selected').text() != 'Country' ? $('#country').find(':selected').text() : null;
+    var countryName =  $('#country').find(':selected').text();
 
     if (destName || countryName ) {
         let geocoder = new google.maps.Geocoder();
         geocoder.geocode({
             address: destName,
             componentRestrictions: {
-                country: countryName
+                country: countryCode
             }
         }, function(results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
@@ -134,15 +166,17 @@ function updateMap() {
                 $('.dest-not-found').show();
                 $('#createDestMap').hide();
                 $('#destSearchTerm').text(destName + ', ' + countryName);
+            } else {
+                console.log('Geocode failed due to:' + status);
             }
         });
     }
     else {
         new google.maps.Map(document.getElementById('createDestMap'), {
-            zoom: 1,
+            zoom: 2,
             center: new google.maps.LatLng(0, 0)
         });
-    }
+    };
 };
 
 // Saves image address to server
@@ -171,8 +205,8 @@ fileUpload.on('change', function(event) {
         nextBtn.prop('disabled', false);
         nextBtn.html('Next');
         imgPreview.attr('src', res.data.secure_url);
-        $('#imgLink').attr('value', res.data.secure_url)
+        $('#imgLink').attr('value', res.data.secure_url);
     }).catch((e) => {
         console.log(e);
-    })
+    });
 });

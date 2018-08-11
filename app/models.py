@@ -49,6 +49,7 @@ class Country(db.Model):
     __tablename__ = 'countries'
 
     id = db.Column(db.Integer, primary_key=True)
+    country_code = db.Column(db.String(2))
     region_id = db.Column(db.Integer, db.ForeignKey('regions.id', onupdate="CASCADE", ondelete="CASCADE"))
     name = db.Column(db.String(100), unique=True)
     destinations = db.relationship('Destination', backref='country', lazy='dynamic')
@@ -198,7 +199,7 @@ class Dest_Image(db.Model):
     __tablename__ = 'dest_images'
 
     dest_id = db.Column(db.Integer, db.ForeignKey('destinations.id', onupdate="CASCADE", ondelete="CASCADE"), primary_key=True)
-    img_url = db.Column(db.String(255))
+    img_url = db.Column(db.String(255), nullable=True)
 
     def __repr__(self):
         return '<Dest ID: {}, Image URL: {}>'.format(self.dest_id, self.img_url)

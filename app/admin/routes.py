@@ -1,4 +1,4 @@
-from flask import flash, redirect, render_template, request, url_for
+from flask import flash, jsonify, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 from sqlalchemy import desc, func, text
 from app import db
@@ -83,8 +83,9 @@ def new_destination():
     """Create a new destination."""
     form = DestinationForm()
     
+    countries = Country.query.order_by(Country.name.asc()).all()
     tags = [tag.name for tag in Tag.query.all()]
-    form.country_id.choices = [(0, '')] + ([(country.id, country.name) for country in Country.query.all()])
+    form.country_id.choices = [(0, '')] + ([(country.id, country.name) for country in countries])
 
     if request.method == 'POST':
         if form.validate_on_submit():
@@ -108,3 +109,11 @@ def new_destination():
             flash("Please fill in all forms correctly.", "danger")
 
     return render_template('admin/new_destination.html', form=form, tags=tags)
+
+@bp.route('/get-country-code', methods=['GET'])
+@login_required
+@admin_required
+def get_country_code():
+    countryId = request.args.get('id')
+    country = Country.query.filter_by(id=countryId).first()
+    return jsonify(country.country_code)

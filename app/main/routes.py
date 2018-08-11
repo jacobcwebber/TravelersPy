@@ -79,6 +79,7 @@ def change_map(where=None):
 
     return jsonify(locations)
 
+#TODO: clean up this func with better sql
 @bp.route('/search')
 @login_required
 def search():
