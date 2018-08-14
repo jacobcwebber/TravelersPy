@@ -21,6 +21,7 @@
 <div class="box col-10 offset-1">
   <h3 class="header" id="sectionHeader"></h3>
   <form method="POST" id="submitForm" action="">
+    {{ form.csrf_token }}
     <div class="form-section">
       <div class="form-group" id="destFormSection">
         <div class="form-label">Destination</div>
@@ -31,7 +32,6 @@
         {{ render_field(form.country_id, placeholder="Country", id="country", class_="form-control") }}
       </div>
     </div>
-
     <div class="form-section" style="display: none;">
       <div class="form-group">
         <div class="form-label">Tags</div>
@@ -47,14 +47,14 @@
         <div class="form-label dest-not-found">We could not find your destination. Please check that the destination is spelled correctly and the country is correctly selected.</div>
         <div class="form-label dest-not-found">Searching for: <div id="destSearchTerm"></div></div>
         <div class="form-label dest-not-found" id="updateSearchTerm">Update search</div>
-        {{ render_field(form.lat, id="lat", style="display: none;") }}
-        {{ render_field(form.lng, id="lng", style="display: none;") }}
+        {{ render_field(form.lat, id="lat", style="display: block;") }}
+        {{ render_field(form.lng, id="lng", style="display: block;") }}
       </div>
       <div id="createDestMap" style="background-color: lightgrey;"></div>
     </div>
     <div class="form-section" style="display: none;">
       <div class="form-group">
-        {{ render_field(form.img_url, id="imgLink", class_="form-control", style="display: none;") }}
+        {{ render_field(form.img_url, id="imgLink", class_="form-control", style="display: block;") }}
         {{ render_field(form.img_upload, class_="form-control-file", id="imgUpload") }}
       </div>
     </div>

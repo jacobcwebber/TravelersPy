@@ -106,6 +106,8 @@ def new_destination():
             flash('Destination successfully created.', 'success')
             return redirect(url_for('admin.index'))
         else:
+            import sys
+            print(form.errors, file=sys.stderr)
             flash("Please fill in all forms correctly.", "danger")
 
     return render_template('admin/new_destination.html', form=form, tags=tags)
