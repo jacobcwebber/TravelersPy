@@ -3,7 +3,8 @@
 
 <!-- Consider adding macro for sections -->
 {% block head %}
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" />
+<link rel="stylesheet" href="{{ url_for('static', filename='js/packages/tagify/dist/tagify.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -47,8 +48,8 @@
         <div class="form-label dest-not-found">We could not find your destination. Please check that the destination is spelled correctly and the country is correctly selected.</div>
         <div class="form-label dest-not-found">Searching for: <div id="destSearchTerm"></div></div>
         <div class="form-label dest-not-found" id="updateSearchTerm">Update search</div>
-        {{ render_field(form.lat, id="lat", style="display: block;") }}
-        {{ render_field(form.lng, id="lng", style="display: block;") }}
+        {{ render_field(form.lat, id="lat", style="display: none;") }}
+        {{ render_field(form.lng, id="lng", style="display: none;") }}
       </div>
       <div id="createDestMap" style="background-color: lightgrey;"></div>
     </div>
@@ -86,5 +87,6 @@
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABEVdEk2zQBeCHstcUpXQUkSxPhtmTv0Q&callback=initMap"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+<script src="{{ url_for('static', filename='js/packages/tagify/dist/tagify.min.js') }}"></script>
 <script src="/static/js/create_destination.js"></script>
 {% endblock %}

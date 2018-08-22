@@ -1,0 +1,75 @@
+{
+  "_from": "@yaireo/tagify",
+  "_id": "@yaireo/tagify@2.1.0",
+  "_inBundle": false,
+  "_integrity": "sha512-Oh7RNbe5PJH2GDtJ6in5xrYZlJvh2Qnf0850rZ7dzHtrvMBOM55YQN9ICPdeudlCHBeA5M/lOoaTDAVkDTYHyA==",
+  "_location": "/@yaireo/tagify",
+  "_npmUser": {
+    "name": "vsync",
+    "email": "vsync.design@gmail.com"
+  },
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "@yaireo/tagify",
+    "name": "@yaireo/tagify",
+    "escapedName": "@yaireo%2ftagify",
+    "scope": "@yaireo",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@yaireo/tagify/-/tagify-2.1.0.tgz",
+  "_shasum": "5cfc5061fb512cbbb33a5a1505a84d312efc3cf5",
+  "_spec": "@yaireo/tagify",
+  "_where": "C:\\Users\\jacob\\Projects\\Wanderlist",
+  "author": {
+    "name": "Yair Even-Or",
+    "email": "vsync.design@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/yaireo/tagify/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "Want to simply convert an input field into a tags element, in a easy customizable way, with good performance and smallest code footprint? You are in the right place my friend.",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "beepbeep": "^1.2.1",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "4.0.0",
+    "gulp-babel": "^7.0.1",
+    "gulp-cached": "^1.1.1",
+    "gulp-clean-css": "^3.9.4",
+    "gulp-combine-mq": "^0.4.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-css-globbing": "^0.2.2",
+    "gulp-eslint": "^3.0.1",
+    "gulp-insert": "^0.5.0",
+    "gulp-load-plugins": "^1.5.0",
+    "gulp-rename": "~1.2.2",
+    "gulp-replace": "^0.5.4",
+    "gulp-sass": "^3.1.0",
+    "gulp-sourcemaps": "^2.6.4",
+    "gulp-uglify": "^3.0.0",
+    "gulp-umd": "^0.2.1",
+    "gulp-util": "^3.0.8",
+    "gulp-watch": "latest",
+    "path": "^0.12.7",
+    "run-sequence": "^1.2.2"
+  },
+  "homepage": "https://github.com/yairEO/tagify",
+  "main": "tagify.js",
+  "name": "@yaireo/tagify",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yairEO/tagify.git"
+  },
+  "version": "2.1.0"
+}

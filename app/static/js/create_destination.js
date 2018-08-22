@@ -100,9 +100,20 @@ $(document).ready(function() {
     });
 });
 
+//Tags
+var tagsInput = document.querySelector('#tags');
+tagify = new Tagify(tagsInput, {
+    enforceWhitelist: true,
+    whitelist: tags,
+    dropdown: {
+        enabled: 1,
+        maxItems: 5
+    }
+});
+
 /// Initiates map
 function initMap() {
-    var map = new google.maps.Map(document.getElementById('createDestMap'), {
+    new google.maps.Map(document.getElementById('createDestMap'), {
       zoom: 2,
       center: {lat: 0, lng: 0}
     });
@@ -127,7 +138,6 @@ countryField.on("change", function() {
                 id: $(this).val()
             }
         }).done((response) => {
-            console.log(response);
             countryCode = response;
         }).fail((error) => {
             console.log(error);
