@@ -55,8 +55,10 @@
     </div>
     <div class="form-section" style="display: none;">
       <div class="form-group">
-        {{ render_field(form.img_url, id="imgLink", class_="form-control", style="display: block;") }}
-        {{ render_field(form.img_upload, class_="form-control-file", id="imgUpload") }}
+        <i id="imgPlaceholder" class="fas fa-image fa-7x"></i>
+        <img id="imgPreview" src="" alt="">
+        {{ render_field(form.img_url, id="imgLink", class_="form-control", style="display: none;") }}
+        {{ render_field(form.img_upload, class_="form-control-file form-control-lg", id="imgUpload") }}
       </div>
     </div>
     <div class="form-section" style="display: none;">
@@ -87,6 +89,6 @@
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABEVdEk2zQBeCHstcUpXQUkSxPhtmTv0Q&callback=initMap"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
-<script src="{{ url_for('static', filename='js/packages/tagify/dist/tagify.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/packages/tagify/dist/tagify.js') }}"></script>
 <script src="/static/js/create_destination.js"></script>
 {% endblock %}

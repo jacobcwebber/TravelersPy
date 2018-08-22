@@ -103,6 +103,7 @@ $(document).ready(function() {
 //Tags
 var tagsInput = document.querySelector('#tags');
 tagify = new Tagify(tagsInput, {
+    autocomplete: false,
     enforceWhitelist: true,
     whitelist: tags,
     dropdown: {
@@ -193,7 +194,8 @@ function updateMap() {
 const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/jacobcwebber/upload/';
 const CLOUDINARY_UPLOAD_PRESET = 'pzrian47';
 
-var imgPreview = $('#img-preview');
+var imgPlaceholder = $('#imgPlaceholder');
+var imgPreview = $('#imgPreview');
 var fileUpload = $('#imgUpload');
 
 fileUpload.on('change', function(event) {
@@ -203,7 +205,6 @@ fileUpload.on('change', function(event) {
     var formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-
     axios({
         url: CLOUDINARY_URL,
         method: 'POST',
@@ -214,6 +215,7 @@ fileUpload.on('change', function(event) {
     }).then((res) => {
         nextBtn.prop('disabled', false);
         nextBtn.html('Next');
+        imgPlaceholder.hide()
         imgPreview.attr('src', res.data.secure_url);
         $('#imgLink').attr('value', res.data.secure_url);
     }).catch((e) => {

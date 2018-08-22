@@ -307,6 +307,11 @@ a:hover {
 
 //Create destination
 
+//Tabs
+.tagify tag>div {
+    border-radius:  1em !important;
+}
+
 //Map tab
 #createDestMap {
     height: 300px;
@@ -324,6 +329,19 @@ a:hover {
     font-style: italic;
     cursor: pointer;
     font-size: .85rem;
+}
+
+//Add Photos tab
+#imgUpload {
+    color: transparent;
+    padding: 0px;
+}
+#imgPlaceholder {
+    color: lighten(@lightnavy, 20%);  
+}
+#imgPreview {
+    max-height: 300px;
+    margin-bottom: 1em;
 }
 
 //Destinations table

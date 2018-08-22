@@ -90,8 +90,9 @@ def new_destination():
     if request.method == 'POST':
         if form.validate_on_submit():
             dest = Destination(name=form.name.data, country_id=form.country_id.data, description=form.description.data)
-            tags = (form.tags.data).split(',')
+            tags = (form.tags.data).split(',') 
             for tag_name in tags:
+                tag_name = tag_name[1:-1].capitalize()
                 tag = Tag.query.filter_by(name=tag_name).first()
                 dest.add_tag(tag)
             db.session.add(dest)
