@@ -5,6 +5,8 @@
 {% block head %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" />
 <link rel="stylesheet" href="{{ url_for('static', filename='js/packages/tagify/dist/tagify.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='js/packages/dropzone/basic.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='js/packages/dropzone/dropzone.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -45,8 +47,10 @@
     </div>
     <div class="form-section" style="display: none;">
       <div class="form-group">
-        <div class="form-label dest-not-found">We could not find your destination. Please check that the destination is spelled correctly and the country is correctly selected.</div>
-        <div class="form-label dest-not-found">Searching for: <div id="destSearchTerm"></div></div>
+        <div class="form-label dest-not-found">We could not find your destination. Please check that the destination is
+          spelled correctly and the country is correctly selected.</div>
+        <div class="form-label dest-not-found">Searching for: <div id="destSearchTerm"></div>
+        </div>
         <div class="form-label dest-not-found" id="updateSearchTerm">Update search</div>
         {{ render_field(form.lat, id="lat", style="display: none;") }}
         {{ render_field(form.lng, id="lng", style="display: none;") }}
@@ -54,29 +58,28 @@
       <div id="createDestMap" style="background-color: lightgrey;"></div>
     </div>
     <div class="form-section" style="display: none;">
-      <div class="form-group">
-        <i id="imgPlaceholder" class="fas fa-image fa-7x"></i>
-        <img id="imgPreview" src="" alt="">
-        {{ render_field(form.img_url, id="imgLink", class_="form-control", style="display: none;") }}
-        {{ render_field(form.img_upload, class_="form-control-file form-control-lg", id="imgUpload") }}
+      <div id="dzUpload" class="dropzone">
+        <div class="dz-default dz-message text-teal">
+          Drop image here or click to upload.
+        </div>
       </div>
     </div>
     <div class="form-section" style="display: none;">
       <div class="form-group">
         <div class="form-inline text-white">
-            {{ form.name.label }}: <div id="destinationConfirm"></div>
+          {{ form.name.label }}: <div id="destinationConfirm"></div>
         </div>
         <div class="form-inline text-white">
-            {{ form.country_id.label }}: <div id="countryConfirm"></div>
+          {{ form.country_id.label }}: <div id="countryConfirm"></div>
         </div>
         <div class="form-inline text-white">
-            {{ form.description.label }}: <div id="descriptionConfirm"></div>
+          {{ form.description.label }}: <div id="descriptionConfirm"></div>
         </div>
       </div>
     </div>
     {{ render_field(form.submit, id="submitBtn", class="btn btn-teal", style="display: none; float: right;")}}
   </form>
-  <button class="btn btn-tertiary" id="prevBtn" style="float: left">Back</button>  
+  <button class="btn btn-tertiary" id="prevBtn" style="float: left">Back</button>
   <button class="btn btn-teal btn-wide" id="nextBtn" style="float: right">Continue</button>
 </div>
 {% endblock %}
@@ -90,5 +93,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 <script src="{{ url_for('static', filename='js/packages/tagify/dist/tagify.js') }}"></script>
+<script src="{{ url_for('static', filename='js/packages/dropzone/dropzone.js') }}"></script>
 <script src="/static/js/create_destination.js"></script>
 {% endblock %}

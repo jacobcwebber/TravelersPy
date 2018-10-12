@@ -6,7 +6,7 @@ manager = Manager(app)
 
 @manager.command
 def test():
-    """Run all unit tests."""
+    "Run all unit tests."
     import unittest
 
     tests = unittest.TestLoader().discover('tests', pattern='test*.py')

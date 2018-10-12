@@ -14,14 +14,14 @@ var countryCode;
 
 var sectionHeader = $("#sectionHeader");
 
-const LAST_SECTION = sections.length - 1; 
+const LAST_SECTION = sections.length - 1;
 var currentSection = 0;
 
 //Tab navigation
 navigateTo(currentSection)
 
 function navigateTo(currentSection) {
-    sections.eq(currentSection).show();   
+    sections.eq(currentSection).show();
 
     //Changes text of section header
     currentStepName = steps.eq(currentSection).text();
@@ -43,11 +43,11 @@ function navigateTo(currentSection) {
         submitBtn.show();
     } else {
         nextBtn.show();
-        submitBtn.hide();       
+        submitBtn.hide();
     }
 };
 
-$('#updateSearchTerm').click(function() {
+$('#updateSearchTerm').click(function () {
     sections.eq(2).hide();
     steps.eq(2).removeClass("active");
     steps.eq(0).addClass("active");
@@ -56,9 +56,9 @@ $('#updateSearchTerm').click(function() {
 })
 
 //Deals with clicking into completed steps in metro nav to hop between steps
-$(".progressbar").on('click', 'li.complete', function(event) {
+$(".progressbar").on('click', 'li.complete', function (event) {
     var clickedStepNum = parseInt((event.target.id).slice(-1)) - 1;
-    if (clickedStepNum == currentSection) {return}
+    if (clickedStepNum == currentSection) { return }
 
     sections.eq(currentSection).hide();
     steps.eq(currentSection).removeClass("active");
@@ -74,12 +74,12 @@ function updateConfirmTab() {
     $('#descriptionConfirm').text(destinationField.val());
 }
 
-allBtns.click(function() {
+allBtns.click(function () {
     sections.eq(currentSection).hide();
     steps.eq(currentSection).removeClass("active");
     let btnId = $(this).attr('id');
     if (btnId == "nextBtn") {
-        steps.eq(currentSection+1).addClass("complete");
+        steps.eq(currentSection + 1).addClass("complete");
         currentSection++;
     } else if (btnId == "prevBtn") {
         currentSection--;
@@ -88,7 +88,7 @@ allBtns.click(function() {
     navigateTo(currentSection);
 });
 
-$(document).ready(function() {
+$(document).ready(function () {
     $('#country').select2();
 
     // Creates tags autocomplete
@@ -115,10 +115,10 @@ tagify = new Tagify(tagsInput, {
 /// Initiates map
 function initMap() {
     new google.maps.Map(document.getElementById('createDestMap'), {
-      zoom: 2,
-      center: {lat: 0, lng: 0}
+        zoom: 2,
+        center: { lat: 0, lng: 0 }
     });
-  }
+}
 
 //Call to updateMap on Next button click or any navigation using metro nav
 nextBtn.on("click", () => {
@@ -129,7 +129,7 @@ nextBtn.on("click", () => {
 $(".progressbar").on('click', 'li.complete', updateMap);
 
 //Ajax call to get country_code when country is changed
-countryField.on("change", function() {
+countryField.on("change", function () {
     if ($(this).val() != '0') {
         $.ajax({
             type: 'GET',
@@ -149,16 +149,16 @@ countryField.on("change", function() {
 // Changes map viewport and adds pin to verify correct location
 function updateMap() {
     var destName = $('#destName').val();
-    var countryName =  $('#country').find(':selected').text();
+    var countryName = $('#country').find(':selected').text();
 
-    if (destName || countryName ) {
+    if (destName || countryName) {
         let geocoder = new google.maps.Geocoder();
         geocoder.geocode({
             address: destName,
             componentRestrictions: {
                 country: countryCode
             }
-        }, function(results, status) {
+        }, function (results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
                 $('.dest-not-found').hide();
                 $('#createDestMap').show();
@@ -191,34 +191,30 @@ function updateMap() {
 };
 
 // Saves image address to server
-const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/jacobcwebber/upload/';
+const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/jacobcwebber/image/upload';
 const CLOUDINARY_UPLOAD_PRESET = 'pzrian47';
+const CLOUDINARY_API_KEY = 144913695731324;
 
-var imgPlaceholder = $('#imgPlaceholder');
-var imgPreview = $('#imgPreview');
-var fileUpload = $('#imgUpload');
 
-fileUpload.on('change', function(event) {
-    nextBtn.prop('disabled', true);
-    nextBtn.html('<i class="fas fa-spinner fa-spin"></i>');
-    var file = event.target.files[0];
-    var formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-    axios({
-        url: CLOUDINARY_URL,
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        data: formData
-    }).then((res) => {
-        nextBtn.prop('disabled', false);
-        nextBtn.html('Next');
-        imgPlaceholder.hide()
-        imgPreview.attr('src', res.data.secure_url);
-        $('#imgLink').attr('value', res.data.secure_url);
-    }).catch((e) => {
-        console.log(e);
-    });
+//Stop dropzone from trying to find the element until it's created
+Dropzone.autoDiscover = false;
+
+//Configure image dropzone
+var dropzone = new Dropzone(document.getElementById("dzUpload"), {
+    uploadMultiple: false,
+    maxFiles: 1,
+    addRemoveLinks: true,
+    acceptedFiles: '.jpg,.png,.jpeg,.gif',
+    url: CLOUDINARY_URL,
+    dictDefaultMessage: "Drop image here or click to upload."
+});
+
+dropzone.on('sending', function (file, xhr, formData) {
+    formData.append('api_key', CLOUDINARY_API_KEY);
+    formData.append('timestamp', Date.now() / 1000 | 0);
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
+});
+
+dropzone.on('success', function (file, response) {
+    file.previewElement.classList.add("dz-success");
 });

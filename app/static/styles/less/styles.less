@@ -336,12 +336,16 @@ a:hover {
     color: transparent;
     padding: 0px;
 }
-#imgPlaceholder {
-    color: lighten(@lightnavy, 20%);  
+
+.dropzone {
+    border: 2px dashed @teal !important;
+    border-radius: 5px;
+    margin-bottom: 16px;
+    background: transparent !important;
 }
-#imgPreview {
-    max-height: 300px;
-    margin-bottom: 1em;
+
+.dropzone .dz-preview.dz-image-preview {
+    background-color: transparent !important;
 }
 
 //Destinations table
@@ -419,6 +423,27 @@ a:hover {
         }
 
     }
+}
+
+//Iamge upload page
+.file-upload-box.has-advanced-upload {
+    background-color: white;
+    outline: 2px dashed black;
+    outline-offset: -10px;
+
+    .box-dragndrop {
+        display: inline;
+    }
+    .is-dragover {
+        background-color: grey;
+    }
+}
+
+.box-dragndrop,
+.file-uploading,
+.file-upload-success,
+.file-upload-error {
+  display: none;
 }
 
 /////////////////////////////////
